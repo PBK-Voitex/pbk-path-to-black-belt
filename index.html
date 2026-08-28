@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v6.9</title>
+<title>PBK: Path to Black Belt v7.0.1</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -4477,6 +4477,204 @@ body.time-night .building .window{
   #scoreAssistBadge{bottom:80px;font-size:6px;padding:4px 7px}
 }
 
+
+/* v7.0 REAL SPARRING MOTION + PROGRESSION */
+
+/* locked fighter choices */
+.fighterChoice.locked{
+  opacity:.38;filter:grayscale(.55);cursor:not-allowed;position:relative
+}
+.fighterChoice.locked::after{
+  content:'BLACK BELT';
+  position:absolute;left:50%;bottom:4px;transform:translateX(-50%);
+  font-size:5px;padding:2px 4px;border-radius:999px;background:#111;color:#d9c07a;
+  border:1px solid #715f32;white-space:nowrap
+}
+
+/* actual technique motion */
+.fighterReal.realPunch{
+  animation:bodyPunchDrive .34s cubic-bezier(.18,.72,.25,1)
+}
+.fighterReal.realPunch .farm.r{
+  animation:armPunchDrive .34s cubic-bezier(.18,.72,.25,1)!important
+}
+.fighterReal.realPunch .ftorso{
+  animation:torsoPunchDrive .34s cubic-bezier(.18,.72,.25,1)
+}
+@keyframes bodyPunchDrive{
+  0%{translate:0 0}
+  38%{translate:14px -1px}
+  62%{translate:20px -1px}
+  100%{translate:0 0}
+}
+@keyframes armPunchDrive{
+  0%{transform:rotate(-18deg) translateY(0)}
+  35%{transform:rotate(-58deg) translateY(-4px)}
+  58%{transform:rotate(-94deg) translateY(-8px) scaleY(1.18)}
+  100%{transform:rotate(-18deg) translateY(0)}
+}
+@keyframes torsoPunchDrive{
+  0%{rotate:0deg}
+  50%{rotate:-8deg}
+  100%{rotate:0deg}
+}
+
+/* round kick = chamber, hip turn, extension, recoil */
+.fighterReal.roundKicking{
+  animation:roundBodyTurn .46s ease-in-out
+}
+.fighterReal.roundKicking .fleg.r{
+  animation:roundKickLeg .46s cubic-bezier(.2,.72,.24,1)!important
+}
+.fighterReal.roundKicking .ftorso{
+  animation:roundTorso .46s ease-in-out
+}
+@keyframes roundBodyTurn{
+  0%{translate:0 0}
+  30%{translate:6px -4px}
+  58%{translate:16px -5px}
+  100%{translate:0 0}
+}
+@keyframes roundKickLeg{
+  0%{transform:rotate(-4deg)}
+  24%{transform:rotate(-45deg) translateY(-15px)}
+  55%{transform:rotate(-108deg) translateY(-30px) scaleY(1.22)}
+  74%{transform:rotate(-58deg) translateY(-18px)}
+  100%{transform:rotate(-4deg)}
+}
+@keyframes roundTorso{
+  50%{rotate:12deg}
+}
+
+/* side kick = knee chamber then linear extension */
+.fighterReal.sideKicking{
+  animation:sideKickBody .44s cubic-bezier(.2,.72,.24,1)
+}
+.fighterReal.sideKicking .fleg.r{
+  animation:sideKickLeg .44s cubic-bezier(.18,.75,.25,1)!important
+}
+.fighterReal.sideKicking .ftorso{
+  animation:sideKickTorso .44s ease-in-out
+}
+@keyframes sideKickBody{
+  0%{translate:0 0}
+  28%{translate:4px -5px}
+  58%{translate:18px -5px}
+  100%{translate:0 0}
+}
+@keyframes sideKickLeg{
+  0%{transform:rotate(-4deg)}
+  24%{transform:rotate(-42deg) translateY(-20px) scaleY(.82)}
+  55%{transform:rotate(-92deg) translateY(-34px) scaleY(1.35)}
+  76%{transform:rotate(-46deg) translateY(-20px) scaleY(.9)}
+  100%{transform:rotate(-4deg)}
+}
+@keyframes sideKickTorso{
+  50%{rotate:-8deg}
+}
+
+/* defensive side kick holds line longer */
+.fighterReal.defensiveSideKicking{
+  animation:defSideBody .48s ease-out
+}
+.fighterReal.defensiveSideKicking .fleg.r{
+  animation:defSideLeg .48s ease-out!important
+}
+@keyframes defSideBody{
+  0%{translate:0 0}
+  25%{translate:-5px -3px}
+  55%{translate:10px -4px}
+  100%{translate:0 0}
+}
+@keyframes defSideLeg{
+  0%{transform:rotate(-4deg)}
+  22%{transform:rotate(-38deg) translateY(-18px) scaleY(.82)}
+  48%,68%{transform:rotate(-88deg) translateY(-33px) scaleY(1.38)}
+  100%{transform:rotate(-4deg)}
+}
+
+/* B-twist uses body travel instead of only spin */
+.fighterReal.twisting{
+  animation:bTwistBody .62s cubic-bezier(.22,.7,.25,1)!important
+}
+.fighterReal.twisting .fleg.r{
+  animation:bTwistLeg .62s ease-in-out!important
+}
+@keyframes bTwistBody{
+  0%{translate:0 0;rotate:0deg;scale:1}
+  25%{translate:8px -15px;rotate:95deg;scale:.96}
+  55%{translate:24px -26px;rotate:240deg;scale:1.02}
+  78%{translate:30px -10px;rotate:355deg;scale:1}
+  100%{translate:0 0;rotate:360deg;scale:1}
+}
+@keyframes bTwistLeg{
+  35%{transform:rotate(-80deg) translateY(-24px) scaleY(1.15)}
+  60%{transform:rotate(-118deg) translateY(-30px) scaleY(1.24)}
+}
+
+/* movement feels like fighting footwork */
+.fighterReal.fightAdvance .fleg.l,
+.fighterReal.fightRetreat .fleg.r{
+  animation:leadStep .22s ease-in-out infinite alternate!important
+}
+.fighterReal.fightAdvance .fleg.r,
+.fighterReal.fightRetreat .fleg.l{
+  animation:trailStep .22s ease-in-out infinite alternate!important
+}
+@keyframes leadStep{to{transform:rotate(14deg) translateY(-3px)}}
+@keyframes trailStep{to{transform:rotate(-14deg) translateY(2px)}}
+
+/* stronger contact cue */
+#scoreAssistBadge.ready{
+  background:rgba(45,86,49,.82)!important;
+  border-color:#8fc58b!important;
+  box-shadow:0 0 18px rgba(104,172,104,.28)!important
+}
+
+
+/* v7.0.1 ANDROID HOME ENTRY FIX */
+#homeEnter{
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:rgba(255,255,255,.12);
+  pointer-events:auto!important;
+}
+@media (pointer:coarse), (max-width:980px){
+  #homeEnter{
+    width:min(560px,78vw)!important;
+    height:auto!important;
+    min-height:58px!important;
+    bottom:7.5%!important;
+    padding:14px 22px!important;
+    border-radius:15px!important;
+    background:rgba(9,14,18,.86)!important;
+    border:2px solid rgba(232,205,111,.92)!important;
+    box-shadow:0 10px 28px rgba(0,0,0,.34)!important;
+    color:#f5e3a0!important;
+    font-size:clamp(15px,4vw,24px)!important;
+    font-weight:1000!important;
+    letter-spacing:.7px!important;
+    z-index:30!important;
+  }
+  #musicHint{
+    display:none!important;
+  }
+  #homeShade{
+    pointer-events:none!important;
+  }
+  #homeArt{
+    pointer-events:none!important;
+  }
+}
+@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){
+  #homeEnter{
+    bottom:5%!important;
+    min-height:48px!important;
+    padding:10px 18px!important;
+    font-size:16px!important;
+    width:min(500px,70vw)!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4858,12 +5056,13 @@ const rankPath=[
 {name:'Blue Belt',stripes:2},{name:'Advanced Blue',stripes:2},{name:'Purple Belt',stripes:4},{name:'Advanced Purple',stripes:2},
 {name:'Red Belt',stripes:4},{name:'Advanced Red',stripes:2},{name:'Brown Belt',stripes:4},{name:'Advanced Brown',stripes:2},
 {name:'Training Cycle',stripes:1},{name:'1st Degree Black Belt',stripes:1},{name:'2nd Degree Black Belt',stripes:1},{name:'3rd Degree Black Belt',stripes:1},{name:'4th Degree Black Belt',stripes:1},{name:'5th Degree Black Belt',stripes:1},{name:'6th Degree Black Belt',stripes:1},{name:'7th Degree Black Belt',stripes:1},{name:'8th Degree Black Belt',stripes:1},{name:'9th Degree Black Belt',stripes:1},{name:'10th Degree Black Belt',stripes:1}];
-let save={cash:500,home:'',vehicle:'',rep:0,energy:100,day:1,minutes:540,trainingScore:0,tournamentWins:0,relationship:{},bosses:{dad:false,ryan:false,alex:false,stef:false,camara:false,rappold:false,chung:false},visited:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},dojoQuest:{NORTON:0,EASTON:0,FOXBOROUGH:0,RAYNHAM:0}};
+let save={cash:500,home:'',vehicle:'',rep:0,energy:100,day:1,minutes:540,trainingScore:0,tournamentWins:0,relationship:{},bosses:{bradley:false,dad:false,ryan:false,alex:false,stef:false,camara:false,rappold:false,chung:false},visited:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},dojoQuest:{NORTON:0,EASTON:0,FOXBOROUGH:0,RAYNHAM:0}};
 
 try{Object.assign(save,JSON.parse(localStorage.getItem('pbkV43')||'{}'))}catch(e){}
 if(!save.trainingBest)save.trainingBest={grade:'',accuracy:0,hits:0};
 if(!save.formsBest)save.formsBest={traditional:0,creative:0};
 if(!save.schoolChallenges)save.schoolChallenges={NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false};
+if(save.bosses&&save.bosses.bradley===undefined)save.bosses.bradley=false;
 
 function saveGame(){try{localStorage.setItem('pbkV43',JSON.stringify(save))}catch(e){}updateRpgHud();updateDojoMeta();renderBosses()}
 
@@ -5121,8 +5320,42 @@ function musicLoop(){if(!audioCtx||!musicOn)return;const n=audioCtx.currentTime+
 async function startMusic(){if(musicOn)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=new AC();if(audioCtx.state==='suspended')await audioCtx.resume();musicOn=true;$('musicHint').textContent='DOJO MUSIC PLAYING';musicLoop();musicTimer=setInterval(musicLoop,9600)}
 function stopMusic(){musicOn=false;if(musicTimer)clearInterval(musicTimer);musicTimer=null;if(audioCtx){try{audioCtx.close()}catch(e){}audioCtx=null}}
 
-$('home').addEventListener('pointerdown',()=>startMusic(),{passive:true});
-$('homeEnter').addEventListener('click',e=>{e.preventDefault();startMusic();setTimeout(()=>{stopMusic();show('world');renderRegionCamera()},450)});
+let homeEntering=false;
+function enterPBKWorldFromHome(e){
+  if(e){
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  if(homeEntering)return;
+  homeEntering=true;
+
+  // Enter immediately. Audio is optional and must never block navigation.
+  try{startMusic()}catch(_){}
+  show('world');
+  try{renderRegionCamera()}catch(_){}
+  try{updateGlobalTouchInteract()}catch(_){}
+  setTimeout(()=>{try{stopMusic()}catch(_){}},220);
+  setTimeout(()=>{homeEntering=false},650);
+}
+
+// Desktop click.
+$('homeEnter').addEventListener('click',enterPBKWorldFromHome);
+
+// Android/iOS pointer path. Pointerup is more reliable than waiting for synthesized click.
+$('homeEnter').addEventListener('pointerup',e=>{
+  if(e.pointerType==='touch' || e.pointerType==='pen'){
+    enterPBKWorldFromHome(e);
+  }
+});
+
+// Fallback for older/mobile WebKit/Chromium touch event behavior.
+$('homeEnter').addEventListener('touchend',enterPBKWorldFromHome,{passive:false});
+
+// Starting music elsewhere on the splash remains optional, but never intercept the ENTER button.
+$('home').addEventListener('pointerdown',e=>{
+  if(e.target===$('homeEnter') || $('homeEnter').contains(e.target))return;
+  try{startMusic()}catch(_){}
+},{passive:true});
 
 
 
@@ -6759,9 +6992,14 @@ function openTournament(){$('tournamentTitle').textContent=state.town+' PBK TOUR
 $('tournamentExit').onclick=$('tournamentBackTop').onclick=()=>show('dojo');
 $('startTournamentBtn').onclick=()=>{state.fightContext='tournament';startFight(state.town+' Tournament Opponent',7)};
 function tournamentReward(){save.tournamentWins++;save.cash+=100;save.rep+=2;advanceTime(90);saveGame()}
-const bossPath=[['dad','Dad',10],['ryan','Ryan',20],['alex','Alex George',21],['stef','Master Stef',21],['camara','Master Camara',21],['rappold','Master Rappold',21],['chung','Grandmaster Chung',21]];
-function bossUnlocked(i){if(i===0)return true;return save.bosses[bossPath[i-1][0]]&&(bossPath[i][0]!=='stef'||state.town==='RAYNHAM')}
-function renderBosses(){if(!$('bossGrid'))return;$('bossGrid').innerHTML='';bossPath.forEach((b,i)=>{let unlocked=bossUnlocked(i),done=save.bosses[b[0]],c=document.createElement('div');c.className='bossCard '+(!unlocked?'locked':'');c.innerHTML=`${portraitHtml(b[1])}<strong>${b[1]}</strong><div>${rankOf(b[1])||''}</div><div>${done?'DEFEATED':unlocked?'AVAILABLE':'LOCKED'}</div>`;let btn=document.createElement('button');btn.textContent=done?'REMATCH':unlocked?'FIGHT':'LOCKED';btn.disabled=!unlocked;btn.onclick=()=>{state.fightContext='boss';state.activeBoss=b[0];startFight(b[1],b[2])};c.appendChild(btn);$('bossGrid').appendChild(c)})}
+const bossPath=[['bradley','Bradley',10],['dad','Dad',10],['ryan','Ryan',20],['alex','Alex George',21],['stef','Master Stef',21],['camara','Master Camara',21],['rappold','Master Rappold',21],['chung','Grandmaster Chung',21]];
+function bossUnlocked(i){
+  const id=bossPath[i][0];
+  if(id==='bradley')return fightPlayerChoice!=='bradley';
+  if(i===1)return true;
+  return save.bosses[bossPath[i-1][0]]&&(id!=='stef'||state.town==='RAYNHAM');
+}
+function renderBosses(){if(!$('bossGrid'))return;$('bossGrid').innerHTML='';bossPath.forEach((b,i)=>{let unlocked=bossUnlocked(i),done=save.bosses[b[0]],c=document.createElement('div');c.className='bossCard '+(!unlocked?'locked':'');c.innerHTML=`${portraitHtml(b[1])}<strong>${b[1]}</strong><div>${rankOf(b[1])||''}</div><div>${done?'DEFEATED':unlocked?'AVAILABLE':b[0]==='bradley'?'CUSTOM CHARACTER REQUIRED':'LOCKED'}</div>`;let btn=document.createElement('button');btn.textContent=done?'REMATCH':unlocked?'FIGHT':'LOCKED';btn.disabled=!unlocked;btn.onclick=()=>{state.fightContext='boss';state.activeBoss=b[0];startFight(b[1],b[2])};c.appendChild(btn);$('bossGrid').appendChild(c)})}
 function openBossRoom(){renderBosses();show('bosses')}
 $('bossExit').onclick=$('bossBackTop').onclick=()=>show('dojo');
 function startFight(name,target){if(state.fightContext!=='instructorSpar')$('instructorFightTag').classList.remove('show');applyVisualProfileToFighter($('playerFight'),'Bradley');applyVisualProfileToFighter($('enemyFight'),name);state.pScore=0;state.eScore=0;state.fightTarget=target;state.fightActive=true;$('enemyName').textContent=name;$('fightTarget').textContent='FIRST TO '+target;$('pScore').textContent='0';$('eScore').textContent='0';$('fightMessage').textContent='FIGHT!';show('fight')}
@@ -6809,8 +7047,8 @@ const fightRoster={
   dad:{name:'DAD',style:'balanced'},
   ryan:{name:'RYAN',style:'pressure'},
   alex:{name:'ALEX GEORGE',style:'counter'},
-  camara:{name:'MASTER CAMARA',style:'master'},
-  stef:{name:'MASTER STEF',style:'power'}
+  camara:{name:'MASTER CAMARA',style:'master',requiresBlackBelt:true},
+  stef:{name:'MASTER STEF',style:'power',requiresBlackBelt:true}
 };
 const fightDifficultyProfiles={
   rookie:{name:'ROOKIE',aiSpeed:900,blockScale:.28,telegraph:1.8,rangeBonus:8,aiMove:.55,damageDelay:1.45},
@@ -6846,7 +7084,20 @@ function closeFightSetup(){
   $('fightSetupOverlay').classList.remove('show');
   fightSetupPending=false;
 }
+
+function fighterUnlockedForSpar(id){
+  const f=fightRoster[id];
+  return !f?.requiresBlackBelt || isBlackBelt();
+}
+function refreshFightLocks(){
+  document.querySelectorAll('.fighterChoice').forEach(e=>{
+    const locked=!fighterUnlockedForSpar(e.dataset.fighter);
+    e.classList.toggle('locked',locked);
+    e.setAttribute('aria-disabled',locked?'true':'false');
+  });
+}
 function syncSetupSelections(){
+  refreshFightLocks();
   document.querySelectorAll('#playerFighterChoices .fighterChoice').forEach(e=>e.classList.toggle('selected',e.dataset.fighter===fightPlayerChoice));
   document.querySelectorAll('#enemyFighterChoices .fighterChoice').forEach(e=>e.classList.toggle('selected',e.dataset.fighter===fightEnemyChoice));
   document.querySelectorAll('#fightDifficultyChoices .diffChoice').forEach(e=>e.classList.toggle('selected',e.dataset.diff===fightDifficulty));
@@ -6858,11 +7109,13 @@ function syncSetupSelections(){
     'ELITE has almost no scoring assistance and master-level reactions.';
 }
 document.querySelectorAll('#playerFighterChoices .fighterChoice').forEach(e=>e.onclick=()=>{
+  if(!fighterUnlockedForSpar(e.dataset.fighter)){ $('fightSetupHint').textContent='Reach Black Belt to use or spar this instructor.'; return; }
   fightPlayerChoice=e.dataset.fighter;
   if(fightEnemyChoice===fightPlayerChoice)fightEnemyChoice=fightPlayerChoice==='bradley'?'ryan':'bradley';
   syncSetupSelections();
 });
 document.querySelectorAll('#enemyFighterChoices .fighterChoice').forEach(e=>e.onclick=()=>{
+  if(!fighterUnlockedForSpar(e.dataset.fighter)){ $('fightSetupHint').textContent='Reach Black Belt before sparring this instructor.'; return; }
   fightEnemyChoice=e.dataset.fighter;
   if(fightEnemyChoice===fightPlayerChoice)fightPlayerChoice=fightEnemyChoice==='bradley'?'dad':'bradley';
   syncSetupSelections();
@@ -6870,10 +7123,11 @@ document.querySelectorAll('#enemyFighterChoices .fighterChoice').forEach(e=>e.on
 document.querySelectorAll('#fightDifficultyChoices .diffChoice').forEach(e=>e.onclick=()=>{fightDifficulty=e.dataset.diff;syncSetupSelections()});
 $('fightSetupCancel').onclick=()=>{closeFightSetup();exitSparring()};
 $('fightSetupStart').onclick=()=>{
+  if(!fighterUnlockedForSpar(fightPlayerChoice)||!fighterUnlockedForSpar(fightEnemyChoice)){ $('fightSetupHint').textContent='That matchup is locked until Black Belt.'; return; }
   closeFightSetup();
   applyFightSelections();
   state.pScore=0;state.eScore=0;$('pScore').textContent='0';$('eScore').textContent='0';
-  $('playerFight').style.left='24%';$('enemyFight').style.left='68%';
+  $('playerFight').style.left='34%';$('enemyFight').style.left='60%';
   guardStamina=100;updateGuardMeter();modernAttackLock=false;aiActionLocked=false;
   state.fightTarget=fightSetupOriginalTarget;
   fightSeconds=60;$('fightTimer').textContent='60';$('fightClockFill').style.width='100%';
@@ -7030,6 +7284,8 @@ function modernAttack(type,label,points,animClass,startup=110,recovery=320){
   }
   modernAttackLock=true;
   const p=$('playerFight');p.classList.add('attackStartup');setFightGuard(false);
+  const entryStep={punch:3.2,kick:2.3,side:2.0,defside:.6,twist:3.5,special:4}[type]||2;
+  if(fightDistance()>18)moveFighter(p,entryStep,8,72);
   $('fightFootworkStatus').textContent='STARTUP • COMMIT TO THE TECHNIQUE';
   setTimeout(()=>{
     p.classList.remove('attackStartup');p.classList.add(animClass);
@@ -7076,7 +7332,7 @@ function modernFightMove(x){
   const p=$('playerFight');
   p.classList.add(shaped>0?'fightAdvance':'fightRetreat');
   p.classList.remove(shaped>0?'fightRetreat':'fightAdvance');
-  moveFighter(p,shaped*.55,6,70);addMeter('p',.025);
+  moveFighter(p,shaped*.85,8,72);addMeter('p',.025);
   clearTimeout(p._footT);p._footT=setTimeout(()=>p.classList.remove('fightAdvance','fightRetreat'),90);
 }
 attachJoystick('fightJoy',(x,y)=>{fightJoyX=x;fightJoyY=y});
@@ -7086,7 +7342,7 @@ $('fightPunchBtn').onclick=()=>{if(modernAttack('punch','PUNCH',1,'realPunch',80
 $('fightRoundBtn').onclick=()=>{if(modernAttack('kick','ROUND KICK',2,'roundKicking',145,360))buttonCooldown($('fightRoundBtn'),420)};
 $('fightSideBtn').onclick=()=>{if(modernAttack('side','SIDE KICK',2,'sideKicking',120,340))buttonCooldown($('fightSideBtn'),400)};
 $('fightDefSideBtn').onclick=()=>{
-  if(counterWindowOpen){fightStats.counters++;updateFightStats();counterWindowOpen=false;$('counterWindow').classList.remove('show');modernAttack('defside','DEFENSIVE SIDE KICK COUNTER',2,'sideKicking',65,300)}
+  if(counterWindowOpen){fightStats.counters++;updateFightStats();counterWindowOpen=false;$('counterWindow').classList.remove('show');modernAttack('defside','DEFENSIVE SIDE KICK COUNTER',2,'defensiveSideKicking',65,320)}
   else $('fightMessage').textContent='WAIT FOR THE COUNTER WINDOW';
 };
 $('fightBTwistBtn').onclick=()=>{if(modernAttack('twist','B-TWIST KICK',2,'twisting',210,480))buttonCooldown($('fightBTwistBtn'),560)};
@@ -7443,7 +7699,7 @@ function cameraPunch(ms=150){
 function pointReset(label){
   const o=$('pointResetOverlay'),c=$('pointResetCard'),count=$('refereeCount');
   c.textContent=label+' • REFEREE RESET';o.classList.add('show');state.fightActive=false;
-  setTimeout(()=>{$('playerFight').style.left='18%';$('enemyFight').style.left='72%';},220);
+  setTimeout(()=>{$('playerFight').style.left='34%';$('enemyFight').style.left='60%';},220);
 
   let n=3;
   setTimeout(()=>{
@@ -7595,7 +7851,7 @@ $('fightSummaryExitBtn').onclick=()=>{$('fightSummary').classList.remove('show')
 $('fightRematchBtn').onclick=()=>{
   $('fightSummary').classList.remove('show');
   state.pScore=0;state.eScore=0;$('pScore').textContent='0';$('eScore').textContent='0';
-  $('playerFight').style.left='24%';$('enemyFight').style.left='68%';
+  $('playerFight').style.left='34%';$('enemyFight').style.left='60%';
   fightSeconds=60;setFightPhase('REGULATION');suddenDeath=false;
   modernAttackLock=false;aiActionLocked=false;guardStamina=100;updateGuardMeter();
   state.fightActive=true;clearFightLoops();
@@ -7604,7 +7860,7 @@ $('fightRematchBtn').onclick=()=>{
   roundIntro('FIGHT!');
 };
 const oldStartFight=startFight;
-startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFightPhase('REGULATION');suddenDeath=false;$('fightSummary').classList.remove('show');fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};fightEvades=0;fightCounterWindows=0;updateDefenseHud();playerTechniqueHistory=[];updateFightStats();modernAttackLock=false;aiActionLocked=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);updateFightStyleScout();
+startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFightPhase('REGULATION');suddenDeath=false;$('fightSummary').classList.remove('show');fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};fightEvades=0;fightCounterWindows=0;updateDefenseHud();playerTechniqueHistory=[];updateFightStats();modernAttackLock=false;aiActionLocked=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='34%';$('enemyFight').style.left='60%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);updateFightStyleScout();
   clearFightLoops();
   oldStartFight(name,target);
   fightSeconds=60;
@@ -7649,12 +7905,12 @@ function enemyAiThink(){
   if(!state.fightActive||!$('fight').classList.contains('active')||aiActionLocked)return;
   const enemy=$('enemyFight'),d=fightDistance(),profile=aiProfiles[aiStyle]||aiProfiles.balanced,r=Math.random();
 
-  if(d>37){
+  if(d>32){
     $('enemyIntent').textContent='CLOSING RANGE';
     enemy.classList.add('fightAdvance');moveFighter(enemy,-2.6*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);
     setTimeout(()=>enemy.classList.remove('fightAdvance'),180);return;
   }
-  if(d<17){
+  if(d<14){
     $('enemyIntent').textContent='CREATING SPACE';
     enemy.classList.add('fightRetreat');moveFighter(enemy,2.5*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);
     setTimeout(()=>enemy.classList.remove('fightRetreat'),180);return;
