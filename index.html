@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v4.0</title>
+<title>PBK: Path to Black Belt v4.1</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -137,6 +137,328 @@ button:active{transform:scale(.98)}
 #fightMessage{position:absolute;left:50%;top:70px;transform:translateX(-50%);z-index:20;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.65);font-weight:1000}
 #fightControls{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:10px;background:#0c1014;width:100%}
 #fightControls button{min-width:110px}
+
+/* v4.1 visual upgrade */
+:root{
+  --glass:rgba(10,14,18,.84);
+  --line:rgba(255,255,255,.15);
+  --warm:#e7b66f;
+}
+.screen::before{
+  content:'';
+  position:absolute;inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.035),transparent 45%);
+}
+.panel{
+  backdrop-filter:blur(7px);
+  background:linear-gradient(180deg,rgba(17,23,30,.92),rgba(8,11,15,.88));
+}
+#world{
+  background:
+    radial-gradient(circle at 50% 20%,rgba(127,169,211,.12),transparent 35%),
+    linear-gradient(#182431,#090d12);
+}
+#regionMap{
+  background:
+    radial-gradient(circle at 18% 18%,rgba(255,255,255,.07),transparent 20%),
+    radial-gradient(circle at 78% 14%,rgba(255,255,255,.04),transparent 18%),
+    linear-gradient(145deg,#6a895c,#4a7147 42%,#35553a);
+}
+#regionMap::after{
+  content:'';
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    radial-gradient(circle at 20% 70%,rgba(29,62,33,.36),transparent 10%),
+    radial-gradient(circle at 78% 62%,rgba(29,62,33,.28),transparent 12%),
+    repeating-linear-gradient(115deg,transparent 0 38px,rgba(255,255,255,.018) 38px 39px);
+}
+.townNode{
+  overflow:hidden;
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.townNode::before{
+  content:'';
+  position:absolute;left:10px;right:10px;bottom:8px;height:25px;
+  background:
+    radial-gradient(circle at 12% 75%,#263628 0 8px,transparent 9px),
+    radial-gradient(circle at 34% 65%,#29402d 0 9px,transparent 10px),
+    radial-gradient(circle at 65% 70%,#263628 0 9px,transparent 10px),
+    radial-gradient(circle at 87% 72%,#29402d 0 8px,transparent 9px);
+  opacity:.9;
+}
+.townNode:hover{transform:translateY(-4px);box-shadow:0 18px 30px rgba(0,0,0,.4),0 0 0 2px rgba(255,255,255,.08)}
+.townNode .miniDojo{
+  background:
+    linear-gradient(rgba(255,255,255,.06),rgba(255,255,255,.01)),
+    #192028;
+  box-shadow:0 6px 10px rgba(0,0,0,.28);
+}
+.townNode .miniDojo::before{
+  content:'';
+  position:absolute;left:-7px;right:-7px;top:-12px;height:16px;
+  clip-path:polygon(5% 100%,50% 0,95% 100%);
+  background:#48535f;
+}
+
+/* Human proportions */
+.human{
+  width:48px;height:82px;
+}
+.human .head{
+  left:13px;width:22px;height:25px;
+  border-radius:45% 45% 48% 48%;
+  background:
+    radial-gradient(circle at 35% 45%,#38261e 0 1.1px,transparent 1.5px),
+    radial-gradient(circle at 68% 45%,#38261e 0 1.1px,transparent 1.5px),
+    linear-gradient(90deg,#b97851,#e0a87b);
+}
+.human .head::after{
+  content:'';
+  position:absolute;left:8px;top:16px;width:6px;height:2px;border-radius:50%;
+  background:rgba(90,48,34,.55);
+}
+.human .hair{
+  left:12px;width:24px;height:11px;
+  background:linear-gradient(#1e1814,#30231c);
+}
+.human .torso{
+  left:9px;top:25px;width:30px;height:34px;
+  border-radius:10px 10px 7px 7px;
+  background:
+    linear-gradient(130deg,transparent 0 44%,rgba(255,255,255,.06) 45% 48%,transparent 49%),
+    linear-gradient(90deg,#0d1115,#262d34 50%,#0d1115);
+}
+.human .torso::after{
+  content:'';
+  position:absolute;left:4px;right:4px;bottom:5px;height:5px;background:#080808;border-radius:2px;
+}
+.human .arm{top:30px;height:31px;width:8px}
+.human .leg{top:57px;height:25px;width:9px}
+.human .leg::after{
+  content:'';
+  position:absolute;bottom:-3px;width:12px;height:5px;border-radius:50%;background:#08090b;
+}
+.human .leg.l::after{left:-2px}.human .leg.r::after{right:-2px}
+.human .shadow{width:38px;height:10px}
+
+/* Town environmental detail */
+#townMap{
+  background:
+    linear-gradient(#7ba0ca 0 20%,#88a875 20% 100%);
+}
+#townMap::before{
+  content:'';
+  position:absolute;left:0;right:0;top:17%;height:20%;
+  background:
+    radial-gradient(circle at 8% 80%,#4a7347 0 26px,transparent 27px),
+    radial-gradient(circle at 20% 75%,#4d7649 0 34px,transparent 35px),
+    radial-gradient(circle at 80% 72%,#456d44 0 34px,transparent 35px),
+    radial-gradient(circle at 92% 78%,#4b7548 0 25px,transparent 26px);
+  opacity:.95;z-index:1;pointer-events:none;
+}
+.tRoad{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.025),rgba(0,0,0,.08)),
+    #474c51;
+  box-shadow:inset 0 5px 0 rgba(255,255,255,.025),inset 0 -5px 0 rgba(0,0,0,.12);
+}
+.tRoad::after{
+  content:'';
+  position:absolute;left:6%;right:6%;top:50%;height:3px;
+  background:repeating-linear-gradient(90deg,#e1d17a 0 34px,transparent 34px 68px);
+  opacity:.85;
+}
+.building{
+  overflow:visible;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.building::before{
+  content:'';
+  position:absolute;left:-10px;right:-10px;top:-22px;height:27px;
+  clip-path:polygon(4% 100%,50% 0,96% 100%);
+  background:#434d57;
+  z-index:-1;
+}
+.building:hover{transform:translateY(-3px)}
+.building .door{
+  box-shadow:inset -6px 0 0 rgba(255,255,255,.025),0 -2px 0 rgba(255,255,255,.04);
+}
+.building .door::after{
+  content:'';
+  position:absolute;right:5px;top:24px;width:4px;height:4px;border-radius:50%;background:#c6a56c;
+}
+.building .window{
+  background:linear-gradient(150deg,#c2d6e7 0 20%,#6d92ad 22% 100%);
+  box-shadow:inset 0 0 10px rgba(255,255,255,.13);
+}
+#bDojo{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.04),transparent),
+    linear-gradient(#343c45,#151a20);
+}
+#bDojo::before{background:#4a5662;height:31px;top:-26px}
+#bDojo::after{
+  content:'';
+  position:absolute;left:16px;right:16px;bottom:-14px;height:14px;
+  background:linear-gradient(#888,#656b70);clip-path:polygon(0 0,100% 0,94% 100%,6% 100%);
+}
+#townPlayer,#npc1,#npc2,#npc3,#npc4{
+  transition:left .08s linear,top .08s linear;
+}
+.npc .human{animation:npcIdle 2.8s ease-in-out infinite}
+@keyframes npcIdle{50%{transform:translateY(-2px)}}
+
+/* Interior realism */
+#interiorRoom{
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(#30373e 0 26%,#796247 26% 100%);
+  background-size:48px 48px,48px 48px,100% 100%;
+}
+#interiorRoom::before{
+  content:'';
+  position:absolute;left:0;right:0;top:26%;height:9px;background:#4d3b2b;
+}
+.roomObj{
+  background:linear-gradient(#1b2229,#11161b);
+  box-shadow:0 10px 18px rgba(0,0,0,.22);
+}
+
+/* Dojo lighting and details */
+#dojoRoom{
+  background:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(#2b3239 0 24%,#806747 24% 100%);
+  background-size:48px 48px,48px 48px,100% 100%;
+}
+#dojoRoom::before{
+  content:'PBK • RESPECT • DISCIPLINE • CONFIDENCE • LEADERSHIP';
+  position:absolute;left:50%;top:64px;transform:translateX(-50%);
+  width:min(640px,75%);padding:8px 14px;border-radius:999px;
+  background:#0f1419;border:1px solid #5b6671;text-align:center;
+  font-size:10px;font-weight:1000;letter-spacing:1px;
+}
+#dojoRoom::after{
+  content:'';
+  position:absolute;left:9%;top:19%;width:150px;height:82px;border:4px solid #8e99a4;border-radius:10px;
+  background:linear-gradient(145deg,#8db0c7 0 30%,#42627b 31% 100%);
+  box-shadow:inset 0 0 18px rgba(255,255,255,.18);
+}
+#dojoMat{
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    #315978;
+  background-size:52px 52px;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.025),0 18px 28px rgba(0,0,0,.28);
+}
+.dojoSpot{
+  backdrop-filter:blur(4px);
+  background:linear-gradient(180deg,rgba(21,27,33,.94),rgba(8,12,16,.92));
+  box-shadow:0 8px 14px rgba(0,0,0,.22);
+}
+#dojoTrophies::after{
+  content:'🏆 🏆 🏆';
+  display:block;margin-top:6px;font-size:22px;
+}
+#dojoTraining::after{
+  content:'🥋';
+  display:block;margin-top:5px;font-size:20px;
+}
+#dojoSpar::after{
+  content:'🥊';
+  display:block;margin-top:5px;font-size:19px;
+}
+
+/* Fight presentation */
+#fightHud{
+  background:linear-gradient(#121820,#070a0e);
+  border-bottom:1px solid #343e48;
+}
+.scorePanel{
+  background:linear-gradient(#1a2129,#0f1419);
+}
+#arena{
+  background:
+    radial-gradient(circle at 50% 16%,rgba(255,235,194,.16),transparent 26%),
+    linear-gradient(#25323f 0 26%,#1e262f 26% 55%,#6f5137 55% 100%);
+}
+#arena::before,#arena::after{
+  content:'';
+  position:absolute;top:0;width:32%;height:100%;pointer-events:none;
+}
+#arena::before{left:0;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+#arena::after{right:0;background:linear-gradient(-90deg,rgba(0,0,0,.35),transparent)}
+#arenaFloor{
+  box-shadow:0 0 0 8px rgba(0,0,0,.18),0 28px 50px rgba(0,0,0,.32);
+}
+#crowd{
+  background:
+    radial-gradient(circle at 5% 65%,#d6b08b 0 4px,transparent 5px),
+    radial-gradient(circle at 12% 52%,#ba8e69 0 4px,transparent 5px),
+    radial-gradient(circle at 20% 70%,#d1a27c 0 4px,transparent 5px),
+    radial-gradient(circle at 28% 50%,#c8946f 0 4px,transparent 5px),
+    radial-gradient(circle at 36% 64%,#d0a17a 0 4px,transparent 5px),
+    radial-gradient(circle at 45% 54%,#b98664 0 4px,transparent 5px),
+    radial-gradient(circle at 55% 67%,#d5a77d 0 4px,transparent 5px),
+    radial-gradient(circle at 64% 49%,#bd8d69 0 4px,transparent 5px),
+    radial-gradient(circle at 73% 64%,#d6aa83 0 4px,transparent 5px),
+    radial-gradient(circle at 82% 53%,#c79772 0 4px,transparent 5px),
+    radial-gradient(circle at 91% 65%,#d4a47b 0 4px,transparent 5px),
+    repeating-linear-gradient(90deg,#11161b 0 16px,#20262c 16px 31px);
+}
+#fightBanner{
+  top:16px;padding:7px 12px;border-radius:999px;background:rgba(0,0,0,.48);
+  border:1px solid rgba(255,255,255,.1);
+}
+.fighterReal{
+  filter:drop-shadow(0 11px 7px rgba(0,0,0,.32));
+}
+.fighterReal .fhead{
+  background:
+    radial-gradient(circle at 35% 43%,#3a251c 0 1.4px,transparent 1.8px),
+    radial-gradient(circle at 67% 43%,#3a251c 0 1.4px,transparent 1.8px),
+    linear-gradient(90deg,#b87951,#e0a87b);
+}
+.fighterReal .fhead::after{
+  content:'';
+  position:absolute;left:12px;top:26px;width:9px;height:2px;border-radius:50%;background:rgba(91,49,35,.5);
+}
+.fighterReal .ftorso{
+  background:
+    linear-gradient(135deg,transparent 0 43%,rgba(255,255,255,.08) 44% 48%,transparent 49%),
+    linear-gradient(90deg,#080a0d,#252b32 50%,#080a0d);
+}
+.fighterReal .ftorso::before{
+  content:'';
+  position:absolute;left:18px;top:0;width:2px;height:74px;background:rgba(255,255,255,.07);transform:rotate(15deg);
+}
+#enemyFight .ftorso{
+  background:
+    linear-gradient(135deg,transparent 0 43%,rgba(255,255,255,.08) 44% 48%,transparent 49%),
+    linear-gradient(90deg,#4a1515,#811f1f 50%,#4a1515);
+}
+#fightMessage{
+  transition:transform .15s ease,filter .15s ease;
+}
+#fightMessage.impact{
+  transform:translateX(-50%) scale(1.14);
+  filter:brightness(1.4);
+}
+#impactFlash{
+  position:absolute;inset:0;pointer-events:none;z-index:30;opacity:0;
+  background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.22),transparent 35%);
+}
+#impactFlash.on{animation:impactFlash .24s ease-out}
+@keyframes impactFlash{0%{opacity:0}45%{opacity:1}100%{opacity:0}}
+#fightControls button{
+  background:linear-gradient(#313b47,#151a20);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
 </style>
 </head>
 <body>
@@ -246,7 +568,7 @@ button:active{transform:scale(.98)}
 
 <section id="fight" class="screen">
   <div id="fightHud"><div class="scorePanel"><strong>BRADLEY</strong><div class="score" id="pScore">0</div></div><div id="fightCenter"><div id="fightTimer">60</div><div id="fightTarget">FIRST TO 5</div></div><div class="scorePanel" style="text-align:right"><strong id="enemyName">OPPONENT</strong><div class="score" id="eScore">0</div></div></div>
-  <div id="arena"><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="fightMessage">FIGHT!</div>
+  <div id="arena"><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
     <div class="fighterReal" id="playerFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
     <div class="fighterReal" id="enemyFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
   </div>
@@ -338,6 +660,69 @@ else if($('town').classList.contains('active')){if(e.key==='ArrowUp'||e.key==='w
 setInterval(()=>{if(!$('town').classList.contains('active'))return;[['npc1',.03,.02],['npc2',-.025,.015],['npc3',.02,-.018],['npc4',-.02,-.012]].forEach(([id,dx,dy])=>{const el=$(id);let x=parseFloat(el.style.left||getComputedStyle(el).left)/$('townMap').clientWidth*100;let y=parseFloat(el.style.top||getComputedStyle(el).top)/$('townMap').clientHeight*100;if(!Number.isFinite(x))return;x+=dx*10;y+=dy*10;if(x<15||x>85)dx*=-1;if(y<30||y>75)dy*=-1;el.style.left=Math.max(12,Math.min(88,x))+'%';el.style.top=Math.max(28,Math.min(78,y))+'%'})},120);
 
 renderWorld();
+
+/* v4.1 audio + visual game feel */
+let sfxCtx=null;
+function ensureSfx(){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return null;
+  if(!sfxCtx)sfxCtx=new AC();
+  if(sfxCtx.state==='suspended')sfxCtx.resume();
+  return sfxCtx;
+}
+function sfxTone(freq,dur=.12,gain=.04,type='square'){
+  const c=ensureSfx();if(!c)return;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(.0001,c.currentTime);
+  g.gain.linearRampToValueAtTime(gain,c.currentTime+.008);
+  g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+dur);
+  o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+dur+.03);
+}
+function sfxHit(points=1){
+  sfxTone(points===2?165:220,.1,.055,'square');
+  setTimeout(()=>sfxTone(points===2?82:110,.14,.035,'sine'),30);
+}
+function sfxWhoosh(){
+  const c=ensureSfx();if(!c)return;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type='sawtooth';o.frequency.setValueAtTime(520,c.currentTime);o.frequency.exponentialRampToValueAtTime(130,c.currentTime+.15);
+  g.gain.setValueAtTime(.0001,c.currentTime);g.gain.linearRampToValueAtTime(.025,c.currentTime+.01);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.16);
+  o.connect(g).connect(c.destination);o.start();o.stop(c.currentTime+.18);
+}
+function impactFx(points){
+  const f=$('impactFlash'),m=$('fightMessage');
+  f.classList.remove('on');void f.offsetWidth;f.classList.add('on');
+  m.classList.add('impact');setTimeout(()=>m.classList.remove('impact'),180);
+  sfxHit(points);
+}
+function ambienceTown(){
+  // tiny subtle bell/chime when entering a town
+  sfxTone(392,.16,.018,'sine');setTimeout(()=>sfxTone(523.25,.22,.014,'sine'),80);
+}
+function ambienceDojo(){
+  sfxTone(196,.18,.025,'sine');setTimeout(()=>sfxTone(392,.5,.014,'sine'),60);
+}
+
+const priorOpenTown=openTown;
+openTown=function(id){priorOpenTown(id);ambienceTown();}
+
+const priorOpenDojo=openDojo;
+openDojo=function(){priorOpenDojo();ambienceDojo();}
+
+const oldScorePoint=scorePoint;
+scorePoint=function(side,pts,label){
+  oldScorePoint(side,pts,label);
+  if(side==='p')impactFx(pts);
+};
+
+document.querySelectorAll('[data-fight]').forEach(b=>{
+  b.addEventListener('pointerdown',()=>{
+    const a=b.dataset.fight;
+    if(['punch','kick','side','twist'].includes(a))sfxWhoosh();
+  },{passive:true});
+});
+
 </script>
 </body>
 </html>
