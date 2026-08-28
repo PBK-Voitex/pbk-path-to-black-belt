@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v6.7</title>
+<title>PBK: Path to Black Belt v6.9</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -4249,6 +4249,234 @@ body.time-night .building .window{
 #fightActionCluster button.readable{border-color:#718895}
 #fightActionCluster button.readable.good{border-color:#72a376;color:#cfe9cf}
 
+
+/* v6.8 REGIONAL WORLD REBUILD */
+#gpsPanel{
+ position:absolute!important; right:18px!important; left:auto!important; top:18px!important;
+ width:210px!important; height:42px!important; min-height:42px!important; max-height:42px!important;
+ overflow:hidden!important; padding:5px 7px!important; border-radius:12px!important;
+ background:rgba(12,18,23,.64)!important; border:1px solid rgba(255,255,255,.12)!important;
+ box-shadow:0 8px 22px rgba(0,0,0,.16)!important; backdrop-filter:blur(9px)!important;
+ transform:none!important; z-index:300!important;
+}
+#gpsPanel.open{width:250px!important;height:auto!important;max-height:260px!important;overflow:visible!important}
+#gpsTop{height:30px!important;min-height:30px!important;padding:2px 4px!important}
+#gpsArrow{width:20px!important;height:20px!important;font-size:11px!important}
+#gpsText{font-size:8px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#gpsButtons{display:none!important;margin-top:5px!important;grid-template-columns:1fr 1fr!important;gap:4px!important}
+#gpsPanel.open #gpsButtons{display:grid!important}
+#gpsButtons button{padding:6px 5px!important;font-size:7px!important;border-radius:8px!important}
+#mapViewBadge,#cameraModeBadge,#districtStatus,#regionStatusFloating,#regionControlsFloating,#roadAssistBadge,#worldInteractHint,#vehicleHud,#mapModeControls{display:none!important}
+
+#regionTopHud{top:14px!important;left:18px!important;right:auto!important;width:auto!important;max-width:430px!important;transform:none!important;display:block!important;z-index:260!important}
+#regionTopHud .panel:first-child{display:none!important}
+#regionTopHud .panel:last-child{width:auto!important;max-width:430px!important;padding:7px 11px!important;border-radius:12px!important;background:rgba(12,18,23,.58)!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:0 8px 18px rgba(0,0,0,.14)!important;backdrop-filter:blur(8px)!important}
+#regionTopHud strong{font-size:11px!important} #regionTopHud .small{font-size:7px!important;opacity:.76!important}
+
+#worldControlDock{left:16px!important;bottom:16px!important;padding:7px!important;gap:6px!important;border-radius:16px!important;background:rgba(11,17,22,.46)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 8px 20px rgba(0,0,0,.13)!important;backdrop-filter:blur(8px)!important}
+#worldStick{width:98px!important;height:98px!important} #worldStickKnob{width:40px!important;height:40px!important}
+#worldActionButtons{grid-template-columns:68px 68px!important;gap:4px!important}
+#worldActionButtons button{width:68px!important;min-width:68px!important;height:32px!important;padding:4px!important;font-size:7px!important;border-radius:9px!important}
+#roadAssistBtn{display:none!important}
+
+#miniMap{right:18px!important;bottom:18px!important;top:auto!important;width:178px!important;height:118px!important;border-radius:16px!important;background:rgba(8,13,17,.58)!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:0 9px 24px rgba(0,0,0,.18)!important;backdrop-filter:blur(8px)!important;opacity:.94!important}
+#miniMapCanvas{inset:7px!important;border-radius:11px!important;background:#75996d!important}
+
+#globalTouchInteract{right:auto!important;left:50%!important;bottom:18px!important;transform:translateX(-50%)!important;min-width:92px!important;min-height:38px!important;padding:7px 12px!important;font-size:8px!important;border-width:1px!important;box-shadow:0 6px 15px rgba(0,0,0,.17)!important}
+
+.townDistrict{border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.townDistrict::before{inset:0!important;opacity:.42!important;border-radius:28px!important;background:linear-gradient(90deg,transparent 0 46%,rgba(79,84,86,.82) 46% 53%,transparent 53%),linear-gradient(transparent 0 47%,rgba(79,84,86,.82) 47% 54%,transparent 54%)!important}
+.townDistrict .districtLabel{top:4px!important;padding:5px 9px!important;font-size:12px!important;letter-spacing:.8px!important;background:rgba(11,16,20,.66)!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:none!important}
+.townDistrict .districtSub{top:35px!important;font-size:7px!important;opacity:.64!important}
+.townDistrict .districtRoadName{font-size:6px!important;padding:3px 5px!important;background:rgba(12,17,21,.6)!important}
+
+.bigRoad{box-shadow:inset 0 3px 0 rgba(255,255,255,.035),inset 0 -3px 0 rgba(0,0,0,.14),0 4px 10px rgba(0,0,0,.10)!important;background:linear-gradient(#4a4f53,#42484c)!important}
+.bigRoad::after{height:2px!important;background:repeating-linear-gradient(90deg,#e3cf6c 0 30px,transparent 30px 63px)!important}
+.roadShoulder{opacity:.25!important}.routeShield{padding:4px 7px!important;font-size:7px!important;border-radius:8px!important;background:rgba(10,15,19,.78)!important;box-shadow:none!important}
+
+.regionCommercial{border:none!important;border-radius:8px!important;box-shadow:0 7px 14px rgba(0,0,0,.12)!important;background:#777d79!important;overflow:visible!important}
+#regionCommercial1{width:320px!important;height:190px!important;left:1020px!important;top:770px!important;background:linear-gradient(90deg,transparent 0 15%,rgba(255,255,255,.22) 15% 15.8%,transparent 15.8% 33%,rgba(255,255,255,.22) 33% 33.8%,transparent 33.8% 52%,rgba(255,255,255,.22) 52% 52.8%,transparent 52.8% 70%,rgba(255,255,255,.22) 70% 70.8%,transparent 70.8%),#62696c!important}
+#regionCommercial1::before{content:'';position:absolute;left:26px;top:24px;width:118px;height:74px;background:linear-gradient(#947259,#684c39);border-radius:4px;box-shadow:150px 52px 0 #7b8589}
+#regionCommercial1::after{content:'SHOPPING PLAZA';position:absolute;left:50%;bottom:12px;transform:translateX(-50%);padding:4px 7px;border-radius:7px;background:rgba(12,17,21,.72);color:#e7ecef;font-size:7px;font-weight:1000}
+#regionCommercial2{width:280px!important;height:170px!important;background:#5e6669!important}
+#regionCommercial2::before{content:'';position:absolute;left:22px;top:24px;width:92px;height:65px;background:#795f48;border-radius:4px;box-shadow:118px 35px 0 #8a8f91}
+#regionCommercial2::after{content:'LOCAL BUSINESS';position:absolute;left:50%;bottom:12px;transform:translateX(-50%);font-size:7px;font-weight:1000;color:#e3e8eb}
+
+.regionSubdivision{border:none!important;box-shadow:none!important;background:radial-gradient(circle at 18% 34%,#9a826c 0 18px,transparent 19px),radial-gradient(circle at 42% 58%,#a38c74 0 18px,transparent 19px),radial-gradient(circle at 68% 30%,#947d69 0 18px,transparent 19px),radial-gradient(circle at 81% 66%,#a18b73 0 18px,transparent 19px),rgba(92,123,82,.36)!important;opacity:.78!important}
+.roadsideSign{font-size:6px!important;padding:3px 5px!important}.speedLimitSign{transform:scale(.78)!important;transform-origin:center!important}
+.regionTree,.roadDecorTree{filter:saturate(.85);opacity:.82!important}
+.mapBuilding:hover{transform:translateY(-2px)!important;filter:brightness(1.12)!important}
+
+@media (max-height:700px) and (pointer:coarse),(max-width:980px) and (pointer:coarse){
+ #gpsPanel{right:8px!important;top:8px!important;left:auto!important;width:145px!important;height:36px!important;max-height:36px!important}
+ #gpsPanel.open{width:210px!important;height:auto!important;max-height:220px!important}
+ #regionTopHud{left:8px!important;top:8px!important;max-width:190px!important}
+ #regionTopHud .panel:last-child{max-width:190px!important}
+ #miniMap{right:8px!important;bottom:8px!important;width:92px!important;height:64px!important}
+ #worldControlDock{left:8px!important;bottom:8px!important}
+ #globalTouchInteract{bottom:8px!important}
+}
+
+
+/* v6.9 SPARRING REBUILD */
+
+/* MATCH SETUP */
+#fightSetupOverlay{
+  position:absolute;inset:0;z-index:220;display:none;place-items:center;
+  background:rgba(6,10,13,.78);backdrop-filter:blur(8px)
+}
+#fightSetupOverlay.show{display:grid}
+#fightSetupCard{
+  width:min(860px,92vw);padding:18px;border-radius:18px;
+  background:linear-gradient(145deg,#152029,#0c1217);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 28px 80px rgba(0,0,0,.48)
+}
+#fightSetupCard h2{margin:0 0 4px;font-size:23px}
+#fightSetupCard p{margin:0 0 14px;font-size:9px;opacity:.7}
+#fightSetupGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fightSetupColumn{
+  padding:11px;border-radius:13px;background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.09)
+}
+.fightSetupColumn strong{display:block;margin-bottom:7px;font-size:11px}
+.fighterChoiceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fighterChoice{
+  padding:9px 6px;border-radius:10px;background:#1c2730;border:1px solid #46545f;
+  text-align:center;font-size:8px;font-weight:1000;cursor:pointer
+}
+.fighterChoice.selected{border-color:#d3b95d;color:#f1db8d;box-shadow:0 0 0 2px rgba(211,185,93,.12) inset}
+.fighterChoice .miniHead{
+  width:34px;height:34px;margin:0 auto 5px;border-radius:50%;
+  background:linear-gradient(#d6ab87,#9a6d50);border:2px solid #111
+}
+.fighterChoice[data-fighter="bradley"] .miniHead{background:linear-gradient(#d9af8d,#a26f4f)}
+.fighterChoice[data-fighter="ryan"] .miniHead{background:linear-gradient(#c99c78,#855d43)}
+.fighterChoice[data-fighter="dad"] .miniHead{background:linear-gradient(#c9966f,#80553b)}
+.fighterChoice[data-fighter="alex"] .miniHead{background:linear-gradient(#ddb491,#9a6e50)}
+.fighterChoice[data-fighter="camara"] .miniHead{background:linear-gradient(#b9805f,#6d4634)}
+.fighterChoice[data-fighter="stef"] .miniHead{background:linear-gradient(#d3a682,#8f6549)}
+
+#fightDifficultyChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.diffChoice{
+  padding:9px 6px;border-radius:10px;background:#172129;border:1px solid #45515b;
+  text-align:center;font-size:8px;font-weight:1000;cursor:pointer
+}
+.diffChoice.selected{border-color:#d2b75d;color:#f1dc8d}
+#fightSetupHint{
+  margin-top:10px;padding:8px 9px;border-radius:10px;background:#11181e;
+  border:1px solid #394650;font-size:8px;line-height:1.45
+}
+#fightSetupActions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+#fightSetupStart{min-width:160px;background:linear-gradient(#786127,#3d3015);border-color:#b69649}
+#fightSetupCancel{min-width:100px}
+
+/* NEW FIGHTER PRESENTATION */
+.fighterNamePlate{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  min-width:100px;padding:4px 6px;border-radius:999px;background:rgba(8,12,15,.82);
+  border:1px solid rgba(255,255,255,.13);font-size:7px;font-weight:1000;text-align:center;
+  white-space:nowrap
+}
+#playerFight .fighterNamePlate{color:#d7e8f1}
+#enemyFight .fighterNamePlate{color:#f0d7cf}
+.fighterReal{
+  filter:drop-shadow(0 13px 10px rgba(0,0,0,.32));
+  transform-origin:50% 90%;
+}
+.fighterReal .fhead{
+  box-shadow:inset -5px -6px 0 rgba(0,0,0,.08),0 1px 0 rgba(255,255,255,.12)
+}
+.fighterReal .ftorso{
+  box-shadow:inset -7px 0 0 rgba(0,0,0,.11),inset 7px 0 0 rgba(255,255,255,.035)
+}
+.fighterReal::before{
+  content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:92px;height:11px;border-radius:50%;background:rgba(0,0,0,.16);filter:blur(3px);z-index:-1
+}
+
+/* individual visual identities */
+.fighterReal.fighter-bradley .fhair{background:#7c5737!important}
+.fighterReal.fighter-bradley .fbelt{background:#050505!important}
+.fighterReal.fighter-ryan .fhair{background:#3c2b22!important}
+.fighterReal.fighter-ryan .ftorso{background:linear-gradient(90deg,#14191d,#333d44,#14191d)!important}
+.fighterReal.fighter-dad .fhair{background:#35281f!important}
+.fighterReal.fighter-dad .fhead{transform:scale(1.04)}
+.fighterReal.fighter-alex .fhair{background:#75513b!important}
+.fighterReal.fighter-alex .ftorso{background:linear-gradient(90deg,#111,#26313a,#111)!important}
+.fighterReal.fighter-camara .fhair{background:#171717!important}
+.fighterReal.fighter-camara .fbelt{box-shadow:0 0 0 1px #a28239 inset}
+.fighterReal.fighter-stef .fhair{background:#62452f!important}
+.fighterReal.fighter-stef .ftorso{background:linear-gradient(90deg,#101418,#2d3740,#101418)!important}
+
+/* More arena depth */
+#fightStage{
+  background:
+    radial-gradient(ellipse at 50% 112%,rgba(99,137,161,.20),transparent 46%),
+    linear-gradient(#26333e 0 22%,#1c262e 22% 38%,#2b586f 38% 100%)!important;
+}
+#fightStage::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(circle at 18% 7%,rgba(255,255,255,.18),transparent 13%),
+    radial-gradient(circle at 50% 3%,rgba(255,255,255,.13),transparent 12%),
+    radial-gradient(circle at 82% 7%,rgba(255,255,255,.17),transparent 13%)
+}
+#arenaFloor{
+  box-shadow:inset 0 12px 22px rgba(255,255,255,.025),0 -18px 45px rgba(0,0,0,.23)!important
+}
+#fightCrowdGlow{
+  background:
+    radial-gradient(circle at 10% 50%,rgba(224,205,130,.14),transparent 7%),
+    radial-gradient(circle at 25% 55%,rgba(121,169,197,.14),transparent 7%),
+    radial-gradient(circle at 75% 48%,rgba(224,205,130,.12),transparent 7%),
+    radial-gradient(circle at 90% 54%,rgba(121,169,197,.14),transparent 7%)!important
+}
+#fightMessage{
+  font-size:13px!important;
+  text-shadow:0 3px 10px rgba(0,0,0,.48)
+}
+#judgeCall{
+  font-size:15px!important;
+  padding:12px 18px!important
+}
+#hitMarker.show{transform:scale(1.25)!important}
+
+/* SCORE ASSIST UI */
+#scoreAssistBadge{
+  position:absolute;left:50%;bottom:108px;transform:translateX(-50%);z-index:138;
+  padding:6px 10px;border-radius:999px;background:rgba(11,17,22,.7);
+  border:1px solid rgba(255,255,255,.12);font-size:8px;font-weight:1000
+}
+#scoreAssistBadge.ready{border-color:#7eaa79;color:#cce8c7}
+#scoreAssistBadge.close{border-color:#d0b75c;color:#f1dc8d}
+
+/* keyboard legend */
+#fightKeyboardLegend{
+  position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:139;
+  padding:5px 8px;border-radius:999px;background:rgba(9,14,18,.58);
+  border:1px solid rgba(255,255,255,.09);font-size:6px;opacity:.72
+}
+.touchDevice #fightKeyboardLegend{display:none!important}
+
+/* simplify desktop fighting controls */
+#fightControls{display:none!important}
+
+/* mobile */
+@media (max-height:700px) and (pointer:coarse),(max-width:980px) and (pointer:coarse){
+  #fightSetupCard{width:94vw;padding:10px}
+  #fightSetupGrid{grid-template-columns:1fr 1fr;gap:6px}
+  .fighterChoiceGrid{grid-template-columns:repeat(3,1fr);gap:3px}
+  .fighterChoice{padding:5px 3px;font-size:6px}
+  .fighterChoice .miniHead{width:25px;height:25px}
+  #fightDifficultyChoices{gap:3px;margin-top:6px}
+  .diffChoice{padding:6px 3px;font-size:6px}
+  #fightSetupHint{font-size:6px;margin-top:5px;padding:5px}
+  #fightSetupActions{margin-top:6px}
+  #fightKeyboardLegend{display:none!important}
+  #scoreAssistBadge{bottom:80px;font-size:6px;padding:4px 7px}
+}
+
 </style>
 </head>
 <body>
@@ -4340,7 +4568,7 @@ body.time-night .building .window{
       <div class="miniTown" id="mmFox"></div><div class="miniTown" id="mmNorton"></div><div class="miniTown" id="mmEaston"></div><div class="miniTown" id="mmRay"></div><div id="miniPlayer"></div>
     </div></div>
     <div id="vehicleHud">FUEL <span id="fuelText">100%</span><span id="fuelBar"><span id="fuelFill"></span></span><span id="roadStatus">WALKING</span></div>
-    <div id="regionTopHud">
+    <div id="driveObjective" style="position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:255;padding:6px 10px;border-radius:999px;background:rgba(12,18,23,.48);border:1px solid rgba(255,255,255,.09);font-size:7px;font-weight:900;backdrop-filter:blur(7px);pointer-events:none">EXPLORE • FOLLOW ROADS • ENTER ANY PBK</div><div id="regionTopHud">
     <div class="panel"><strong>PBK WORLD</strong><div class="small">Massachusetts Region</div></div>
     <div class="panel">
       <strong id="worldRank">White Belt</strong>
@@ -4546,10 +4774,45 @@ body.time-night .building .window{
 <section id="tournament" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK TOURNAMENT</strong><button id="tournamentBackTop">BACK TO DOJO</button></div><div id="tournamentRoom"><div id="tournamentTitle">TOURNAMENT BRACKET</div><div id="bracketGrid"><div class="bracketCol"><strong>ROUND 1</strong><div class="bracketMatch">Bradley vs Local Fighter</div></div><div class="bracketCol"><strong>SEMIFINAL</strong><div class="bracketMatch">Winner advances</div></div><div class="bracketCol"><strong>FINAL</strong><div class="bracketMatch">Championship Match</div></div><div class="bracketCol"><strong>REWARD</strong><div class="bracketMatch">3-Foot Trophy</div><div class="bracketMatch">Stripe Progress</div></div></div><div id="tournamentActions"><button id="startTournamentBtn">START TOURNAMENT</button></div><button id="tournamentExit">EXIT</button></div></section>
 <section id="bosses" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK BOSS PATH</strong><button id="bossBackTop">BACK TO DOJO</button></div><div id="bossRoom"><div id="bossTitle">BLACK BELT ROAD</div><div id="bossGrid"></div><button id="bossExit">EXIT</button></div></section>
 <section id="fight" class="screen">
+<div id="fightSetupOverlay">
+  <div id="fightSetupCard">
+    <h2>SPARRING MATCH SETUP</h2>
+    <p>Choose who you want to play, who you want to fight, and how difficult the opponent should be.</p>
+    <div id="fightSetupGrid">
+      <div class="fightSetupColumn"><strong>YOUR FIGHTER</strong><div class="fighterChoiceGrid" id="playerFighterChoices">
+        <div class="fighterChoice selected" data-fighter="bradley"><div class="miniHead"></div>BRADLEY</div>
+        <div class="fighterChoice" data-fighter="dad"><div class="miniHead"></div>DAD</div>
+        <div class="fighterChoice" data-fighter="ryan"><div class="miniHead"></div>RYAN</div>
+        <div class="fighterChoice" data-fighter="alex"><div class="miniHead"></div>ALEX</div>
+        <div class="fighterChoice" data-fighter="camara"><div class="miniHead"></div>MASTER CAMARA</div>
+        <div class="fighterChoice" data-fighter="stef"><div class="miniHead"></div>MASTER STEF</div>
+      </div></div>
+      <div class="fightSetupColumn"><strong>OPPONENT</strong><div class="fighterChoiceGrid" id="enemyFighterChoices">
+        <div class="fighterChoice" data-fighter="bradley"><div class="miniHead"></div>BRADLEY</div>
+        <div class="fighterChoice" data-fighter="dad"><div class="miniHead"></div>DAD</div>
+        <div class="fighterChoice selected" data-fighter="ryan"><div class="miniHead"></div>RYAN</div>
+        <div class="fighterChoice" data-fighter="alex"><div class="miniHead"></div>ALEX</div>
+        <div class="fighterChoice" data-fighter="camara"><div class="miniHead"></div>MASTER CAMARA</div>
+        <div class="fighterChoice" data-fighter="stef"><div class="miniHead"></div>MASTER STEF</div>
+      </div></div>
+    </div>
+    <div id="fightDifficultyChoices">
+      <div class="diffChoice selected" data-diff="rookie">ROOKIE<br><span>Very forgiving</span></div>
+      <div class="diffChoice" data-diff="normal">NORMAL<br><span>Balanced</span></div>
+      <div class="diffChoice" data-diff="advanced">ADVANCED<br><span>Fast reactions</span></div>
+      <div class="diffChoice" data-diff="elite">ELITE<br><span>Master level</span></div>
+    </div>
+    <div id="fightSetupHint">ROOKIE gives generous scoring range, slower opponent reactions, fewer blocks, and longer attack warnings. NORMAL is the intended default once the controls feel comfortable.</div>
+    <div id="fightSetupActions"><button id="fightSetupCancel">CANCEL</button><button id="fightSetupStart">START MATCH</button></div>
+  </div>
+</div>
+<div id="scoreAssistBadge">MOVE INTO RANGE</div>
+<div id="fightKeyboardLegend">A/D MOVE • Q BLOCK • J PUNCH • K ROUND KICK • L SIDE KICK • U DEF. SIDE • I B-TWIST • F FEINT • G ANGLE • ESC EXIT</div>
+
   <div id="fightHud"><div class="scorePanel"><strong>BRADLEY</strong><div class="score" id="pScore">0</div><div class="meterWrap"><div class="meterFill" id="playerMeterFill"></div></div></div><div id="fightCenter"><div id="fightTimer">60</div><div id="fightTarget">FIRST TO 5</div></div><div class="scorePanel" style="text-align:right"><strong id="enemyName">OPPONENT</strong><div class="score" id="eScore">0</div><div class="meterWrap"><div class="meterFill" id="enemyMeterFill"></div></div></div></div>
   <div id="arena"><div id="fightStage"><div id="fightCrowdGlow"></div><div class="distanceShadow"></div><div class="ringBoundary"></div><div class="centerMark"></div><div class="hitMarker" id="hitMarker"></div><div id="fightLightCone"></div><div class="fightRef"></div><div class="fightJudge j1"></div><div class="fightJudge j2"></div><div id="stageBackWall"></div><div id="stageLights"></div><div id="stageSideLeft"></div><div id="stageSideRight"></div><div id="arenaMatLogo">PBK</div><div id="stageNameplate">PBK ARENA</div><div id="rangeGuide">RANGE: LONG</div><div id="impactParticles"></div><div id="whiffText">WHIFF</div><div id="fightClockBar"><div id="fightClockFill"></div></div><div id="enemyIntent">WATCHING</div><div id="fightCombo">COMBO 0</div><div id="counterWindow">COUNTER WINDOW — SIDE KICK NOW!</div><div id="roundResult"></div><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
-    <div class="fighterReal" id="playerFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
-    <div class="fighterReal" id="enemyFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
+    <div class="fighterReal fighter-bradley" id="playerFight"><div class="fighterNamePlate" id="playerFightName">BRADLEY</div><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
+    <div class="fighterReal fighter-ryan" id="enemyFight"><div class="fighterNamePlate" id="enemyFightName">RYAN</div><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
   </div><div id="refereeCount">3</div><div id="fightBoundaryLeft"></div><div id="fightBoundaryRight"></div><div id="fightBoundaryWarning">BOUNDARY — CREATE SPACE</div><div id="fightTacticalRead">READ: CALIBRATING RANGE</div><div id="fightDefenseStats"><strong>DEFENSE</strong><br>BLOCKS <span id="fightBlocks">0</span><br>EVADES <span id="fightEvades">0</span><br>COUNTER WINDOWS <span id="fightCounterWindows">0</span></div><div id="fightPhaseBadge">REGULATION</div><div id="fightStyleScout">OPPONENT STYLE: BALANCED</div><div id="fightSummary"><h2 id="fightSummaryTitle">MATCH COMPLETE</h2><div id="fightSummaryGrid"></div><div id="fightSummaryRead"></div><div id="fightCoachingTip"></div><div id="fightSummaryActions"><button id="fightRematchBtn">REMATCH</button><button id="fightSummaryExitBtn">RETURN TO DOJO</button></div></div><div id="fightStatsPanel">ATTEMPTS <span id="fightAttempts">0</span><br>LANDING <span id="fightLanded">0</span><br>ACCURACY <span id="fightAccuracy">0%</span><br>WHIFFS <span id="fightWhiffs">0</span><br>COUNTERS <span id="fightCounters">0</span></div>
     <div id="fightAdaptPanel">OPPONENT READ<br><span id="fightOpponentRead">CALIBRATING</span></div>
     <div id="judgeCall">POINT!</div><div id="fightVignette"></div><div id="roundIntro"></div><div id="bossTag"></div><div id="instructorFightTag">BLACK BELT INSTRUCTOR TRAINING</div><div id="pointResetOverlay"><div id="pointResetCard">POINT • RESET</div></div><div id="specialCallout"></div></div>
@@ -6539,6 +6802,127 @@ moveFighter=function(el,delta,min,max){
 let modernAttackLock=false,fightJoyX=0,fightJoyY=0,fightJoyTimer=null;
 function setFightGuard(on){$('playerFight').classList.toggle('guardHigh',on);if(on)addMeter('p',.4)}
 
+
+/* v6.9 selectable fighters + accessible sparring */
+const fightRoster={
+  bradley:{name:'BRADLEY',style:'balanced'},
+  dad:{name:'DAD',style:'balanced'},
+  ryan:{name:'RYAN',style:'pressure'},
+  alex:{name:'ALEX GEORGE',style:'counter'},
+  camara:{name:'MASTER CAMARA',style:'master'},
+  stef:{name:'MASTER STEF',style:'power'}
+};
+const fightDifficultyProfiles={
+  rookie:{name:'ROOKIE',aiSpeed:900,blockScale:.28,telegraph:1.8,rangeBonus:8,aiMove:.55,damageDelay:1.45},
+  normal:{name:'NORMAL',aiSpeed:650,blockScale:.60,telegraph:1.35,rangeBonus:5,aiMove:.78,damageDelay:1.18},
+  advanced:{name:'ADVANCED',aiSpeed:480,blockScale:.85,telegraph:1.10,rangeBonus:2,aiMove:.95,damageDelay:1.0},
+  elite:{name:'ELITE',aiSpeed:380,blockScale:1.05,telegraph:.92,rangeBonus:0,aiMove:1.12,damageDelay:.88}
+};
+let fightPlayerChoice='bradley',fightEnemyChoice='ryan',fightDifficulty='rookie';
+let fightSetupPending=false,fightSetupOriginalName='Ryan',fightSetupOriginalTarget=5;
+
+function fighterDisplayName(id){return (fightRoster[id]||fightRoster.bradley).name}
+function applyFighterVisual(el,id){
+  Object.keys(fightRoster).forEach(k=>el.classList.remove('fighter-'+k));
+  el.classList.add('fighter-'+id);
+}
+function applyFightSelections(){
+  applyFighterVisual($('playerFight'),fightPlayerChoice);
+  applyFighterVisual($('enemyFight'),fightEnemyChoice);
+  $('playerFightName').textContent=fighterDisplayName(fightPlayerChoice);
+  $('enemyFightName').textContent=fighterDisplayName(fightEnemyChoice);
+  $('fightHud').querySelector('.scorePanel strong').textContent=fighterDisplayName(fightPlayerChoice);
+  $('enemyName').textContent=fighterDisplayName(fightEnemyChoice);
+  aiStyle=(fightRoster[fightEnemyChoice]||fightRoster.ryan).style;
+  $('bossTag').textContent='AI STYLE: '+aiStyle.toUpperCase()+' • '+fightDifficultyProfiles[fightDifficulty].name;
+  updateFightStyleScout();
+}
+function openFightSetup(name='Ryan',target=5){
+  fightSetupOriginalName=name;fightSetupOriginalTarget=target;
+  fightSetupPending=true;state.fightActive=false;
+  $('fightSetupOverlay').classList.add('show');
+}
+function closeFightSetup(){
+  $('fightSetupOverlay').classList.remove('show');
+  fightSetupPending=false;
+}
+function syncSetupSelections(){
+  document.querySelectorAll('#playerFighterChoices .fighterChoice').forEach(e=>e.classList.toggle('selected',e.dataset.fighter===fightPlayerChoice));
+  document.querySelectorAll('#enemyFighterChoices .fighterChoice').forEach(e=>e.classList.toggle('selected',e.dataset.fighter===fightEnemyChoice));
+  document.querySelectorAll('#fightDifficultyChoices .diffChoice').forEach(e=>e.classList.toggle('selected',e.dataset.diff===fightDifficulty));
+  const p=fightDifficultyProfiles[fightDifficulty];
+  $('fightSetupHint').textContent=
+    fightDifficulty==='rookie'?'ROOKIE gives generous scoring range, slower opponent reactions, fewer blocks, and longer attack warnings.':
+    fightDifficulty==='normal'?'NORMAL keeps scoring forgiving but opponents move and defend more actively.':
+    fightDifficulty==='advanced'?'ADVANCED reduces score assistance and opponents react quickly to repeated attacks.':
+    'ELITE has almost no scoring assistance and master-level reactions.';
+}
+document.querySelectorAll('#playerFighterChoices .fighterChoice').forEach(e=>e.onclick=()=>{
+  fightPlayerChoice=e.dataset.fighter;
+  if(fightEnemyChoice===fightPlayerChoice)fightEnemyChoice=fightPlayerChoice==='bradley'?'ryan':'bradley';
+  syncSetupSelections();
+});
+document.querySelectorAll('#enemyFighterChoices .fighterChoice').forEach(e=>e.onclick=()=>{
+  fightEnemyChoice=e.dataset.fighter;
+  if(fightEnemyChoice===fightPlayerChoice)fightPlayerChoice=fightEnemyChoice==='bradley'?'dad':'bradley';
+  syncSetupSelections();
+});
+document.querySelectorAll('#fightDifficultyChoices .diffChoice').forEach(e=>e.onclick=()=>{fightDifficulty=e.dataset.diff;syncSetupSelections()});
+$('fightSetupCancel').onclick=()=>{closeFightSetup();exitSparring()};
+$('fightSetupStart').onclick=()=>{
+  closeFightSetup();
+  applyFightSelections();
+  state.pScore=0;state.eScore=0;$('pScore').textContent='0';$('eScore').textContent='0';
+  $('playerFight').style.left='24%';$('enemyFight').style.left='68%';
+  guardStamina=100;updateGuardMeter();modernAttackLock=false;aiActionLocked=false;
+  state.fightTarget=fightSetupOriginalTarget;
+  fightSeconds=60;$('fightTimer').textContent='60';$('fightClockFill').style.width='100%';
+  setFightPhase('REGULATION');suddenDeath=false;state.fightActive=true;
+  clearFightLoops();
+  fightTimerId=setInterval(fightTimerTickAccessible,1000);
+  enemyAiId=setInterval(enemyAiThink, fightDifficultyProfiles[fightDifficulty].aiSpeed);
+  roundIntro('FIGHT!');
+  updateFightRangeFeedback();updateScoreAssist();
+};
+syncSetupSelections();
+
+function effectiveAttackRange(type){
+  return attackRange(type)+fightDifficultyProfiles[fightDifficulty].rangeBonus;
+}
+function isAttackInAccessibleRange(type){
+  return fightDistance()<=effectiveAttackRange(type);
+}
+function updateScoreAssist(){
+  if(!$('fight').classList.contains('active'))return;
+  const e=$('scoreAssistBadge'),d=fightDistance();
+  e.classList.remove('ready','close');
+  if(d<=effectiveAttackRange('punch')){
+    e.textContent='GREEN RANGE • PUNCH WILL SCORE';e.classList.add('ready');
+  }else if(d<=effectiveAttackRange('side')){
+    e.textContent='GREEN RANGE • KICK WILL SCORE';e.classList.add('ready');
+  }else if(d<=effectiveAttackRange('side')+8){
+    e.textContent='ONE STEP AWAY';e.classList.add('close');
+  }else e.textContent='MOVE CLOSER';
+}
+setInterval(updateScoreAssist,100);
+
+function fightTimerTickAccessible(){
+  if(!$('fight').classList.contains('active')||!state.fightActive)return;
+  fightSeconds--;$('fightTimer').textContent=fightSeconds;
+  $('fightClockFill').style.width=(Math.min(60,fightSeconds)/60*100)+'%';
+  if(fightSeconds<=0){
+    if(state.pScore===state.eScore&&fightPhase==='REGULATION'){
+      fightSeconds=10;setFightPhase('OVERTIME');roundIntro('OVERTIME • 10 SECONDS');return;
+    }
+    if(state.pScore===state.eScore&&fightPhase==='OVERTIME'){
+      fightSeconds=999;setFightPhase('SUDDEN DEATH');suddenDeath=true;$('fightTimer').textContent='SD';roundIntro('SUDDEN DEATH');return;
+    }
+    clearFightLoops();state.fightActive=false;
+    const msg=state.pScore>state.eScore?'BRADLEY WINS':'OPPONENT WINS';
+    $('roundResult').textContent=msg;$('roundResult').classList.add('show');
+    setTimeout(()=>showFightSummary(state.pScore>state.eScore?'BRADLEY':'OPPONENT'),450);
+  }
+}
 /* v6.4 sparring analytics + adaptation */
 let fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};
 let playerTechniqueHistory=[],playerFeintActive=false,playerAngleActive=false;
@@ -6581,8 +6965,62 @@ $('fightAngleBtn').onclick=doAngleStep;
 function adaptiveBlockChance(type){
   const recent=playerTechniqueHistory.slice(-5);
   const repeats=recent.filter(x=>x===type).length;
-  return Math.min(.48,.08+repeats*.10);
+  if(fightDifficulty==='rookie')return 0; return Math.min(.48,(.08+repeats*.10)*fightDifficultyProfiles[fightDifficulty].blockScale);
 }
+
+function awardPlayerPointAccessible(points,label){
+  if(!state.fightActive)return false;
+  if(enemyBlocking){
+    $('fightMessage').textContent='OPPONENT BLOCKED!';
+    return false;
+  }
+
+  state.pScore+=points;
+  $('pScore').textContent=state.pScore;
+  setCombo(playerCombo+1);
+  addMeter('p',points===2?18:10);
+  flashHitMarker();
+  strongImpact(points);
+  cameraPunch(points===2?150:100);
+  showJudgeCall(label+' • '+points+' POINT'+(points>1?'S':''));
+  $('fightMessage').textContent=label+' • '+points+' POINT'+(points>1?'S':'');
+  impactFx(points);
+
+  if(suddenDeath){
+    clearFightLoops();
+    state.fightActive=false;
+    $('roundResult').textContent=fighterDisplayName(fightPlayerChoice)+' WINS • SUDDEN DEATH';
+    $('roundResult').classList.add('show');
+    setTimeout(()=>showFightSummary('BRADLEY'),450);
+    return true;
+  }
+
+  if(state.pScore>=state.fightTarget){
+    clearFightLoops();
+    state.fightActive=false;
+    $('roundResult').textContent=fighterDisplayName(fightPlayerChoice)+' WINS';
+    $('roundResult').classList.add('show');
+
+    if(state.fightContext==='tournament')tournamentReward();
+    if(state.fightContext==='boss'&&state.activeBoss){
+      save.bosses[state.activeBoss]=true;save.cash+=150;save.rep+=3;saveGame();state.activeBoss='';
+    }
+    if(state.fightContext==='spar'){
+      save.dojoQuest[state.town]=Math.min(3,(save.dojoQuest[state.town]||0)+1);
+      save.sparWins[state.town]=(save.sparWins[state.town]||0)+1;
+      save.rep+=.5;saveGame();tryCompleteTownQuest(state.town);
+    }
+    if(state.fightContext==='instructorSpar'&&state.activeInstructor){
+      completeInstructorSparWin(state.activeInstructor);
+    }
+    setTimeout(()=>showFightSummary('BRADLEY'),450);
+  }else{
+    state.fightActive=false;
+    setTimeout(()=>pointReset(label),220);
+  }
+  return true;
+}
+
 function modernAttack(type,label,points,animClass,startup=110,recovery=320){
   if(modernAttackLock||!state.fightActive)return false;
   fightStats.attempts++;playerTechniqueHistory.push(type);updateFightStats();
@@ -6595,11 +7033,15 @@ function modernAttack(type,label,points,animClass,startup=110,recovery=320){
   $('fightFootworkStatus').textContent='STARTUP • COMMIT TO THE TECHNIQUE';
   setTimeout(()=>{
     p.classList.remove('attackStartup');p.classList.add(animClass);
-    const liveRange=isAttackInRange(type);
+    let liveRange=isAttackInAccessibleRange(type);
+    if(!liveRange && fightDifficulty==='rookie' && fightDistance()<=effectiveAttackRange(type)+5){
+      moveFighter($('playerFight'),Math.min(4,fightDistance()-effectiveAttackRange(type)+1),6,70);
+      liveRange=isAttackInAccessibleRange(type);
+    }
     if(liveRange){
       fightStats.landed++;updateFightStats();showJudgeCall(label+' • '+points+' POINT'+(points>1?'S':''));
       const e=$('enemyFight');e.classList.add('recoil');setTimeout(()=>e.classList.remove('recoil'),260);
-      scorePoint('p',points,label);flashHitMarker();strongImpact(points);cameraPunch(points===2?130:90);
+      awardPlayerPointAccessible(points,label);
     }else{fightStats.whiffs++;updateFightStats();whiff();addMeter('p',2)}
     setTimeout(()=>p.classList.remove(animClass),220);
     p.classList.add('attackRecovery');$('fightFootworkStatus').textContent='RECOVERY • RESET YOUR GUARD';
@@ -7136,7 +7578,7 @@ function updateFightStyleScout(){
 function showFightSummary(winner){
   state.fightActive=false;clearFightLoops();
   const attempts=fightStats.attempts,landed=fightStats.landed,acc=attempts?Math.round(landed/attempts*100):0;
-  $('fightSummaryTitle').textContent=winner==='BRADLEY'?'BRADLEY WINS':'MATCH COMPLETE';
+  $('fightSummaryTitle').textContent=winner==='BRADLEY'?fighterDisplayName(fightPlayerChoice)+' WINS':'MATCH COMPLETE';
   $('fightSummaryGrid').innerHTML=`
     <div class="fightSummaryCard">SCORE<strong>${state.pScore}-${state.eScore}</strong></div>
     <div class="fightSummaryCard">ACCURACY<strong>${acc}%</strong></div>
@@ -7150,7 +7592,17 @@ function showFightSummary(winner){
   $('fightSummary').classList.add('show');
 }
 $('fightSummaryExitBtn').onclick=()=>{$('fightSummary').classList.remove('show');exitSparring()};
-$('fightRematchBtn').onclick=()=>{$('fightSummary').classList.remove('show');startFight(lastFightName,lastFightTarget)};
+$('fightRematchBtn').onclick=()=>{
+  $('fightSummary').classList.remove('show');
+  state.pScore=0;state.eScore=0;$('pScore').textContent='0';$('eScore').textContent='0';
+  $('playerFight').style.left='24%';$('enemyFight').style.left='68%';
+  fightSeconds=60;setFightPhase('REGULATION');suddenDeath=false;
+  modernAttackLock=false;aiActionLocked=false;guardStamina=100;updateGuardMeter();
+  state.fightActive=true;clearFightLoops();
+  fightTimerId=setInterval(fightTimerTickAccessible,1000);
+  enemyAiId=setInterval(enemyAiThink,fightDifficultyProfiles[fightDifficulty].aiSpeed);
+  roundIntro('FIGHT!');
+};
 const oldStartFight=startFight;
 startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFightPhase('REGULATION');suddenDeath=false;$('fightSummary').classList.remove('show');fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};fightEvades=0;fightCounterWindows=0;updateDefenseHud();playerTechniqueHistory=[];updateFightStats();modernAttackLock=false;aiActionLocked=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);updateFightStyleScout();
   clearFightLoops();
@@ -7161,6 +7613,13 @@ startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFi
   $('enemyIntent').textContent='WATCHING';setCombo(0);counterWindowOpen=false;$('counterWindow').classList.remove('show');
   $('roundResult').classList.remove('show');roundIntro(name.toUpperCase());setTimeout(()=>roundIntro('FIGHT!'),650);
   enemyBlocking=false;
+
+  if(state.fightContext==='spar'){
+    clearFightLoops();
+    state.fightActive=false;
+    openFightSetup(name,target);
+    return;
+  }
 
   fightTimerId=setInterval(()=>{
     if(!$('fight').classList.contains('active'))return;
@@ -7192,12 +7651,12 @@ function enemyAiThink(){
 
   if(d>37){
     $('enemyIntent').textContent='CLOSING RANGE';
-    enemy.classList.add('fightAdvance');moveFighter(enemy,-2.6,38,88);
+    enemy.classList.add('fightAdvance');moveFighter(enemy,-2.6*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);
     setTimeout(()=>enemy.classList.remove('fightAdvance'),180);return;
   }
   if(d<17){
     $('enemyIntent').textContent='CREATING SPACE';
-    enemy.classList.add('fightRetreat');moveFighter(enemy,2.5,38,88);
+    enemy.classList.add('fightRetreat');moveFighter(enemy,2.5*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);
     setTimeout(()=>enemy.classList.remove('fightRetreat'),180);return;
   }
   if(r<.20){
@@ -7206,7 +7665,7 @@ function enemyAiThink(){
   }
   if(r<.38){
     $('enemyIntent').textContent='FOOTWORK';enemy.classList.add('fightBounce');
-    moveFighter(enemy,aiCircleDir*1.3,38,88);aiCircleDir*=-1;
+    moveFighter(enemy,aiCircleDir*1.3*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);aiCircleDir*=-1;
     setTimeout(()=>enemy.classList.remove('fightBounce'),240);return;
   }
   const repeatRead=playerTechniqueHistory.slice(-4).length>=3&&new Set(playerTechniqueHistory.slice(-4)).size<=2;
@@ -7224,8 +7683,8 @@ function enemyAiThink(){
       $('enemyIntent').classList.remove('telegraph');$('enemyIntent').textContent='KICK';
       anim(enemy,'kicking',480);enemy.classList.add('attackLunge');moveFighter(enemy,-1.2,38,88);
       setTimeout(()=>enemy.classList.remove('attackLunge'),280);
-      setTimeout(()=>{if(fightDistance()<=33)enemyScore(2,'OPPONENT KICK');else whiffEnemy();aiActionLocked=false},220);
-    },260);return;
+      setTimeout(()=>{if(fightDistance()<=33)enemyScore(2,'OPPONENT KICK');else whiffEnemy();aiActionLocked=false},Math.round(220*fightDifficultyProfiles[fightDifficulty].damageDelay));
+    },Math.round(260*fightDifficultyProfiles[fightDifficulty].telegraph));return;
   }
 
   $('enemyIntent').textContent='PUNCH ENTRY';$('enemyIntent').classList.add('telegraph');
@@ -7234,8 +7693,8 @@ function enemyAiThink(){
     $('enemyIntent').classList.remove('telegraph');$('enemyIntent').textContent='PUNCH';
     anim(enemy,'punching',380);enemy.classList.add('attackLunge');moveFighter(enemy,-1.4,38,88);
     setTimeout(()=>enemy.classList.remove('attackLunge'),240);
-    setTimeout(()=>{if(fightDistance()<=24)enemyScore(1,'OPPONENT PUNCH');else whiffEnemy();aiActionLocked=false},170);
-  },210);
+    setTimeout(()=>{if(fightDistance()<=24)enemyScore(1,'OPPONENT PUNCH');else whiffEnemy();aiActionLocked=false},Math.round(170*fightDifficultyProfiles[fightDifficulty].damageDelay));
+  },Math.round(210*fightDifficultyProfiles[fightDifficulty].telegraph));
 }
 
 function whiffEnemy(){
@@ -7326,6 +7785,45 @@ $('formsScoreBtn').onclick=()=>{
 try{renderFormsRequirements();updateFormsTempo();updateDefenseHud();updateTrainingControlHud();}catch(_){ }
 try{updateTrainingCoachHud();updateFormsBestHud();}catch(_){ }
 try{updateFormsQualityHud();}catch(_){ }
+
+setInterval(()=>{
+ const o=$('driveObjective'); if(!o)return;
+ if(!$('world').classList.contains('active')){o.style.display='none';return}
+ o.style.display='block';
+ const d=currentDistrict(),g=nearGasStation();
+ if(g)o.textContent='GAS STATION NEARBY';
+ else if(d)o.textContent=d+' • CLICK/TAP A BUILDING OR ENTER TOWN';
+ else if(gpsTarget)o.textContent='GPS ACTIVE • FOLLOW THE ROUTE';
+ else o.textContent='EXPLORE • FOLLOW ROADS • ENTER ANY PBK';
+},250);
+
+/* v6.9 desktop keyboard controls */
+const fightHeldKeys=new Set();
+document.addEventListener('keydown',e=>{
+  if(!$('fight').classList.contains('active')||$('fightSetupOverlay').classList.contains('show'))return;
+  const k=e.key.toLowerCase();
+  if(['a','d','q','j','k','l','u','i','f','g','escape'].includes(k))e.preventDefault();
+  if(k==='a')fightHeldKeys.add('a');
+  if(k==='d')fightHeldKeys.add('d');
+  if(k==='q'&&guardStamina>0){guardHeld=true;setFightGuard(true)}
+  if(k==='j')$('fightPunchBtn').click();
+  if(k==='k')$('fightRoundBtn').click();
+  if(k==='l')$('fightSideBtn').click();
+  if(k==='u')$('fightDefSideBtn').click();
+  if(k==='i')$('fightBTwistBtn').click();
+  if(k==='f')$('fightFeintBtn').click();
+  if(k==='g')$('fightAngleBtn').click();
+});
+document.addEventListener('keyup',e=>{
+  const k=e.key.toLowerCase();
+  fightHeldKeys.delete(k);
+  if(k==='q'){guardHeld=false;setFightGuard(false)}
+});
+setInterval(()=>{
+  if(!$('fight').classList.contains('active')||!state.fightActive||fightSetupPending)return;
+  if(fightHeldKeys.has('a'))modernFightMove(-.7);
+  if(fightHeldKeys.has('d'))modernFightMove(.7);
+},35);
 </script>
 </body>
 </html>
