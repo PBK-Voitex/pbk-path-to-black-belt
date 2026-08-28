@@ -1983,8 +1983,11 @@ h1,h2,h3{margin:0}
   height:min(132px,13vw);
 }
 #menu.splashHome #worldBtn{
+  display:block;
   width:100%;
   height:100%;
+  min-width:100%;
+  min-height:100%;
   padding:0;
   border:0;
   background:transparent;
@@ -2011,30 +2014,65 @@ h1,h2,h3{margin:0}
     height:min(132px,18vw);
     bottom:15%;
   }
-}#menu.splashHome .splashButtonWrap{bottom:5vh}#menu.splashHome #worldBtn{min-height:68px}}
+}
 
 
 /* Emergency no-JS entry fallback */
 body:has(#world:target) #menu{display:none!important}
 #world:target{display:flex!important}
 
+
+/* v3.3.2 verified splash hotspot */
+#menu.splashHome .splashButtonWrap{
+  position:absolute!important;
+  left:50%!important;
+  bottom:14.5%!important;
+  transform:translateX(-50%)!important;
+  width:44vw!important;
+  max-width:680px!important;
+  min-width:320px!important;
+  height:9.2vw!important;
+  max-height:132px!important;
+  min-height:82px!important;
+  z-index:10000!important;
+  pointer-events:auto!important;
+}
+#menu.splashHome #worldBtn{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  background:transparent!important;
+}
+@media(max-width:900px){
+  #menu.splashHome .splashButtonWrap{
+    width:64vw!important;
+    min-width:240px!important;
+    height:14vw!important;
+    min-height:70px!important;
+    bottom:14%!important;
+  }
+}
+
 </style>
 <script>
 window.pbkEnterWorld=function(e){
   if(e&&e.preventDefault)e.preventDefault();
-  try{
-    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
-    var world=document.getElementById('world');
-    if(!world)return false;
-    world.classList.add('active');
-    if(typeof processBeltProgress==='function')processBeltProgress();
-    if(typeof updateWorldHud==='function')updateWorldHud();
-    if(typeof updateWorldProgress==='function')updateWorldProgress();
-    window.scrollTo(0,0);
-  }catch(err){
-    var world=document.getElementById('world');
-    if(world){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});world.classList.add('active');}
-  }
+  var screens=document.querySelectorAll('.screen');
+  for(var i=0;i<screens.length;i++)screens[i].classList.remove('active');
+  var world=document.getElementById('world');
+  if(!world)return false;
+  world.classList.add('active');
+  try{history.replaceState(null,'','#world')}catch(_e){}
+  try{if(typeof processBeltProgress==='function')processBeltProgress()}catch(_e){}
+  try{if(typeof updateWorldHud==='function')updateWorldHud()}catch(_e){}
+  try{if(typeof updateWorldProgress==='function')updateWorldProgress()}catch(_e){}
+  try{window.scrollTo(0,0)}catch(_e){}
   return false;
 };
 document.addEventListener('DOMContentLoaded',function(){
@@ -2753,6 +2791,12 @@ document.addEventListener('DOMContentLoaded',function(){
 <script>
 const $=id=>document.getElementById(id),screens=['menu','world','town','sideinterior','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
+function pbkStorageGet(key){
+  try{return window.localStorage?window.localStorage.getItem(key):null}catch(e){return null}
+}
+function pbkStorageSet(key,value){
+  try{if(window.localStorage)window.localStorage.setItem(key,value)}catch(e){}
+}
 const saveDefaults={
   tournamentWins:0,totalWins:0,formsDone:false,breakingDone:false,
   selectedFighter:'BRADLEY',
@@ -2762,7 +2806,7 @@ const saveDefaults={
 };
 let rawSave={};
 try{
-  rawSave=JSON.parse(localStorage.getItem('pbkSaveV25')||localStorage.getItem('pbkSaveV19')||'{}');
+  rawSave=JSON.parse(pbkStorageGet('pbkSaveV25')||pbkStorageGet('pbkSaveV19')||'{}');
 }catch(e){rawSave={}}
 let save=Object.assign({},saveDefaults,rawSave);
 save.visitedSchools=Object.assign({},saveDefaults.visitedSchools,rawSave.visitedSchools||{});
@@ -2872,7 +2916,7 @@ function updateCareer(){
   updateBeltLadder();
   updateWorldHud();
   updateWorldProgress();
-  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  pbkStorageSet('pbkSaveV25',JSON.stringify(save));
 }
 
 function updateBossProgress(){
@@ -3002,7 +3046,7 @@ function updateRoster(){
 function selectPlayable(name){
   if(!playableUnlocked(name))return;
   save.selectedFighter=name;
-  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  pbkStorageSet('pbkSaveV25',JSON.stringify(save));
   updateRoster();
   applySelectedFighter();
 }
@@ -3032,6 +3076,20 @@ function bindTap(id,fn){
   el.setAttribute(key,'1');
   el.addEventListener('pointerup',e=>{safe(e);fn(e)},{passive:false});
 };
+
+function bindHold(id,onStart,onEnd){
+  const el=$(id);
+  if(!el)return;
+  const key='data-pbk-hold-'+id.replace(/[^a-zA-Z0-9_-]/g,'');
+  if(el.getAttribute(key)==='1')return;
+  el.setAttribute(key,'1');
+  const start=e=>{safe(e);if(onStart)onStart(e)};
+  const end=e=>{safe(e);if(onEnd)onEnd(e)};
+  el.addEventListener('pointerdown',start,{passive:false});
+  el.addEventListener('pointerup',end,{passive:false});
+  el.addEventListener('pointercancel',end,{passive:false});
+  el.addEventListener('pointerleave',end,{passive:false});
+}
 
 function resetFormsMode(){
   formMode='traditional';
@@ -3192,11 +3250,11 @@ function performAndScoreForm(){
     $('formsMsg').textContent='Excellent form! Judges approve the performance.';
     if(currentSchool&&save.schoolActivities[currentSchool]){
       save.schoolActivities[currentSchool].forms=true;
-      localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+      pbkStorageSet('pbkSaveV25',JSON.stringify(save));
     }
     if(!save.formsDone){
       save.formsDone=true;
-      localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+      pbkStorageSet('pbkSaveV25',JSON.stringify(save));
       updateCareer();
     }
   }else if(total>=20){
@@ -3311,7 +3369,7 @@ document.querySelectorAll('[data-form-control]').forEach(btn=>{
 });
 
 function startFocus(){clearInterval(focusTimer);focusTimer=setInterval(()=>{focus+=focusDir*2;if(focus>=100){focus=100;focusDir=-1}if(focus<=0){focus=0;focusDir=1}$('focusFill').style.width=focus+'%'},35)}
-bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV25',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
+bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;pbkStorageSet('pbkSaveV25',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
 
 
 function pointTargetForCareer(){
@@ -3422,7 +3480,7 @@ function endPointMatch(winner){
     if(s.bossMode){
       if(s.bossName==='DAD')save.dadDefeated=true;if(s.bossName==='RYAN')save.ryanDefeated=true;if(s.bossName==='ALEX GEORGE')save.alexDefeated=true;if(s.bossName==='MASTER STEPH')save.stephDefeated=true;
       if(s.bossName==='MASTER CAMARA')save.camaraDefeated=true;if(s.bossName==='MASTER RAPPOLD')save.rappoldDefeated=true;
-      localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+      pbkStorageSet('pbkSaveV25',JSON.stringify(save));
       updateBossProgress();
       $('message').textContent=`BRADLEY DEFEATS ${s.bossName} ${s.pScore}-${s.eScore}`;
       announce('BOSS DOWN!');
@@ -3835,7 +3893,7 @@ function openDojo(id){
   currentSchool=id;
   $('dojoName').textContent='PBK '+id;
   save.visitedSchools[id]=true;
-  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  pbkStorageSet('pbkSaveV25',JSON.stringify(save));
   updateWorldProgress();
   updateDojoRoster(id);
 
@@ -3968,7 +4026,7 @@ function dojoInteract(){
     const name=el?.dataset.npcName||'PBK Student';
     openDialog(name,dojoDialogue(currentSchool,name));
     save.dojoTalks[currentSchool]=Math.min(3,(save.dojoTalks[currentSchool]||0)+1);
-    localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+    pbkStorageSet('pbkSaveV25',JSON.stringify(save));
     updateDojoQuest();
     return;
   }
@@ -3980,7 +4038,7 @@ function markSchoolActivity(type){
   if(!save.schoolActivities[currentSchool])return;
   if(type in save.schoolActivities[currentSchool]){
     save.schoolActivities[currentSchool][type]=true;
-    localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+    pbkStorageSet('pbkSaveV25',JSON.stringify(save));
   }
   updateDojoQuest();
 }
@@ -4121,7 +4179,7 @@ function updateSchoolChallengeProgress(){
 
 function finishSchoolChallenge(){
   save.schoolChallengeComplete[currentSchool]=true;
-  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  pbkStorageSet('pbkSaveV25',JSON.stringify(save));
   $('challengeResult').textContent='CHALLENGE COMPLETE!';
   $('challengeProgress').textContent='School mastered.';
   updateDojoQuest();
@@ -4216,7 +4274,7 @@ function updateDojoQuest(){
     badge.textContent=challengeDone?'SCHOOL MASTERED':'SCHOOL QUEST COMPLETE';
   }
 
-  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  pbkStorageSet('pbkSaveV25',JSON.stringify(save));
 }
 
 function trainingDialog(){
@@ -5183,7 +5241,7 @@ function endRound(w){
     else $('nextRound').style.display='block';
   },700);
 }
-function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins+=1;save.totalWins+=1;processBeltProgress();localStorage.setItem('pbkSaveV25',JSON.stringify(save));updateCareer();let extra='';
+function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins+=1;save.totalWins+=1;processBeltProgress();pbkStorageSet('pbkSaveV25',JSON.stringify(save));updateCareer();let extra='';
 $('ceremonyText').textContent=`Tournament victory! Current rank: ${rankDisplay()}.`;updateCareer();setTimeout(()=>show('ceremony'),500)}}
 function nextOpponent(){s.bWins=0;s.eWins=0;s.round=1;s.over=false;s.pScore=0;s.eScore=0;loadOpponent(1);setupRound()}
 function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&!s.paused&&!s.roundLocked&&!s.playerStun&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;if(Math.random()<.08)stepFootwork($('bradley'));render()}requestAnimationFrame(movementLoop)}
