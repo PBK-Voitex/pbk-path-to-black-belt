@@ -464,18 +464,724 @@ h1,h2,h3{margin:0}
   100%{opacity:0}
 }
 
+
+/* v1.2 cinematic depth + motion pass */
+#arena{
+  overflow:hidden;
+}
+#parallaxBack{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 18%,rgba(255,245,220,.09),transparent 18%),
+    linear-gradient(to bottom,rgba(20,24,30,.1),rgba(0,0,0,.28));
+  transform:translateZ(-80px) scale(1.08);
+}
+#crowdLayer{
+  position:absolute;left:0;right:0;bottom:34%;height:18%;z-index:1;pointer-events:none;
+  opacity:.28;filter:blur(.3px);
+}
+.crowdHead{
+  position:absolute;bottom:0;width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(#0a0c0f,#030405);
+}
+.crowdHead:after{
+  content:"";position:absolute;left:-8px;top:16px;width:38px;height:34px;
+  border-radius:18px 18px 5px 5px;background:linear-gradient(#090b0e,#020304);
+}
+#tatamiGlow{
+  position:absolute;left:12%;right:12%;bottom:8%;height:26%;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(255,235,200,.06),transparent 70%);
+  filter:blur(10px);
+}
+#cameraFrame{
+  position:absolute;inset:0;pointer-events:none;z-index:40;
+  border:0 solid rgba(0,0,0,.96);
+}
+#cameraFrame.koBars{
+  animation:koBars .9s ease-out;
+}
+@keyframes koBars{
+  0%{border-top-width:0;border-bottom-width:0}
+  28%{border-top-width:8vh;border-bottom-width:8vh}
+  75%{border-top-width:8vh;border-bottom-width:8vh}
+  100%{border-top-width:0;border-bottom-width:0}
+}
+.motionTrail{
+  position:absolute;width:80px;height:156px;z-index:6;pointer-events:none;
+  opacity:.16;filter:blur(2px);
+  transform-origin:center bottom;
+  animation:trailFade .28s linear forwards;
+}
+.motionTrail .trailBody{
+  position:absolute;left:18px;top:30px;width:44px;height:87px;
+  border-radius:12px;background:rgba(255,255,255,.55);
+}
+@keyframes trailFade{
+  from{opacity:.18;transform:scale(1)}
+  to{opacity:0;transform:scale(.98)}
+}
+.dynamicShadow{
+  position:absolute;bottom:13%;width:95px;height:18px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.68),rgba(0,0,0,0) 72%);
+  filter:blur(2px);z-index:3;pointer-events:none;
+  transition:left .07s linear,width .12s ease,opacity .12s ease;
+}
+#bradleyShadow{left:18%}
+#enemyShadow{left:71%}
+#lensFlash{
+  position:absolute;inset:-10%;z-index:35;pointer-events:none;opacity:0;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,255,255,.5),rgba(255,255,255,.09) 12%,transparent 34%);
+  mix-blend-mode:screen;
+}
+#lensFlash.on{animation:lensFlash .42s ease-out}
+@keyframes lensFlash{
+  0%{opacity:0}
+  18%{opacity:.95}
+  100%{opacity:0}
+}
+#specialAura{
+  position:absolute;z-index:7;width:150px;height:150px;border-radius:50%;
+  pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(255,255,255,.24),rgba(255,255,255,.06) 35%,transparent 70%);
+  filter:blur(3px);
+}
+#specialAura.on{animation:auraPulse .65s ease-out}
+@keyframes auraPulse{
+  0%{opacity:0;transform:scale(.6)}
+  35%{opacity:1;transform:scale(1.12)}
+  100%{opacity:0;transform:scale(1.45)}
+}
+#fightHudGlow{
+  position:absolute;left:0;right:0;top:0;height:19vh;z-index:-1;pointer-events:none;
+  box-shadow:0 18px 28px rgba(0,0,0,.35);
+}
+.panel{
+  backdrop-filter:blur(4px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 6px 16px rgba(0,0,0,.28);
+}
+.bar{
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.6);
+}
+.bar .fill{
+  box-shadow:inset 0 0 7px rgba(255,255,255,.25);
+}
+.fighter cinematic-guard{}
+.fighter{
+  transition:left .07s linear,filter .1s ease;
+}
+.fighter.specialFx{
+  filter:drop-shadow(0 18px 14px rgba(0,0,0,.58)) brightness(1.14);
+}
+.fighter.recoilFx{
+  filter:brightness(1.45) drop-shadow(0 18px 12px rgba(0,0,0,.55));
+}
+#message{
+  letter-spacing:1px;
+}
+#arena.slowmo .fighter,
+#arena.slowmo .motionTrail,
+#arena.slowmo .vfxParticle{
+  animation-duration:1.4s!important;
+  transition-duration:.5s!important;
+}
+
+
+/* v1.3 cinematic animation / camera pass */
+#arenaStage{
+  position:absolute;inset:0;
+  transform-origin:center center;
+  transition:transform .09s linear;
+  z-index:3;
+  pointer-events:none;
+}
+#actionLight{
+  position:absolute;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,245,220,.12),rgba(255,245,220,.035) 42%,transparent 72%);
+  filter:blur(8px);
+  z-index:5;pointer-events:none;
+  transform:translate(-50%,-50%);
+  transition:left .09s linear,top .09s linear;
+}
+.fighter{
+  transform-origin:center bottom;
+}
+.fighter.walkInLeft{animation:walkInLeft 1.15s cubic-bezier(.2,.8,.2,1)}
+.fighter.walkInRight{animation:walkInRight 1.15s cubic-bezier(.2,.8,.2,1)}
+@keyframes walkInLeft{
+  0%{opacity:0;transform:translateX(-180px) scale(.92)}
+  70%{opacity:1;transform:translateX(10px) scale(1.02)}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+@keyframes walkInRight{
+  0%{opacity:0;transform:translateX(180px) scale(.92)}
+  70%{opacity:1;transform:translateX(-10px) scale(1.02)}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
+/* subtle sparring footwork */
+.fighter.idleBreath:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.recoilFx){
+  animation:guardBounce 1.05s ease-in-out infinite alternate, guardSway 2.2s ease-in-out infinite;
+}
+@keyframes guardSway{
+  0%,100%{transform:translateX(0) rotate(0deg)}
+  25%{transform:translateX(1px) rotate(.4deg)}
+  75%{transform:translateX(-1px) rotate(-.4deg)}
+}
+.fighter.stepFx{animation:stepBob .18s ease-out}
+@keyframes stepBob{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+  100%{transform:translateY(0)}
+}
+
+#arena.hitStop *{
+  animation-play-state:paused!important;
+  transition:none!important;
+}
+.fighter.koFallLeft{animation:koFallLeft .8s cubic-bezier(.15,.7,.2,1) forwards!important}
+.fighter.koFallRight{animation:koFallRight .8s cubic-bezier(.15,.7,.2,1) forwards!important}
+@keyframes koFallLeft{
+  0%{transform:rotate(0) translateY(0)}
+  40%{transform:rotate(-22deg) translateY(8px)}
+  100%{transform:rotate(-78deg) translate(-16px,50px)}
+}
+@keyframes koFallRight{
+  0%{transform:rotate(0) translateY(0)}
+  40%{transform:rotate(22deg) translateY(8px)}
+  100%{transform:rotate(78deg) translate(16px,50px)}
+}
+
+#introBanner{
+  position:absolute;left:50%;top:18%;transform:translateX(-50%);
+  z-index:33;padding:10px 22px;border:1px solid rgba(255,255,255,.16);
+  background:rgba(8,10,13,.72);backdrop-filter:blur(6px);
+  border-radius:12px;font-weight:900;letter-spacing:2px;
+  opacity:0;pointer-events:none;
+}
+#introBanner.show{animation:introBanner 1.45s ease-out}
+@keyframes introBanner{
+  0%{opacity:0;transform:translate(-50%,12px) scale(.96)}
+  20%,75%{opacity:1;transform:translate(-50%,0) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-8px)}
+}
+
+#comboMeter{
+  position:absolute;left:12px;top:110px;z-index:14;
+  min-width:110px;padding:8px 10px;border-radius:10px;
+  background:rgba(0,0,0,.42);backdrop-filter:blur(3px);
+  font-weight:900;opacity:.85;
+}
+#comboMeter.hot{animation:comboPulse .32s ease-out}
+@keyframes comboPulse{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.12)}
+  100%{transform:scale(1)}
+}
+
+#roundFlash{
+  position:absolute;inset:0;z-index:34;pointer-events:none;opacity:0;
+  background:#fff;
+}
+#roundFlash.on{animation:roundFlash .18s ease-out}
+@keyframes roundFlash{
+  0%{opacity:.55}
+  100%{opacity:0}
+}
+
+
+/* v1.4 character polish + reactive HUD/lighting */
+.fighter{
+  width:84px;
+  height:164px;
+}
+.fighter .head{
+  left:27px;
+  width:31px;
+  height:31px;
+}
+.fighter .body{
+  left:18px;
+  width:48px;
+  height:91px;
+  top:31px;
+}
+.fighter .arm{
+  width:14px;
+  height:62px;
+}
+.fighter .leg{
+  width:16px;
+  height:58px;
+}
+.fighter .belt{
+  top:97px;
+  width:57px;
+}
+.fighter .tag{
+  top:-30px;
+}
+
+/* shoulder/chest depth */
+.fighter .body .chestShade{
+  position:absolute;
+  inset:6px 5px auto 5px;
+  height:28px;
+  border-radius:12px 12px 6px 6px;
+  background:linear-gradient(90deg,rgba(255,255,255,.05),transparent 48%,rgba(0,0,0,.18));
+  pointer-events:none;
+}
+.fighter .body .hipShade{
+  position:absolute;
+  left:5px;right:5px;bottom:7px;height:18px;
+  border-radius:4px;
+  background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 45%,rgba(255,255,255,.03));
+  pointer-events:none;
+}
+
+/* guard transitions */
+.fighter.guardHigh .arm.l{
+  left:21px!important;top:29px!important;transform:rotate(-78deg)!important;
+}
+.fighter.guardHigh .arm.r{
+  right:16px!important;top:27px!important;transform:rotate(68deg)!important;
+}
+.fighter.guardCompact .arm.l{
+  left:20px!important;top:35px!important;transform:rotate(-54deg)!important;
+}
+.fighter.guardCompact .arm.r{
+  right:13px!important;top:33px!important;transform:rotate(44deg)!important;
+}
+.fighter.guardOpen .arm.l{
+  left:13px!important;top:40px!important;transform:rotate(-35deg)!important;
+}
+.fighter.guardOpen .arm.r{
+  right:10px!important;top:37px!important;transform:rotate(30deg)!important;
+}
+
+/* realistic recoil variation */
+.fighter.recoilHead{animation:recoilHead .22s ease-out}
+.fighter.recoilBody{animation:recoilBody .26s ease-out}
+.fighter.recoilLeg{animation:recoilLeg .28s ease-out}
+@keyframes recoilHead{
+  0%{transform:rotate(0)}
+  45%{transform:rotate(var(--recoil-angle,8deg)) translateX(var(--recoil-x,14px))}
+  100%{transform:rotate(0)}
+}
+@keyframes recoilBody{
+  0%{transform:translateX(0) skewX(0)}
+  45%{transform:translateX(var(--recoil-x,14px)) skewX(var(--recoil-skew,4deg))}
+  100%{transform:translateX(0) skewX(0)}
+}
+@keyframes recoilLeg{
+  0%{transform:translateX(0) rotate(0)}
+  45%{transform:translateX(var(--recoil-x,14px)) rotate(var(--recoil-angle,5deg))}
+  100%{transform:translateX(0) rotate(0)}
+}
+
+/* chip health bars */
+.healthWrap{
+  position:relative;
+}
+.chipBar{
+  position:absolute;left:0;top:0;height:100%;width:100%;
+  background:rgba(255,255,255,.22);
+  transition:width .55s cubic-bezier(.25,.8,.25,1);
+  z-index:0;
+}
+.healthWrap .fill{
+  position:relative;z-index:1;
+}
+.healthWrap{
+  overflow:hidden;border-radius:10px;
+}
+
+/* danger pulse */
+.panel.danger{
+  animation:dangerPulse .85s ease-in-out infinite alternate;
+}
+@keyframes dangerPulse{
+  from{box-shadow:inset 0 0 0 1px rgba(255,255,255,.025),0 6px 16px rgba(0,0,0,.28)}
+  to{box-shadow:inset 0 0 18px rgba(255,255,255,.12),0 0 20px rgba(255,255,255,.06)}
+}
+
+/* reactive spotlights */
+.actionSpot{
+  position:absolute;width:200px;height:320px;z-index:4;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,247,220,.15),rgba(255,247,220,.02) 65%,transparent);
+  filter:blur(10px);
+  opacity:.45;
+  transform-origin:top center;
+  transition:left .1s linear,opacity .2s ease,transform .2s ease;
+}
+#spotBradley{top:-18%;left:15%;transform:rotate(7deg)}
+#spotEnemy{top:-18%;left:68%;transform:rotate(-7deg)}
+
+/* round curtain */
+#roundCurtain{
+  position:absolute;inset:0;z-index:42;pointer-events:none;
+}
+#roundCurtain:before,#roundCurtain:after{
+  content:"";position:absolute;top:0;bottom:0;width:50%;
+  background:#050607;
+  transition:transform .55s cubic-bezier(.7,0,.3,1);
+}
+#roundCurtain:before{left:0;transform:translateX(-100%)}
+#roundCurtain:after{right:0;transform:translateX(100%)}
+#roundCurtain.close:before{transform:translateX(0)}
+#roundCurtain.close:after{transform:translateX(0)}
+
+/* impact line streak */
+.impactLine{
+  position:absolute;height:3px;width:90px;z-index:22;pointer-events:none;
+  background:linear-gradient(90deg,transparent,#fff,transparent);
+  transform-origin:left center;
+  animation:impactLine .28s ease-out forwards;
+}
+@keyframes impactLine{
+  from{opacity:1;transform:scaleX(.2)}
+  to{opacity:0;transform:scaleX(1.5)}
+}
+
+/* special anticipation */
+.fighter.specialCharge{
+  animation:specialCharge .38s ease-in-out infinite alternate;
+}
+@keyframes specialCharge{
+  from{filter:brightness(1) drop-shadow(0 18px 14px rgba(0,0,0,.58))}
+  to{filter:brightness(1.28) drop-shadow(0 0 16px rgba(255,255,255,.25))}
+}
+
+
+/* v1.5 point-fighting + boss ladder */
+#scoreBoard{
+  position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  z-index:16;display:flex;gap:14px;align-items:center;
+  padding:7px 12px;border-radius:12px;
+  background:rgba(0,0,0,.46);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.08);
+  font-weight:900;
+}
+.scoreBox{min-width:66px;text-align:center}
+.scoreNum{font-size:28px;line-height:1}
+.scoreLabel{font-size:10px;opacity:.72;letter-spacing:1px}
+#targetBox{font-size:12px;opacity:.9;text-align:center;min-width:88px}
+.pointPop{
+  position:absolute;z-index:24;font-size:28px;font-weight:1000;
+  text-shadow:0 3px 5px #000;pointer-events:none;
+  animation:pointPop .75s ease-out forwards;
+}
+@keyframes pointPop{
+  0%{opacity:0;transform:translateY(8px) scale(.7)}
+  25%{opacity:1;transform:translateY(0) scale(1.18)}
+  100%{opacity:0;transform:translateY(-42px) scale(1)}
+}
+#bossRoadmap{
+  width:min(900px,95vw);
+}
+.bossCard{
+  border:1px solid #5c6571;border-radius:14px;padding:16px;background:#15191f;
+}
+.bossCard strong{display:block;font-size:21px;margin-bottom:6px}
+.bossTag{
+  display:inline-block;margin-top:7px;padding:4px 8px;border-radius:999px;
+  border:1px solid #6d7580;font-size:11px;opacity:.9
+}
+
+
+/* v1.6 first boss implementation */
+#bossSelect{
+  width:min(920px,95vw);
+}
+.bossFightCard{
+  border:1px solid #606a76;border-radius:14px;padding:16px;background:#15191f;
+  position:relative;overflow:hidden;
+}
+.bossFightCard.unlocked{
+  box-shadow:0 0 24px rgba(255,255,255,.06),inset 0 0 18px rgba(255,255,255,.025);
+}
+.bossFightCard.locked{opacity:.42}
+.bossFightCard button{width:100%;margin-top:12px}
+.bossPortrait{
+  height:120px;border-radius:10px;margin-bottom:12px;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),transparent 25%),
+    linear-gradient(135deg,#242a31,#0e1115);
+  display:flex;align-items:center;justify-content:center;
+  font-size:46px;font-weight:1000;letter-spacing:2px;
+}
+#bossIntro{
+  position:absolute;inset:0;z-index:45;display:none;
+  align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(0,0,0,.86);text-align:center;padding:24px;
+}
+#bossIntro.show{display:flex;animation:bossIntroFade .85s ease-out}
+@keyframes bossIntroFade{
+  from{opacity:0}
+  to{opacity:1}
+}
+#bossIntroName{font-size:clamp(42px,8vw,88px);font-weight:1000;letter-spacing:5px}
+#bossIntroSub{font-size:18px;opacity:.75;margin-top:8px}
+#bossIntro button{margin-top:22px;min-width:220px}
+#bossPhase{
+  position:absolute;right:12px;top:110px;z-index:18;
+  padding:8px 10px;border-radius:10px;
+  background:rgba(0,0,0,.46);backdrop-filter:blur(4px);
+  font-size:12px;font-weight:900;display:none;
+}
+#bossPhase.show{display:block}
+.bossAura{
+  box-shadow:0 0 24px rgba(255,255,255,.12),0 0 55px rgba(255,255,255,.04)!important;
+}
+
+
+/* v1.7 point reset + boss progression */
+#refereeCall{
+  position:absolute;inset:0;z-index:46;display:none;
+  align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(0,0,0,.48);backdrop-filter:blur(2px);
+  pointer-events:none;text-align:center;
+}
+#refereeCall.show{display:flex;animation:refCall .85s ease-out}
+#refereeMain{font-size:clamp(42px,8vw,86px);font-weight:1000;letter-spacing:4px}
+#refereeSub{font-size:18px;margin-top:8px;opacity:.82}
+@keyframes refCall{
+  0%{opacity:0;transform:scale(.88)}
+  25%{opacity:1;transform:scale(1.05)}
+  75%{opacity:1;transform:scale(1)}
+  100%{opacity:0}
+}
+.pointResetFx{animation:pointResetSlide .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes pointResetSlide{
+  0%{filter:brightness(1.3)}
+  100%{filter:brightness(1)}
+}
+#bossProgress{
+  width:min(900px,95vw);padding:12px;border-radius:14px;
+  border:1px solid #505864;background:#11151a;
+}
+.bossProgressRow{
+  display:grid;grid-template-columns:1fr 90px;gap:12px;
+  align-items:center;padding:10px;border-bottom:1px solid #2c323a;
+}
+.bossProgressRow:last-child{border-bottom:0}
+.statusUnlocked{font-weight:900}
+.statusLocked{opacity:.5}
+#camaraBossCard.unlocked{
+  opacity:1;
+  box-shadow:0 0 24px rgba(255,255,255,.06),inset 0 0 18px rgba(255,255,255,.025);
+}
+
+
+/* v1.8 Master Rappold + referee polish */
+#rappoldBossCard.unlocked{
+  opacity:1;
+  box-shadow:0 0 24px rgba(255,255,255,.06),inset 0 0 18px rgba(255,255,255,.025);
+}
+#refereeStrip{
+  position:absolute;left:50%;top:76px;transform:translateX(-50%);
+  z-index:15;padding:6px 12px;border-radius:999px;
+  background:rgba(0,0,0,.48);border:1px solid rgba(255,255,255,.08);
+  font-size:11px;font-weight:900;letter-spacing:1px;
+  backdrop-filter:blur(4px);
+}
+#refereeStrip.active{animation:refStripPulse .45s ease-out}
+@keyframes refStripPulse{
+  0%{transform:translateX(-50%) scale(.92);opacity:.4}
+  50%{transform:translateX(-50%) scale(1.08);opacity:1}
+  100%{transform:translateX(-50%) scale(1);opacity:1}
+}
+.fighter.rappoldFeint{animation:rappoldFeint .28s ease-out}
+@keyframes rappoldFeint{
+  0%{transform:translateX(0)}
+  35%{transform:translateX(-10px)}
+  60%{transform:translateX(7px)}
+  100%{transform:translateX(0)}
+}
+.fighter.rappoldBurst{animation:rappoldBurst .22s ease-out}
+@keyframes rappoldBurst{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-18px) scale(1.03)}
+  100%{transform:translateX(0)}
+}
+
+
+/* v2.0 PBK school playable roster */
+.rosterSection{width:min(980px,96vw)}
+.rosterCard{
+  border:1px solid #59616d;border-radius:14px;padding:14px;background:#171b20;
+  position:relative;overflow:hidden
+}
+.rosterCard.selected{
+  outline:2px solid rgba(255,255,255,.7);
+  box-shadow:0 0 26px rgba(255,255,255,.06)
+}
+.rosterCard.locked{opacity:.42}
+.rosterPortrait{
+  height:120px;border-radius:10px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:1000;letter-spacing:2px;text-align:center;padding:8px;
+  background:
+    radial-gradient(circle at 50% 28%,rgba(255,255,255,.09),transparent 24%),
+    linear-gradient(135deg,#262c34,#101317)
+}
+.schoolBadge{
+  display:inline-block;font-size:11px;font-weight:900;letter-spacing:1px;
+  padding:4px 8px;border-radius:999px;border:1px solid #6d7580;margin-bottom:8px
+}
+.rosterCard button{width:100%;margin-top:12px}
+#selectedFighterBar{
+  width:min(900px,95vw);padding:10px 14px;border-radius:12px;
+  background:#12161b;border:1px solid #4e5661;text-align:center;font-weight:900
+}
+
+
+/* v2.2 named PBK school rosters */
+.schoolGroup{
+  width:min(1040px,96vw);
+  margin:10px auto 18px;
+}
+.schoolGroup h3{
+  margin:0 0 10px;
+  letter-spacing:1px;
+}
+.schoolRoster{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.studentCard{
+  border:1px solid #59616d;
+  border-radius:14px;
+  padding:13px;
+  background:#171b20;
+  position:relative;
+}
+.studentCard.selected{
+  outline:2px solid rgba(255,255,255,.72);
+  box-shadow:0 0 24px rgba(255,255,255,.06);
+}
+.studentCard.locked{opacity:.42}
+.studentPortrait{
+  height:92px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:1000;
+  font-size:24px;
+  letter-spacing:1px;
+  margin-bottom:10px;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(255,255,255,.08),transparent 24%),
+    linear-gradient(135deg,#262c34,#101317);
+}
+.studentCard button{width:100%;margin-top:10px}
+
+
+/* v2.3 interactive forms competition */
+#forms{padding-top:18px}
+#formsArena{
+  width:min(1000px,96vw);
+  min-height:590px;
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid #4f5762;
+  background:
+    linear-gradient(to bottom,#242a31 0 40%,#161a1f 40% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38);
+}
+#formsFloor{
+  position:absolute;left:0;right:0;bottom:0;height:60%;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(to bottom,#70583e,#382c21);
+  background-size:48px 48px,48px 48px,100% 100%;
+}
+#formsBanner{
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  font-weight:1000;letter-spacing:2px;font-size:13px;z-index:10;
+}
+#judgeTable{
+  position:absolute;top:92px;left:50%;transform:translateX(-50%);
+  width:min(560px,75vw);height:70px;border-radius:10px 10px 4px 4px;
+  background:linear-gradient(#5a432e,#2d2118);
+  border:1px solid #806143;box-shadow:0 12px 24px rgba(0,0,0,.4);z-index:5;
+}
+.formJudge{position:absolute;top:-60px;width:96px;text-align:center}
+.formJudge:nth-child(1){left:6%}.formJudge:nth-child(2){left:41%}.formJudge:nth-child(3){right:6%}
+.formJudgeHead{width:35px;height:35px;border-radius:50%;margin:0 auto 4px;background:#c8a379;border:2px solid #111}
+.formJudgeBody{width:62px;height:35px;margin:auto;border-radius:10px 10px 2px 2px;background:#101215}
+.formJudgeName{font-size:10px;font-weight:900;letter-spacing:.5px}
+#formsCharacter{
+  position:absolute;left:50%;bottom:76px;width:86px;height:174px;
+  transform:translateX(-50%);z-index:9;transition:left .22s ease,bottom .22s ease,transform .22s ease;
+}
+#formsCharacter .fh{position:absolute;left:27px;top:0;width:32px;height:32px;border-radius:50%;background:#c89e72;border:2px solid #111}
+#formsCharacter .ft{position:absolute;left:19px;top:31px;width:48px;height:84px;border-radius:10px 10px 6px 6px;background:#101214;border:2px solid #050607}
+#formsCharacter .fbelt{position:absolute;left:15px;top:96px;width:56px;height:8px;background:#eee;border:1px solid #111}
+#formsCharacter .farm,#formsCharacter .fleg{position:absolute;background:#111;border:2px solid #050607;transform-origin:top center}
+#formsCharacter .farm{top:36px;width:13px;height:59px;border-radius:8px}
+#formsCharacter .farm.l{left:14px;transform:rotate(-22deg)}
+#formsCharacter .farm.r{right:14px;transform:rotate(22deg)}
+#formsCharacter .fleg{top:105px;width:15px;height:66px;border-radius:8px}
+#formsCharacter .fleg.l{left:23px;transform:rotate(7deg)}
+#formsCharacter .fleg.r{right:23px;transform:rotate(-7deg)}
+#formsCharacter.forwardStance .fleg.l{left:15px;transform:rotate(20deg)}
+#formsCharacter.forwardStance .fleg.r{right:16px;transform:rotate(-13deg)}
+#formsCharacter.backStance .fleg.l{left:26px;transform:rotate(-7deg)}
+#formsCharacter.backStance .fleg.r{right:8px;transform:rotate(24deg)}
+#formsCharacter.punchMove .farm.r{animation:formPunch .35s ease-out}
+#formsCharacter.sideKickMove .fleg.r{animation:formSideKick .46s ease-out}
+#formsCharacter.roundKickMove .fleg.r{animation:formRoundKick .5s ease-out}
+#formsCharacter.tornadoMove{animation:formTornado .72s ease-out}
+#formsCharacter.blockMove .farm.l{animation:formBlock .38s ease-out}
+@keyframes formPunch{0%{transform:rotate(22deg)}45%{transform:rotate(-82deg) translateY(-3px)}100%{transform:rotate(22deg)}}
+@keyframes formSideKick{0%{transform:rotate(-7deg)}45%{transform:rotate(-92deg) translateY(-5px)}100%{transform:rotate(-7deg)}}
+@keyframes formRoundKick{0%{transform:rotate(-7deg)}40%{transform:rotate(-125deg) translate(4px,-4px)}100%{transform:rotate(-7deg)}}
+@keyframes formTornado{0%{transform:translateX(-50%) rotate(0)}55%{transform:translateX(-50%) translateY(-28px) rotate(300deg)}100%{transform:translateX(-50%) rotate(360deg)}}
+@keyframes formBlock{0%{transform:rotate(-22deg)}45%{transform:rotate(-120deg) translateY(-4px)}100%{transform:rotate(-22deg)}}
+
+#formsControlPanel{
+  width:min(1000px,96vw);margin-top:12px;padding:14px;border-radius:14px;
+  background:#12161b;border:1px solid #4b535e;
+}
+.formControlRow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.formControlRow button{flex:1 1 125px;min-height:46px}
+#formRoutine{
+  min-height:58px;padding:10px;border-radius:10px;background:#0c0f13;border:1px solid #343b44;
+  font-size:12px;line-height:1.5;margin-top:8px
+}
+#formRoutine .moveChip{
+  display:inline-block;padding:4px 7px;margin:2px;border-radius:999px;border:1px solid #4d5662;background:#171c22
+}
+#formsScorePanel{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px
+}
+.judgeScore{padding:10px;border-radius:10px;background:#0e1216;border:1px solid #363e47;text-align:center}
+.judgeScore strong{display:block;font-size:26px}
+#formsTotal{font-size:30px;font-weight:1000;text-align:center;margin-top:10px}
+@media(max-width:700px){
+  #formsArena{min-height:520px}
+  #judgeTable{width:76vw}
+  .formJudge{width:72px}
+  #formsCharacter{bottom:58px}
+}
+
 </style>
 </head>
 <body>
 
 <div id="menu" class="screen active">
   <h1>PBK: PATH TO BLACK BELT</h1>
-  <div>Cinematic Prototype v1.1.1</div>
+  <div>Interactive Forms Prototype v2.3.1</div>
   <div class="menuBtns">
     <button id="playBtn">PLAY</button>
     <button id="careerBtn">BELT LADDER</button>
     <button id="selectBtn">FIGHTER SELECT</button>
-    <button id="bracketBtn">TOURNAMENT</button>
+    <button id="bracketBtn">TOURNAMENT</button><button id="bossBtn">BOSS ROADMAP</button><button id="bossFightBtn">BOSS BATTLES</button>
   </div>
   
 <div id="profileBar">
@@ -487,39 +1193,113 @@ h1,h2,h3{margin:0}
 
 </div>
 
+
+
 <div id="select" class="screen centercol">
   <button class="back" data-back="menu">BACK</button>
-  <h2>FIGHTER SELECT</h2>
-  <div class="cardgrid">
-    <div class="card">
-      <h3>Bradley</h3>
-      <p>Fast, tricky, counter-oriented. Fights from a compact sparring guard.</p>
-      <div class="stat"><span>Speed</span><span>9/10</span></div><div class="meter"><div style="width:90%"></div></div>
-      <div class="stat"><span>Power</span><span>7/10</span></div><div class="meter"><div style="width:70%"></div></div>
-      <div class="stat"><span>Defense</span><span>8/10</span></div><div class="meter"><div style="width:80%"></div></div>
-      <div class="stat"><span>Special</span><span>Beat Twist Kick</span></div>
-      <button id="chooseBradley">SELECT BRADLEY</button>
-    </div>
-    
-    <div class="card" id="rexCard">
-      <h3>Rex</h3><p>Relentless pressure fighter.</p>
-      <div class="stat"><span>Speed</span><span>7/10</span></div>
-      <div class="stat"><span>Power</span><span>8/10</span></div>
-      <div class="stat"><span>Defense</span><span>6/10</span></div>
-      <div class="badge" id="rexUnlock">Win 2 tournaments to unlock</div>
-    </div>
-    <div class="card" id="kaiCard">
-      <h3>Kai</h3><p>Patient counter fighter.</p>
-      <div class="stat"><span>Speed</span><span>8/10</span></div>
-      <div class="stat"><span>Power</span><span>7/10</span></div>
-      <div class="stat"><span>Defense</span><span>9/10</span></div>
-      <div class="badge" id="kaiUnlock">Win 4 tournaments to unlock</div>
-    </div>
-    <div class="card locked">
-      <h3>???</h3><p>New challenger coming later in the career.</p>
-      <div class="badge">Win 6 tournaments to unlock</div>
-    </div>
+  <h2>PLAYABLE CHARACTERS</h2>
+  <div id="selectedFighterBar">Selected: Bradley</div>
 
+  <div class="schoolGroup">
+    <h3>PBK HOME ROSTER</h3>
+    <div class="schoolRoster">
+      <div class="studentCard selected" id="fighterBradley">
+        <div class="studentPortrait">BRADLEY</div>
+        <strong>Bradley</strong>
+        <p>Fast counter fighter with the defensive side kick and Beat Twist Kick.</p>
+        <button id="chooseBradley">SELECT</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="schoolGroup">
+    <h3>PBK NORTON</h3>
+    <div class="schoolRoster">
+      <div class="studentCard unlocked" id="fighterNorton">
+        <div class="studentPortrait">NORTON</div>
+        <strong>Norton Student</strong>
+        <p>Balanced tournament fighter. Named roster can be added later.</p>
+        <button id="chooseNorton">SELECT</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="schoolGroup">
+    <h3>PBK EASTON</h3>
+    <div class="schoolRoster">
+      <div class="studentCard locked" id="fighterIanJo">
+        <div class="studentPortrait">IAN JO</div>
+        <strong>Ian Jo</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseIanJo" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterAlarmaJoe">
+        <div class="studentPortrait">ALARMA JOE</div>
+        <strong>Alarma Joe</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseAlarmaJoe" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterAJ">
+        <div class="studentPortrait">AJ</div>
+        <strong>AJ</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseAJ" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterJesseSanchez">
+        <div class="studentPortrait">JESSE</div>
+        <strong>Jesse Sanchez</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseJesseSanchez" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterSamShanoi">
+        <div class="studentPortrait">SAM</div>
+        <strong>Sam Shanoi</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseSamShanoi" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterMaxShanoi">
+        <div class="studentPortrait">MAX</div>
+        <strong>Max Shanoi</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseMaxShanoi" disabled>LOCKED</button>
+      </div>
+
+      <div class="studentCard locked" id="fighterDrewKazi">
+        <div class="studentPortrait">DREW</div>
+        <strong>Drew Kazi</strong>
+        <p>PBK Easton playable student.</p>
+        <button id="chooseDrewKazi" disabled>LOCKED</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="schoolGroup">
+    <h3>PBK FOXBOROUGH</h3>
+    <div class="schoolRoster">
+      <div class="studentCard locked" id="fighterFoxborough">
+        <div class="studentPortrait">FOXBOROUGH</div>
+        <strong>Foxborough Student</strong>
+        <p>Named roster can be added later.</p>
+        <button id="chooseFoxborough" disabled>LOCKED</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="schoolGroup">
+    <h3>PBK RAYNHAM</h3>
+    <div class="schoolRoster">
+      <div class="studentCard locked" id="fighterRaynham">
+        <div class="studentPortrait">RAYNHAM</div>
+        <strong>Raynham Student</strong>
+        <p>Named roster can be added later.</p>
+        <button id="chooseRaynham" disabled>LOCKED</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -527,12 +1307,18 @@ h1,h2,h3{margin:0}
   <button class="back" data-back="menu">BACK</button>
   <h2>PBK BELT LADDER</h2>
   <div class="ladder">
-    <div class="ladderStep current" id="stripe0Step"><span>Black Belt</span><span>Starting rank</span></div>
-    <div class="ladderStep" id="stripe1Step"><span>Black Belt • Stripe 1</span><span id="stripe1Status">Win Tournament 1</span></div>
-    <div class="ladderStep" id="stripe2Step"><span>Black Belt • Stripe 2</span><span id="stripe2Status">Win Tournament 2</span></div>
-    <div class="ladderStep" id="stripe3Step"><span>Black Belt • Stripe 3</span><span id="stripe3Status">Win Tournament 3</span></div>
-    <div class="ladderStep" id="stripe4Step"><span>Black Belt • Stripe 4</span><span id="stripe4Status">Win Tournament 4</span></div>
-    <div class="ladderStep locked" id="nextBeltStep"><span>Next Belt / Degree</span><span>Unlocks after Stripe 4</span></div>
+    <div class="ladderStep current" id="whiteStep"><span>White Belt</span><span id="whiteStatus">Current</span></div>
+    <div class="ladderStep locked" id="yellowStep"><span>Yellow Belt</span><span id="yellowStatus">Locked</span></div>
+    <div class="ladderStep locked" id="orangeStep"><span>Orange Belt</span><span id="orangeStatus">Locked</span></div>
+    <div class="ladderStep locked" id="greenStep"><span>Green Belt</span><span id="greenStatus">Locked</span></div>
+    <div class="ladderStep locked" id="blueStep"><span>Blue Belt</span><span id="blueStatus">Locked</span></div>
+    <div class="ladderStep locked" id="purpleStep"><span>Purple Belt</span><span id="purpleStatus">Locked</span></div>
+    <div class="ladderStep locked" id="brownStep"><span>Brown Belt</span><span id="brownStatus">Locked</span></div>
+    <div class="ladderStep locked" id="blackStep"><span>Black Belt</span><span id="blackStatus">Locked</span></div>
+  </div>
+  <div class="card" style="width:min(760px,95vw)">
+    <h3>How progression works</h3>
+    <p>Each belt has four stripes. Win one tournament to earn one stripe. After Stripe 4, the next belt is awarded and the stripe count resets.</p>
   </div>
 </div>
 
@@ -540,9 +1326,80 @@ h1,h2,h3{margin:0}
   <button class="back" data-back="menu">BACK</button>
   <h2>CHOOSE EVENT</h2>
   <div class="cardgrid">
-    <div class="card modeCard"><h3>Sparring</h3><p>Best-of-3 arcade fights through the tournament bracket.</p><div class="reward">Reward: Tournament win toward belt advancement</div><button id="sparBtn">ENTER SPARRING</button></div>
+    <div class="card modeCard"><h3>Sparring</h3><p>Point-fighting matches through the tournament bracket.</p><div class="reward">Reward: Tournament win toward belt advancement</div><button id="sparBtn">ENTER SPARRING</button></div>
     <div class="card modeCard"><h3>Forms</h3><p>Timing and sequence challenge inspired by forms competition.</p><div class="reward">Reward: Event completion</div><button id="formsBtn">ENTER FORMS</button></div>
     <div class="card modeCard"><h3>Breaking</h3><p>Build focus and timing to smash through boards.</p><div class="reward">Reward: Event completion</div><button id="breakingBtn">ENTER BREAKING</button></div>
+  </div>
+</div>
+
+
+
+<div id="bossfightselect" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>BOSS BATTLES</h2>
+  <div id="bossProgress">
+    <div class="bossProgressRow"><span>Dad</span><span id="dadStatus">AVAILABLE</span></div>
+    <div class="bossProgressRow"><span>Ryan</span><span id="ryanStatus" class="statusLocked">LOCKED</span></div>
+    <div class="bossProgressRow"><span>Alex George</span><span id="alexStatus" class="statusLocked">LOCKED</span></div>
+    <div class="bossProgressRow"><span>Master Camara</span><span id="camaraStatus" class="statusLocked">LOCKED</span></div>
+    <div class="bossProgressRow"><span>Master Rappold</span><span id="rappoldStatus" class="statusLocked">LOCKED</span></div>
+    <div class="bossProgressRow"><span>Grandmaster Chung</span><span class="statusLocked">LOCKED</span></div>
+  </div>
+  <div id="bossSelect" class="cardgrid">
+    <div class="bossFightCard unlocked" id="dadBossCard">
+      <div class="bossPortrait">DAD</div>
+      <strong>Dad</strong>
+      <p>First boss. Balanced fundamentals, pressure, and counters.</p>
+      <div class="bossTag" id="dadBossTag">FIRST BOSS</div>
+      <button id="fightDadBtn">FIGHT DAD</button>
+    </div>
+    <div class="bossFightCard locked" id="ryanBossCard">
+      <div class="bossPortrait">RYAN</div>
+      <strong>Ryan</strong>
+      <p>Second boss. Fast pressure, strong forward movement, and quick kick entries.</p>
+      <div class="bossTag" id="ryanBossTag">LOCKED</div>
+      <button id="fightRyanBtn" disabled>LOCKED</button>
+    </div>
+    <div class="bossFightCard locked" id="alexBossCard">
+      <div class="bossPortrait">AG</div>
+      <strong>Alex George</strong>
+      <p>Third boss. Versatile movement and mixed attacks.</p>
+      <div class="bossTag" id="alexBossTag">LOCKED</div>
+      <button id="fightAlexBtn" disabled>LOCKED</button>
+    </div>
+    <div class="bossFightCard locked" id="camaraBossCard">
+      <div class="bossPortrait">MC</div>
+      <strong>Master Camara</strong>
+      <p>Technical boss. Reads distance, blocks more intelligently, and punishes careless entries.</p>
+      <div class="bossTag" id="camaraBossTag">LOCKED</div>
+      <button id="fightCamaraBtn" disabled>LOCKED</button>
+    </div>
+    <div class="bossFightCard locked" id="rappoldBossCard">
+      <div class="bossPortrait">MR</div>
+      <strong>Master Rappold</strong>
+      <p>Late-game boss. Uses feints, distance traps, and sudden counter bursts.</p>
+      <div class="bossTag" id="rappoldBossTag">LOCKED</div>
+      <button id="fightRappoldBtn" disabled>LOCKED</button>
+    </div>
+    <div class="bossFightCard locked">
+      <div class="bossPortrait">GC</div>
+      <strong>Grandmaster Chung</strong>
+      <p>True final boss.</p>
+      <div class="bossTag">LOCKED</div>
+    </div>
+  </div>
+</div>
+
+<div id="bosses" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>BOSS ROADMAP</h2>
+  <div id="bossRoadmap" class="cardgrid">
+    <div class="bossCard"><strong>Dad</strong><p>First boss. Balanced fundamentals and counters.</p><span class="bossTag">FIRST BOSS</span></div>
+    <div class="bossCard"><strong>Ryan</strong><p>Second boss. Fast, experienced, aggressive pressure.</p><span class="bossTag">BOSS 2</span></div>
+    <div class="bossCard"><strong>Alex George</strong><p>Third boss. Versatile movement and mixed attacks.</p><span class="bossTag">BOSS 3</span></div>
+    <div class="bossCard"><strong>Master Camara</strong><p>Technical boss focused on timing, discipline, and punishment.</p><span class="bossTag">MASTER BOSS</span></div>
+    <div class="bossCard"><strong>Master Rappold</strong><p>Late-game boss with feints, distance traps, and sudden counter bursts. First to 21.</p><span class="bossTag">LATE GAME</span></div>
+    <div class="bossCard"><strong>Grandmaster Chung</strong><p>True final boss with the broadest move set and strongest defense.</p><span class="bossTag">FINAL BOSS</span></div>
   </div>
 </div>
 
@@ -550,26 +1407,84 @@ h1,h2,h3{margin:0}
   <button class="back" data-back="menu">BACK</button>
   <h2>TOURNAMENT BRACKET</h2>
   <div class="cardgrid">
-    <div class="card"><h3>Semifinal</h3><p>Bradley vs Rex</p><p>Style: Pressure fighter</p></div>
+    <div class="card"><h3>Semifinal</h3><p>Bradley vs Rex</p><p>Point fighting: punch = 1, kick = 2.</p></div>
     <div class="card"><h3>Championship</h3><p>Winner vs Kai</p><p>Style: Counter fighter</p></div>
     <div class="card"><h3>Reward</h3><p>3-foot championship trophy</p><p>1 tournament win = 1 new stripe</p></div>
   </div>
 </div>
 
+
 <div id="forms" class="screen centercol">
   <button class="back" data-back="modes">BACK</button>
-  <div class="challenge">
-    <h2>FORMS COMPETITION</h2>
-    <div class="challengeBox">
-      <p>Memorize the sequence, then tap the moves in order.</p>
-      <div class="sequence" id="formsSequence">BLOCK • KICK • PUNCH • KICK</div>
-      <div class="challengeBtns">
-        <button data-form="BLOCK">BLOCK</button><button data-form="KICK">KICK</button>
-        <button data-form="PUNCH">PUNCH</button><button data-form="STANCE">STANCE</button>
+  <h2>FORMS COMPETITION</h2>
+
+  <div id="formsArena">
+    <div id="formsBanner">THREE-JUDGE FORMS EVENT</div>
+    <div id="formsFloor"></div>
+
+    <div id="judgeTable">
+      <div class="formJudge">
+        <div class="formJudgeHead"></div><div class="formJudgeBody"></div>
+        <div class="formJudgeName">JUDGE 1</div>
       </div>
-      <div class="bigscore" id="formsScore">0</div>
-      <div id="formsMsg">Score 4 to complete the form.</div>
+      <div class="formJudge">
+        <div class="formJudgeHead"></div><div class="formJudgeBody"></div>
+        <div class="formJudgeName">JUDGE 2</div>
+      </div>
+      <div class="formJudge">
+        <div class="formJudgeHead"></div><div class="formJudgeBody"></div>
+        <div class="formJudgeName">JUDGE 3</div>
+      </div>
     </div>
+
+    <div id="formsCharacter" class="forwardStance">
+      <div class="fh"></div><div class="ft"></div><div class="fbelt"></div>
+      <div class="farm l"></div><div class="farm r"></div>
+      <div class="fleg l"></div><div class="fleg r"></div>
+    </div>
+  </div>
+
+  <div id="formsControlPanel">
+    <div class="formControlRow">
+      <button id="traditionalFormBtn">TRADITIONAL</button>
+      <button id="creativeFormBtn">CREATIVE</button>
+      <button id="clearFormBtn">CLEAR ROUTINE</button>
+      <button id="performFormBtn">PERFORM / SCORE</button>
+    </div>
+
+    <div><strong>Movement Controls</strong></div>
+    <div class="formControlRow">
+      <button data-form-control="STEP_FORWARD">STEP FORWARD</button>
+      <button data-form-control="STEP_BACK">STEP BACK</button>
+      <button data-form-control="TURN_LEFT">TURN LEFT</button>
+      <button data-form-control="TURN_RIGHT">TURN RIGHT</button>
+    </div>
+
+    <div><strong>Stances</strong></div>
+    <div class="formControlRow">
+      <button data-form-control="FORWARD_STANCE">FORWARD STANCE</button>
+      <button data-form-control="BACK_STANCE">BACK STANCE</button>
+    </div>
+
+    <div><strong>Techniques</strong></div>
+    <div class="formControlRow">
+      <button data-form-control="PUNCH">PUNCH</button>
+      <button data-form-control="BLOCK">BLOCK</button>
+      <button data-form-control="SIDE_KICK">SIDE KICK</button>
+      <button data-form-control="ROUND_KICK">ROUND KICK</button>
+      <button data-form-control="TORNADO_KICK">TORNADO KICK</button>
+    </div>
+
+    <div id="formsModeText">Mode: Traditional</div>
+    <div id="formRoutine">Routine is empty. Build your form using the controls above.</div>
+
+    <div id="formsScorePanel">
+      <div class="judgeScore">Judge 1<strong id="judgeScore1">--</strong></div>
+      <div class="judgeScore">Judge 2<strong id="judgeScore2">--</strong></div>
+      <div class="judgeScore">Judge 3<strong id="judgeScore3">--</strong></div>
+    </div>
+    <div id="formsTotal">Total: --</div>
+    <div id="formsMsg">Build a routine, then perform it for the judges.</div>
   </div>
 </div>
 
@@ -588,12 +1503,27 @@ h1,h2,h3{margin:0}
 </div>
 
 <div id="fight" class="screen">
-  <div id="hud">
-    <div class="panel"><div class="name">BRADLEY</div><div class="bar"><div id="bhp" class="fill"></div></div><div class="bar power"><div id="bpw" class="fill"></div></div><div id="bRounds">Rounds: 0</div></div>
+  <div id="hud"><div id="fightHudGlow"></div>
+    <div class="panel"><div class="name">BRADLEY</div><div class="bar healthWrap"><div id="bchip" class="chipBar"></div><div id="bhp" class="fill"></div></div><div class="bar power"><div id="bpw" class="fill"></div></div><div id="bRounds">Rounds: 0</div></div>
     <div id="center" class="panel"><div id="timer">60</div><div id="roundLabel">ROUND 1</div><div id="stageLabel">SEMIFINAL</div></div>
-    <div class="panel"><div id="enemyName" class="name" style="text-align:right">REX</div><div class="bar"><div id="ehp" class="fill"></div></div><div class="bar power"><div id="epw" class="fill"></div></div><div id="eRounds" style="text-align:right">Rounds: 0</div></div>
+    <div class="panel"><div id="enemyName" class="name" style="text-align:right">REX</div><div class="bar healthWrap"><div id="echip" class="chipBar"></div><div id="ehp" class="fill"></div></div><div class="bar power"><div id="epw" class="fill"></div></div><div id="eRounds" style="text-align:right">Rounds: 0</div></div>
   </div>
   <div id="arena">
+    <div id="parallaxBack"></div>
+    <div id="spotBradley" class="actionSpot"></div>
+    <div id="spotEnemy" class="actionSpot"></div>
+    <div id="roundCurtain"></div>
+    <div id="actionLight"></div>
+    <div id="introBanner"></div>
+    <div id="roundFlash"></div>
+    <div id="comboMeter">COMBO 0</div>
+    <div id="crowdLayer"></div>
+    <div id="tatamiGlow"></div>
+    <div id="bradleyShadow" class="dynamicShadow"></div>
+    <div id="enemyShadow" class="dynamicShadow"></div>
+    <div id="lensFlash"></div>
+    <div id="specialAura"></div>
+    <div id="cameraFrame"></div>
     <div id="backWall">
       <div class="wallPanel p1"></div><div class="wallPanel p2"></div>
       <div class="wallPanel p3"></div><div class="wallPanel p4"></div>
@@ -601,9 +1531,21 @@ h1,h2,h3{margin:0}
     <div id="cinematicLights"><div class="lightCone left"></div><div class="lightCone right"></div></div>
     <div id="filmGrain"></div><div id="vignette"></div>
     <div id="roundCinematic"></div>
+    <div id="refereeStrip">CLEAN TECHNIQUE SCORES</div><div id="scoreBoard">
+      <div class="scoreBox"><div class="scoreLabel">BRADLEY</div><div id="pScore" class="scoreNum">0</div></div>
+      <div id="targetBox">FIRST TO <span id="targetScore">3</span></div>
+      <div class="scoreBox"><div class="scoreLabel" id="scoreEnemyLabel">REX</div><div id="eScore" class="scoreNum">0</div></div>
+    </div>
     <div id="arenaTitle">PBK TRAINING HALL</div><div id="message">FIGHT!</div>
-    <div id="bradley" class="fighter idleBreath" style="left:20%"><div class="tag">BRADLEY</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"><div class="stripe"></div></div><div class="leg l"></div><div class="leg r"></div></div>
-    <div id="enemy" class="fighter idleBreath" style="left:73%"><div class="tag" id="enemyTag">REX</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="bradley" class="fighter idleBreath" style="left:20%"><div class="tag">BRADLEY</div><div class="head"></div><div class="body"><div class="chestShade"></div><div class="hipShade"></div></div><div class="arm l"></div><div class="arm r"></div><div class="belt"><div class="stripe"></div></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="enemy" class="fighter idleBreath" style="left:73%"><div class="tag" id="enemyTag">REX</div><div class="head"></div><div class="body"><div class="chestShade"></div><div class="hipShade"></div></div><div class="arm l"></div><div class="arm r"></div><div class="belt"></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="refereeCall"><div id="refereeMain">POINT!</div><div id="refereeSub"></div></div>
+    <div id="bossIntro">
+      <div id="bossIntroName">RYAN</div>
+      <div id="bossIntroSub">FIRST BOSS • FIRST TO 20</div>
+      <button id="bossIntroFightBtn">FIGHT</button>
+    </div>
+    <div id="bossPhase">RYAN • PHASE 1</div>
     <div id="announcer"></div>
     <div id="pausedOverlay">
       <h2>PAUSED</h2>
@@ -630,65 +1572,678 @@ h1,h2,h3{margin:0}
 </div>
 
 <script>
-const $=id=>document.getElementById(id),screens=['menu','select','career','modes','bracket','forms','breaking','fight','ceremony'];
+const $=id=>document.getElementById(id),screens=['menu','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
-let save=JSON.parse(localStorage.getItem('pbkSaveV071')||'{"tournamentWins":0,"belt":"Black Belt","stripe":0,"totalWins":0,"formsDone":false,"breakingDone":false}');
-let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formStep=0,focus=0,focusDir=1,focusTimer=null,boards=0;
-const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'}];
-const formSeq=['BLOCK','KICK','PUNCH','KICK'];
+let save=JSON.parse(localStorage.getItem('pbkSaveV191')||'{"tournamentWins":0,"belt":"White Belt","stripe":0,"totalWins":0,"formsDone":false,"breakingDone":false}');
+let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formMode='traditional',formRoutine=[],formX=50,formFacing=1,formStance='forward',focus=0,focusDir=1,focusTimer=null,boards=0;
+const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'},{name:'DAD',style:'bossDad',color:'#45403b'},{name:'RYAN',style:'bossRyan',color:'#2d2f55'},{name:'ALEX GEORGE',style:'bossAlex',color:'#315043'},{name:'MASTER CAMARA',style:'bossCamara',color:'#353535'},{name:'MASTER RAPPOLD',style:'bossRappold',color:'#3a243f'}];
+
+
+const beltOrder=['White Belt','Yellow Belt','Orange Belt','Green Belt','Blue Belt','Purple Belt','Brown Belt','Black Belt'];
+
+function beltIndex(){
+  const i=beltOrder.indexOf(save.belt);
+  return i>=0?i:0;
+}
+
+function processBeltProgress(){
+  // Every 4 tournament wins advances one belt.
+  const total=save.totalWins||0;
+  const maxBeltIndex=beltOrder.length-1;
+  const idx=Math.min(maxBeltIndex,Math.floor(total/4));
+  save.belt=beltOrder[idx];
+  save.stripe=idx===maxBeltIndex ? Math.min(4,total-(idx*4)) : total%4;
+}
+
+function updateBeltLadder(){
+  const ids=['white','yellow','orange','green','blue','purple','brown','black'];
+  const current=beltIndex();
+
+  ids.forEach((id,i)=>{
+    const el=$(id+'Step');
+    const status=$(id+'Status');
+    if(!el||!status)return;
+
+    el.classList.remove('current','locked');
+
+    if(i<current){
+      status.textContent='Completed';
+    }else if(i===current){
+      el.classList.add('current');
+      status.textContent=save.belt==='Black Belt' && save.stripe>=4
+        ? 'Mastered'
+        : `Stripe ${save.stripe} / 4`;
+    }else{
+      el.classList.add('locked');
+      status.textContent='Locked';
+    }
+  });
+}
 
 function updateCareer(){
-  save.stripe = Math.min(4, save.tournamentWins);
-  $('careerLine').textContent = save.stripe >= 4
-    ? `${save.belt} • Stripe 4 • Belt advancement ready`
-    : `${save.belt} • Stripe ${save.stripe} • Next stripe: tournament ${save.stripe+1}`;
+  processBeltProgress();
+  $('careerLine').textContent = `${save.belt} • Stripe ${save.stripe} / 4 • Tournament wins ${save.totalWins}`;
+  $('totalWins').textContent=save.totalWins;
+  $('formsStatus').textContent=save.formsDone?'Completed':'Not Completed';
+  $('breakingStatus').textContent=save.breakingDone?'Completed':'Not Completed';
 
-  $('totalWins').textContent = save.totalWins;
-  $('formsStatus').textContent = save.formsDone ? 'Completed' : 'Not Completed';
-  $('breakingStatus').textContent = save.breakingDone ? 'Completed' : 'Not Completed';
+  if($('rexUnlock'))$('rexUnlock').textContent=save.tournamentWins>=2?'UNLOCKED':'Win 2 tournaments to unlock';
+  if($('kaiUnlock'))$('kaiUnlock').textContent=save.tournamentWins>=4?'UNLOCKED':'Win 4 tournaments to unlock';
+  if($('rexCard'))$('rexCard').classList.toggle('locked',save.tournamentWins<2);
+  if($('kaiCard'))$('kaiCard').classList.toggle('locked',save.tournamentWins<4);
 
-  $('rexUnlock').textContent = save.tournamentWins >= 2 ? 'UNLOCKED' : 'Win 2 tournaments to unlock';
-  $('kaiUnlock').textContent = save.tournamentWins >= 4 ? 'UNLOCKED' : 'Win 4 tournaments to unlock';
-  $('rexCard').classList.toggle('locked', save.tournamentWins < 2);
-  $('kaiCard').classList.toggle('locked', save.tournamentWins < 4);
-
-  for(let i=0;i<=4;i++){
-    const el = $('stripe'+i+'Step');
-    if(el) el.classList.remove('current');
-  }
-  const current = $('stripe'+save.stripe+'Step');
-  if(current) current.classList.add('current');
-
-  for(let i=1;i<=4;i++){
-    const status = $('stripe'+i+'Status');
-    if(status) status.textContent = save.tournamentWins >= i ? 'EARNED' : `Win Tournament ${i}`;
-  }
-
-  $('nextBeltStep').classList.toggle('locked', save.stripe < 4);
-  if(save.stripe >= 4) $('nextBeltStep').querySelector('span:last-child').textContent = 'READY';
+  updateBeltLadder();
+  localStorage.setItem('pbkSaveV19',JSON.stringify(save));
 }
+
+function updateBossProgress(){
+  const ryanUnlocked=!!save.dadDefeated;
+  const alexUnlocked=!!save.ryanDefeated;
+  const camaraUnlocked=!!save.alexDefeated;
+  const rappoldUnlocked=!!save.camaraDefeated;
+
+  $('dadStatus').textContent=save.dadDefeated?'DEFEATED':'AVAILABLE';
+
+  $('ryanStatus').textContent=save.ryanDefeated?'DEFEATED':ryanUnlocked?'AVAILABLE':'LOCKED';
+  $('ryanStatus').className=ryanUnlocked?'statusUnlocked':'statusLocked';
+  $('ryanBossCard').classList.toggle('locked',!ryanUnlocked);
+  $('ryanBossCard').classList.toggle('unlocked',ryanUnlocked);
+  $('ryanBossTag').textContent=save.ryanDefeated?'DEFEATED':ryanUnlocked?'FIRST TO 20':'LOCKED';
+  $('fightRyanBtn').disabled=!ryanUnlocked;
+  $('fightRyanBtn').textContent=ryanUnlocked?'FIGHT RYAN':'LOCKED';
+
+  $('alexStatus').textContent=save.alexDefeated?'DEFEATED':alexUnlocked?'AVAILABLE':'LOCKED';
+  $('alexStatus').className=alexUnlocked?'statusUnlocked':'statusLocked';
+  $('alexBossCard').classList.toggle('locked',!alexUnlocked);
+  $('alexBossCard').classList.toggle('unlocked',alexUnlocked);
+  $('alexBossTag').textContent=save.alexDefeated?'DEFEATED':alexUnlocked?'FIRST TO 21':'LOCKED';
+  $('fightAlexBtn').disabled=!alexUnlocked;
+  $('fightAlexBtn').textContent=alexUnlocked?'FIGHT ALEX GEORGE':'LOCKED';
+
+  $('camaraStatus').textContent=save.camaraDefeated?'DEFEATED':camaraUnlocked?'AVAILABLE':'LOCKED';
+  $('camaraStatus').className=camaraUnlocked?'statusUnlocked':'statusLocked';
+  $('camaraBossCard').classList.toggle('locked',!camaraUnlocked);
+  $('camaraBossCard').classList.toggle('unlocked',camaraUnlocked);
+  $('camaraBossTag').textContent=save.camaraDefeated?'DEFEATED':camaraUnlocked?'FIRST TO 21':'LOCKED';
+  $('fightCamaraBtn').disabled=!camaraUnlocked;
+  $('fightCamaraBtn').textContent=camaraUnlocked?'FIGHT MASTER CAMARA':'LOCKED';
+
+  $('rappoldStatus').textContent=save.rappoldDefeated?'DEFEATED':rappoldUnlocked?'AVAILABLE':'LOCKED';
+  $('rappoldStatus').className=rappoldUnlocked?'statusUnlocked':'statusLocked';
+  $('rappoldBossCard').classList.toggle('locked',!rappoldUnlocked);
+  $('rappoldBossCard').classList.toggle('unlocked',rappoldUnlocked);
+  $('rappoldBossTag').textContent=save.rappoldDefeated?'DEFEATED':rappoldUnlocked?'FIRST TO 21':'LOCKED';
+  $('fightRappoldBtn').disabled=!rappoldUnlocked;
+  $('fightRappoldBtn').textContent=rappoldUnlocked?'FIGHT MASTER RAPPOLD':'LOCKED';
+}
+
+const playableFighters={
+  'BRADLEY':{label:'Bradley',school:'PBK',color:'#090a0b',speed:1.08,power:1.00,defense:1.05},
+  'NORTON':{label:'Norton Student',school:'PBK NORTON',color:'#1d2938',speed:1.00,power:1.00,defense:1.03},
+  'IAN_JO':{label:'Ian Jo',school:'PBK EASTON',color:'#3a2424',speed:1.04,power:1.02,defense:1.00},
+  'ALARMA_JOE':{label:'Alarma Joe',school:'PBK EASTON',color:'#3a2424',speed:1.02,power:1.04,defense:1.00},
+  'AJ':{label:'AJ',school:'PBK EASTON',color:'#3a2424',speed:1.06,power:1.00,defense:.98},
+  'JESSE_SANCHEZ':{label:'Jesse Sanchez',school:'PBK EASTON',color:'#3a2424',speed:1.00,power:1.05,defense:1.02},
+  'SAM_SHANOI':{label:'Sam Shanoi',school:'PBK EASTON',color:'#3a2424',speed:1.03,power:1.03,defense:1.00},
+  'MAX_SHANOI':{label:'Max Shanoi',school:'PBK EASTON',color:'#3a2424',speed:1.01,power:1.06,defense:.99},
+  'DREW_KAZI':{label:'Drew Kazi',school:'PBK EASTON',color:'#3a2424',speed:1.05,power:1.01,defense:1.01},
+  'FOXBOROUGH':{label:'Foxborough Student',school:'PBK FOXBOROUGH',color:'#233a32',speed:1.08,power:.97,defense:1.06},
+  'RAYNHAM':{label:'Raynham Student',school:'PBK RAYNHAM',color:'#3b2f24',speed:.97,power:1.10,defense:1.03}
+};
+
+function playableUnlocked(name){
+  if(name==='BRADLEY'||name==='NORTON')return true;
+
+  const easton=['IAN_JO','ALARMA_JOE','AJ','JESSE_SANCHEZ','SAM_SHANOI','MAX_SHANOI','DREW_KAZI'];
+  if(easton.includes(name))return save.tournamentWins>=2;
+
+  if(name==='FOXBOROUGH')return save.tournamentWins>=4;
+  if(name==='RAYNHAM')return save.totalWins>=6;
+  return false;
+}
+
+function updateRoster(){
+  const entries=[
+    ['Norton','NORTON'],
+    ['IanJo','IAN_JO'],
+    ['AlarmaJoe','ALARMA_JOE'],
+    ['AJ','AJ'],
+    ['JesseSanchez','JESSE_SANCHEZ'],
+    ['SamShanoi','SAM_SHANOI'],
+    ['MaxShanoi','MAX_SHANOI'],
+    ['DrewKazi','DREW_KAZI'],
+    ['Foxborough','FOXBOROUGH'],
+    ['Raynham','RAYNHAM']
+  ];
+
+  entries.forEach(([id,name])=>{
+    const unlocked=playableUnlocked(name);
+    const card=$('fighter'+id);
+    const btn=$('choose'+id);
+    if(card){
+      card.classList.toggle('locked',!unlocked);
+      card.classList.toggle('unlocked',unlocked);
+    }
+    if(btn){
+      btn.disabled=!unlocked;
+      btn.textContent=unlocked?'SELECT':'LOCKED';
+    }
+  });
+
+  document.querySelectorAll('.studentCard').forEach(c=>c.classList.remove('selected'));
+
+  const ids={
+    'BRADLEY':'fighterBradley',
+    'NORTON':'fighterNorton',
+    'IAN_JO':'fighterIanJo',
+    'ALARMA_JOE':'fighterAlarmaJoe',
+    'AJ':'fighterAJ',
+    'JESSE_SANCHEZ':'fighterJesseSanchez',
+    'SAM_SHANOI':'fighterSamShanoi',
+    'MAX_SHANOI':'fighterMaxShanoi',
+    'DREW_KAZI':'fighterDrewKazi',
+    'FOXBOROUGH':'fighterFoxborough',
+    'RAYNHAM':'fighterRaynham'
+  };
+
+  const selected=ids[save.selectedFighter]||'fighterBradley';
+  if($(selected))$(selected).classList.add('selected');
+  $('selectedFighterBar').textContent='Selected: '+(playableFighters[save.selectedFighter]?.label||'Bradley');
+}
+
+function selectPlayable(name){
+  if(!playableUnlocked(name))return;
+  save.selectedFighter=name;
+  localStorage.setItem('pbkSaveV19',JSON.stringify(save));
+  updateRoster();
+  applySelectedFighter();
+}
+
+function applySelectedFighter(){
+  const profile=playableFighters[save.selectedFighter]||playableFighters.BRADLEY;
+  const player=$('bradley');
+  player.querySelector('.tag').textContent=profile.label.toUpperCase();
+
+  const body=player.querySelector('.body');
+  if(body)body.style.background=profile.color;
+
+  const hudName=document.querySelector('#hud .panel .name');
+  if(hudName)hudName.textContent=profile.label.toUpperCase();
+
+  const scoreLabel=document.querySelector('#scoreBoard .scoreBox .scoreLabel');
+  if(scoreLabel)scoreLabel.textContent=profile.label.toUpperCase();
+}
+
+
 function safe(e){if(e&&e.cancelable)e.preventDefault()}
 function bindTap(id,fn){const el=$(id);el.addEventListener('pointerup',e=>{safe(e);fn()},{passive:false})}
 function bindHold(id,down,up){const el=$(id);el.addEventListener('pointerdown',e=>{safe(e);down()},{passive:false});['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,e=>{safe(e);up()},{passive:false}))}
 
 document.querySelectorAll('[data-back]').forEach(el=>el.addEventListener('pointerup',e=>{safe(e);show(el.dataset.back)},{passive:false}));
-bindTap('playBtn',()=>show('modes'));bindTap('careerBtn',()=>show('career'));bindTap('selectBtn',()=>show('select'));bindTap('bracketBtn',()=>show('bracket'));bindTap('chooseBradley',()=>show('menu'));
-bindTap('sparBtn',startTournament);bindTap('formsBtn',()=>{formStep=0;$('formsScore').textContent='0';$('formsMsg').textContent='Score 4 to complete the form.';show('forms')});
+bindTap('playBtn',()=>show('modes'));bindTap('careerBtn',()=>show('career'));bindTap('selectBtn',()=>{updateRoster();show('select')});bindTap('bracketBtn',()=>show('bracket'));bindTap('bossBtn',()=>show('bosses'));bindTap('bossFightBtn',()=>{updateBossProgress();show('bossfightselect')});
+bindTap('chooseBradley',()=>selectPlayable('BRADLEY'));
+bindTap('chooseNorton',()=>selectPlayable('NORTON'));
+bindTap('chooseIanJo',()=>selectPlayable('IAN_JO'));
+bindTap('chooseAlarmaJoe',()=>selectPlayable('ALARMA_JOE'));
+bindTap('chooseAJ',()=>selectPlayable('AJ'));
+bindTap('chooseJesseSanchez',()=>selectPlayable('JESSE_SANCHEZ'));
+bindTap('chooseSamShanoi',()=>selectPlayable('SAM_SHANOI'));
+bindTap('chooseMaxShanoi',()=>selectPlayable('MAX_SHANOI'));
+bindTap('chooseDrewKazi',()=>selectPlayable('DREW_KAZI'));
+bindTap('chooseFoxborough',()=>selectPlayable('FOXBOROUGH'));
+bindTap('chooseRaynham',()=>selectPlayable('RAYNHAM'));
+bindTap('sparBtn',startTournament);bindTap('fightDadBtn',startDadBoss);bindTap('fightRyanBtn',startRyanBoss);bindTap('fightAlexBtn',startAlexBoss);bindTap('fightCamaraBtn',startCamaraBoss);bindTap('fightRappoldBtn',startRappoldBoss);bindTap('bossIntroFightBtn',launchRyanBossFight);bindTap('formsBtn',()=>{resetFormsMode();show('forms')});
 bindTap('breakingBtn',()=>{boards=0;focus=0;$('boards').textContent='0 / 3';$('breakMsg').textContent='Time the strike near full focus.';show('breaking');startFocus()});
 
-document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
+document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV191',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
+
+
+const formMoveLabels={
+  STEP_FORWARD:'Step Forward',
+  STEP_BACK:'Step Back',
+  TURN_LEFT:'Turn Left',
+  TURN_RIGHT:'Turn Right',
+  FORWARD_STANCE:'Forward Stance',
+  BACK_STANCE:'Back Stance',
+  PUNCH:'Punch',
+  BLOCK:'Block',
+  SIDE_KICK:'Side Kick',
+  ROUND_KICK:'Round Kick',
+  TORNADO_KICK:'Tornado Kick'
+};
+
+function resetFormsMode(){
+  formMode='traditional';
+  formRoutine=[];
+  formX=50;
+  formFacing=1;
+  formStance='forward';
+  $('formsCharacter').style.left='50%';
+  $('formsCharacter').style.transform='translateX(-50%)';
+  $('formsCharacter').className='forwardStance';
+  $('formsModeText').textContent='Mode: Traditional';
+  $('judgeScore1').textContent='--';
+  $('judgeScore2').textContent='--';
+  $('judgeScore3').textContent='--';
+  $('formsTotal').textContent='Total: --';
+  $('formsMsg').textContent='Build a routine, then perform it for the judges.';
+  updateFormRoutineDisplay();
+}
+
+function setFormMode(mode){
+  formMode=mode;
+  $('formsModeText').textContent='Mode: '+(mode==='traditional'?'Traditional':'Creative');
+  $('formsMsg').textContent=mode==='traditional'
+    ?'Traditional mode rewards stance discipline, blocks, punches, and controlled kicks.'
+    :'Creative mode rewards variety and allows higher-difficulty techniques like tornado kicks.';
+}
+
+function addFormMove(move){
+  if(formRoutine.length>=24){
+    $('formsMsg').textContent='Routine limit reached. Perform or clear the form.';
+    return;
+  }
+
+  if(formMode==='traditional' && move==='TORNADO_KICK'){
+    $('formsMsg').textContent='Tornado kick is reserved for Creative mode.';
+    return;
+  }
+
+  formRoutine.push(move);
+  animateFormMove(move);
+  updateFormRoutineDisplay();
+}
+
+function updateFormRoutineDisplay(){
+  if(!formRoutine.length){
+    $('formRoutine').innerHTML='Routine is empty. Build your form using the controls above.';
+    return;
+  }
+  $('formRoutine').innerHTML=formRoutine.map((m,i)=>`<span class="moveChip">${i+1}. ${formMoveLabels[m]}</span>`).join('');
+}
+
+function animateFormMove(move){
+  const c=$('formsCharacter');
+
+  ['punchMove','sideKickMove','roundKickMove','tornadoMove','blockMove'].forEach(x=>c.classList.remove(x));
+
+  if(move==='STEP_FORWARD'){
+    formX=Math.min(78,formX+(formFacing*5));
+    c.style.left=formX+'%';
+  }else if(move==='STEP_BACK'){
+    formX=Math.max(22,Math.min(78,formX-(formFacing*5)));
+    c.style.left=formX+'%';
+  }else if(move==='TURN_LEFT'){
+    formFacing=-1;
+    c.style.transform='translateX(-50%) scaleX(-1)';
+  }else if(move==='TURN_RIGHT'){
+    formFacing=1;
+    c.style.transform='translateX(-50%) scaleX(1)';
+  }else if(move==='FORWARD_STANCE'){
+    formStance='forward';
+    c.classList.remove('backStance');
+    c.classList.add('forwardStance');
+  }else if(move==='BACK_STANCE'){
+    formStance='back';
+    c.classList.remove('forwardStance');
+    c.classList.add('backStance');
+  }else{
+    const cls={
+      PUNCH:'punchMove',
+      BLOCK:'blockMove',
+      SIDE_KICK:'sideKickMove',
+      ROUND_KICK:'roundKickMove',
+      TORNADO_KICK:'tornadoMove'
+    }[move];
+    if(cls){
+      void c.offsetWidth;
+      c.classList.add(cls);
+      setTimeout(()=>c.classList.remove(cls),760);
+    }
+  }
+}
+
+function formScoreMetrics(){
+  const techniques=formRoutine.filter(m=>['PUNCH','BLOCK','SIDE_KICK','ROUND_KICK','TORNADO_KICK'].includes(m));
+  const stanceMoves=formRoutine.filter(m=>['FORWARD_STANCE','BACK_STANCE'].includes(m));
+  const movement=formRoutine.filter(m=>['STEP_FORWARD','STEP_BACK','TURN_LEFT','TURN_RIGHT'].includes(m));
+
+  const uniqueTech=new Set(techniques).size;
+  const uniqueStances=new Set(stanceMoves).size;
+  const hasPunch=techniques.includes('PUNCH');
+  const hasBlock=techniques.includes('BLOCK');
+  const hasKick=techniques.some(m=>m.includes('KICK'));
+  const hasTornado=techniques.includes('TORNADO_KICK');
+
+  let difficulty=6.0 + Math.min(2.1,techniques.length*.12 + (hasTornado?.55:0));
+  let variety=5.8 + Math.min(2.2,uniqueTech*.35 + uniqueStances*.2 + movement.length*.05);
+  let structure=5.8;
+
+  if(formRoutine.length>=8)structure+=.5;
+  if(formRoutine.length>=12)structure+=.45;
+  if(hasPunch&&hasBlock&&hasKick)structure+=.55;
+  if(uniqueStances>=2)structure+=.4;
+
+  if(formMode==='traditional'){
+    if(hasTornado)structure-=1.0;
+    if(!hasBlock)structure-=.45;
+    if(!hasPunch)structure-=.35;
+    if(!stanceMoves.length)structure-=.6;
+    difficulty=Math.min(difficulty,8.6);
+  }else{
+    if(hasTornado)difficulty+=.35;
+    if(uniqueTech>=4)variety+=.35;
+  }
+
+  const lengthPenalty=formRoutine.length<6 ? (6-formRoutine.length)*.35 : 0;
+
+  return {
+    difficulty:Math.max(5,Math.min(9.8,difficulty-lengthPenalty)),
+    variety:Math.max(5,Math.min(9.8,variety-lengthPenalty)),
+    structure:Math.max(5,Math.min(9.8,structure-lengthPenalty))
+  };
+}
+
+function performAndScoreForm(){
+  if(formRoutine.length<5){
+    $('formsMsg').textContent='Add at least 5 actions before performing the form.';
+    return;
+  }
+
+  const m=formScoreMetrics();
+  const base=(m.difficulty+m.variety+m.structure)/3;
+
+  const jitter=()=>((Math.random()-.5)*.36);
+  const scores=[
+    Math.max(5,Math.min(10,base+jitter())),
+    Math.max(5,Math.min(10,base+jitter())),
+    Math.max(5,Math.min(10,base+jitter()))
+  ];
+
+  $('judgeScore1').textContent=scores[0].toFixed(1);
+  $('judgeScore2').textContent=scores[1].toFixed(1);
+  $('judgeScore3').textContent=scores[2].toFixed(1);
+
+  const total=scores.reduce((a,b)=>a+b,0);
+  $('formsTotal').textContent='Total: '+total.toFixed(1)+' / 30';
+
+  if(total>=23.0){
+    $('formsMsg').textContent='Excellent form! Judges approve the performance.';
+    if(!save.formsDone){
+      save.formsDone=true;
+      localStorage.setItem('pbkSaveV191',JSON.stringify(save));
+      updateCareer();
+    }
+  }else if(total>=20){
+    $('formsMsg').textContent='Good performance. Add more variety, stance changes, or cleaner structure.';
+  }else{
+    $('formsMsg').textContent='Keep building the routine. The judges want better structure and technique variety.';
+  }
+}
+
+bindTap('traditionalFormBtn',()=>setFormMode('traditional'));
+bindTap('creativeFormBtn',()=>setFormMode('creative'));
+bindTap('clearFormBtn',resetFormsMode);
+bindTap('performFormBtn',performAndScoreForm);
+
+document.querySelectorAll('[data-form-control]').forEach(btn=>{
+  btn.addEventListener('pointerup',e=>{
+    safe(e);
+    addFormMove(btn.dataset.formControl);
+  },{passive:false});
+});
 
 function startFocus(){clearInterval(focusTimer);focusTimer=setInterval(()=>{focus+=focusDir*2;if(focus>=100){focus=100;focusDir=-1}if(focus<=0){focus=0;focusDir=1}$('focusFill').style.width=focus+'%'},35)}
-bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
+bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV191',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
+
+
+function pointTargetForCareer(){
+  const wins=save.tournamentWins||0;
+  if(wins<=0)return 3;
+  if(wins===1)return 5;
+  if(wins===2)return 7;
+  if(wins===3)return 10;
+  if(wins===4)return 20;
+  return 21;
+}
+
+function scoreValueForMove(type){
+  return type==='punch' ? 1 : 2;
+}
+
+function showPointPop(target,points){
+  const arenaRect=$('arena').getBoundingClientRect();
+  const el=target==='e' ? $('enemy') : $('bradley');
+  const r=el.getBoundingClientRect();
+  const pop=document.createElement('div');
+  pop.className='pointPop';
+  pop.textContent='+'+points;
+  pop.style.left=(r.left-arenaRect.left+r.width/2)+'px';
+  pop.style.top=(r.top-arenaRect.top+10)+'px';
+  $('arena').appendChild(pop);
+  setTimeout(()=>pop.remove(),800);
+}
+
+
+
+function pulseRefereeStrip(text){
+  const r=$('refereeStrip');
+  r.textContent=text;
+  r.classList.remove('active');
+  void r.offsetWidth;
+  r.classList.add('active');
+}
+
+function refereePointReset(scorer,points){
+  if(s.over||s.roundOver)return;
+  s.roundLocked=true;
+  s.playerBusy=true;
+  s.enemyBusy=true;
+
+  const ref=$('refereeCall');
+  $('refereeMain').textContent=points===1?'1 POINT!':'2 POINTS!';
+  $('refereeSub').textContent=scorer==='p'?'BRADLEY SCORES':'POINT TO '+opponents[s.opponentIndex].name;pulseRefereeStrip(points===1?'PUNCH • 1 POINT':'KICK • 2 POINTS');
+  ref.classList.add('show');
+
+  stopTimers();
+
+  setTimeout(()=>{
+    s.bx=20;
+    s.ex=73;
+    s.blocking=false;
+    s.eBlocking=false;
+    s.playerStun=false;
+    s.enemyStun=false;
+    $('bradley').classList.add('pointResetFx');
+    $('enemy').classList.add('pointResetFx');
+    render();
+  },420);
+
+  setTimeout(()=>{
+    ref.classList.remove('show');
+    $('bradley').classList.remove('pointResetFx');
+    $('enemy').classList.remove('pointResetFx');
+    s.playerBusy=false;
+    s.enemyBusy=false;
+    s.roundLocked=false;
+    if(!s.over&&!s.roundOver)startTimers();
+  },900);
+}
+
+function awardPoints(target,points){
+  if(s.roundOver||s.over||s.roundLocked)return;
+
+  if(target==='e'){
+    s.pScore+=points;
+    showPointPop('e',points);
+    setCombatText(points===1?'1 POINT!':'2 POINTS!',650);
+    render();
+    if(s.pScore>=s.pointTarget){
+      endPointMatch('p');
+      return;
+    }
+    refereePointReset('p',points);
+  }else{
+    s.eScore+=points;
+    showPointPop('p',points);
+    setCombatText(opponents[s.opponentIndex].name+' SCORES '+points,650);
+    render();
+    if(s.eScore>=s.pointTarget){
+      endPointMatch('e');
+      return;
+    }
+    refereePointReset('e',points);
+  }
+}
+
+function endPointMatch(winner){
+  if(s.roundOver)return;
+  s.roundOver=true;
+  stopTimers();
+  if(winner==='p'){
+    s.bWins=1;
+    if(s.bossMode){
+      if(s.bossName==='DAD')save.dadDefeated=true;if(s.bossName==='RYAN')save.ryanDefeated=true;if(s.bossName==='ALEX GEORGE')save.alexDefeated=true;
+      if(s.bossName==='MASTER CAMARA')save.camaraDefeated=true;if(s.bossName==='MASTER RAPPOLD')save.rappoldDefeated=true;
+      localStorage.setItem('pbkSaveV19',JSON.stringify(save));
+      updateBossProgress();
+      $('message').textContent=`BRADLEY DEFEATS ${s.bossName} ${s.pScore}-${s.eScore}`;
+      announce('BOSS DOWN!');
+      cinematicTitle('BOSS DOWN!');
+      koCinematic();
+      setTimeout(()=>{s.over=true;$('returnMenu').style.display='block'},1100);
+      return;
+    }
+    $('message').textContent=`BRADLEY WINS ${s.pScore}-${s.eScore}`;
+    announce('MATCH!');
+    cinematicTitle('MATCH!');
+    setTimeout(()=>endFight(true),900);
+  }else{
+    s.eWins=1;
+    if(s.bossMode){
+      $('message').textContent=`${s.bossName} WINS ${s.eScore}-${s.pScore}`;
+      announce('BOSS WINS');
+      cinematicTitle('TRY AGAIN');
+      setTimeout(()=>{$('returnMenu').style.display='block'},900);
+      return;
+    }
+    $('message').textContent=`${opponents[s.opponentIndex].name} WINS ${s.eScore}-${s.pScore}`;
+    announce('MATCH!');
+    cinematicTitle('MATCH!');
+    setTimeout(()=>endFight(false),900);
+  }
+}
 
 function resetFightState(){s={
       bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,bWins:0,eWins:0,round:1,time:60,
       over:false,roundOver:false,blocking:false,eBlocking:false,jumping:false,
       opponentIndex:0,playerStun:false,enemyStun:false,playerBusy:false,enemyBusy:false,
-      enemyAdvancing:false,paused:false,roundLocked:false
+      enemyAdvancing:false,paused:false,roundLocked:false,prevBh:100,prevEh:100,pScore:0,eScore:0,pointTarget:3,bossMode:false,bossName:'',bossPhase:1
     }}
-function startTournament(){resetFightState();show('fight');loadOpponent(0);setupRound()}
-function loadOpponent(i){s.opponentIndex=i;const o=opponents[i];$('enemyName').textContent=o.name;$('enemyTag').textContent=o.name;$('enemy').querySelector('.body').style.background=o.color;$('stageLabel').textContent=i===0?'SEMIFINAL':'CHAMPIONSHIP'}
+
+
+
+function startRappoldBoss(){
+  if(!save.camaraDefeated)return;
+  resetFightState();
+  s.bossMode=true;
+  s.bossName='MASTER RAPPOLD';
+  s.bossPhase=1;
+  s.pointTarget=21;
+  s.opponentIndex=6;
+  show('fight');
+  applySelectedFighter();
+  loadOpponent(6);
+  $('bossPhase').classList.add('show');
+  $('bossPhase').textContent='MASTER RAPPOLD • PHASE 1';
+  $('bossIntroName').textContent='MASTER RAPPOLD';
+  $('bossIntroSub').textContent='LATE-GAME BOSS • FIRST TO 21';
+  $('bossIntro').classList.add('show');
+  render();
+}
+
+function startCamaraBoss(){
+  if(!save.alexDefeated)return;
+  resetFightState();
+  s.bossMode=true;
+  s.bossName='MASTER CAMARA';
+  s.bossPhase=1;
+  s.pointTarget=21;
+  s.opponentIndex=5;
+  show('fight');
+  applySelectedFighter();
+  loadOpponent(5);
+  $('bossPhase').classList.add('show');
+  $('bossPhase').textContent='MASTER CAMARA • PHASE 1';
+  $('bossIntroName').textContent='MASTER CAMARA';
+  $('bossIntroSub').textContent='TECHNICAL BOSS • FIRST TO 21';
+  $('bossIntro').classList.add('show');
+  render();
+}
+
+
+function startDadBoss(){
+  resetFightState();
+  s.bossMode=true;
+  s.bossName='DAD';
+  s.bossPhase=1;
+  s.pointTarget=10;
+  s.opponentIndex=3;
+  show('fight');
+  applySelectedFighter();
+  loadOpponent(3);
+  $('bossPhase').classList.add('show');
+  $('bossPhase').textContent='DAD • PHASE 1';
+  $('bossIntroName').textContent='DAD';
+  $('bossIntroSub').textContent='FIRST BOSS • FIRST TO 10';
+  $('bossIntro').classList.add('show');
+  render();
+}
+
+function startAlexBoss(){
+  if(!save.ryanDefeated)return;
+  resetFightState();
+  s.bossMode=true;
+  s.bossName='ALEX GEORGE';
+  s.bossPhase=1;
+  s.pointTarget=21;
+  s.opponentIndex=4;
+  show('fight');
+  applySelectedFighter();
+  loadOpponent(4);
+  $('bossPhase').classList.add('show');
+  $('bossPhase').textContent='ALEX GEORGE • PHASE 1';
+  $('bossIntroName').textContent='ALEX GEORGE';
+  $('bossIntroSub').textContent='THIRD BOSS • FIRST TO 21';
+  $('bossIntro').classList.add('show');
+  render();
+}
+
+function startRyanBoss(){
+  resetFightState();
+  s.bossMode=true;
+  s.bossName='RYAN';
+  s.bossPhase=1;
+  s.pointTarget=20;
+  s.opponentIndex=2;
+  show('fight');
+  applySelectedFighter();
+  loadOpponent(2);
+  $('bossPhase').classList.add('show');
+  $('bossPhase').textContent='RYAN • PHASE 1';
+  $('bossIntroName').textContent='RYAN';
+  $('bossIntroSub').textContent='FIRST BOSS • FIRST TO 20';
+  $('bossIntro').classList.add('show');
+  render();
+}
+
+function launchRyanBossFight(){
+  $('bossIntro').classList.remove('show');
+  setupRound();
+}
+
+function startTournament(){resetFightState();s.pointTarget=pointTargetForCareer();$('bossPhase').classList.remove('show');show('fight');applySelectedFighter();loadOpponent(0);setupRound()}
+function loadOpponent(i){s.opponentIndex=i;const o=opponents[i];$('enemyName').textContent=o.name;$('enemyTag').textContent=o.name;$('scoreEnemyLabel').textContent=o.name;$('enemy').querySelector('.body').style.background=o.color;$('stageLabel').textContent=i===0?'SEMIFINAL':i===1?'CHAMPIONSHIP':'BOSS FIGHT'}
 function announce(text){
   const a=$('announcer');
   a.textContent=text;
@@ -765,13 +2320,13 @@ function pauseGame(){
 function resumeGame(){
   if(!s.paused)return;
   s.paused=false;
-  $('pausedOverlay').classList.remove('show');
+  $('pausedOverlay').classList.remove('show');$('bradley').classList.remove('koFallLeft','koFallRight');$('enemy').classList.remove('koFallLeft','koFallRight');
   if(!s.roundOver&&!s.over&&!s.roundLocked)startTimers();
 }
 
 function setupRound(){
   Object.assign(s,{
-    bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,time:60,roundOver:false,
+    bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,time:60,roundOver:false,prevBh:100,prevEh:100,pScore:0,eScore:0,
     blocking:false,eBlocking:false,playerStun:false,enemyStun:false,
     playerBusy:false,enemyBusy:false,enemyAdvancing:false,paused:false,roundLocked:true
   });
@@ -780,14 +2335,14 @@ function setupRound(){
   $('returnMenu').style.display='none';
   $('pausedOverlay').classList.remove('show');
   $('message').textContent='';
-  render();
-  announce('ROUND '+s.round);cinematicTitle('ROUND '+s.round);
-  setTimeout(()=>{announce('FIGHT!');cinematicTitle('FIGHT!')},700);
+  render();walkInIntro();
+  setTimeout(()=>{announce('ROUND '+s.round);cinematicTitle('ROUND '+s.round);roundFlash()},350);
+  setTimeout(()=>{announce('FIGHT!');cinematicTitle('FIGHT!');roundFlash()},1050);
   setTimeout(()=>{
     s.roundLocked=false;
     $('message').textContent='FIGHT!';
     startTimers();
-  },1250);
+  },1550);
 }
 function startTimers(){
   stopTimers();
@@ -802,6 +2357,223 @@ function startTimers(){
   aiInt=setInterval(enemyAI,430);
 }
 function stopTimers(){if(timerInt)clearInterval(timerInt);if(aiInt)clearInterval(aiInt);timerInt=aiInt=null}
+
+
+
+
+function updateGuards(){
+  const p=$('bradley'),e=$('enemy');
+  ['guardHigh','guardCompact','guardOpen'].forEach(c=>{p.classList.remove(c);e.classList.remove(c)});
+  if(s.blocking)p.classList.add('guardHigh');
+  else if(dist()<13)p.classList.add('guardCompact');
+  else p.classList.add('guardOpen');
+
+  if(s.eBlocking)e.classList.add('guardHigh');
+  else if(dist()<13)e.classList.add('guardCompact');
+  else e.classList.add('guardOpen');
+}
+
+function updateChipBars(){
+  if(s.prevBh!==s.bh){
+    $('bchip').style.width=s.prevBh+'%';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>$('bchip').style.width=s.bh+'%'));
+    s.prevBh=s.bh;
+  }
+  if(s.prevEh!==s.eh){
+    $('echip').style.width=s.prevEh+'%';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>$('echip').style.width=s.eh+'%'));
+    s.prevEh=s.eh;
+  }
+}
+
+function updateDangerState(){
+  const panels=document.querySelectorAll('#hud .panel');
+  if(panels.length>=3){
+    panels[0].classList.toggle('danger',s.bh<=25);
+    panels[2].classList.toggle('danger',s.eh<=25);
+  }
+}
+
+function updateSpotlights(){
+  $('spotBradley').style.left=(s.bx-4)+'%';
+  $('spotEnemy').style.left=(s.ex-4)+'%';
+  $('spotBradley').style.opacity=s.playerStun?.25:.45;
+  $('spotEnemy').style.opacity=s.enemyStun?.25:.45;
+}
+
+function roundCurtainTransition(callback){
+  const c=$('roundCurtain');
+  c.classList.add('close');
+  setTimeout(()=>{
+    if(callback)callback();
+    c.classList.remove('close');
+  },560);
+}
+
+function spawnImpactLine(target,dir=1){
+  const arenaRect=$('arena').getBoundingClientRect();
+  const r=(target==='e' ? $('enemy') : $('bradley')).getBoundingClientRect();
+  const line=document.createElement('div');
+  line.className='impactLine';
+  line.style.left=(r.left-arenaRect.left+r.width/2)+'px';
+  line.style.top=(r.top-arenaRect.top+r.height*.45)+'px';
+  line.style.transform=`rotate(${dir>0?0:180}deg)`;
+  $('arena').appendChild(line);
+  setTimeout(()=>line.remove(),320);
+}
+
+function variedRecoil(target,dir,special=false){
+  const el=target==='e' ? $('enemy') : $('bradley');
+  const variants=['recoilHead','recoilBody','recoilLeg'];
+  const cls=special?'recoilBody':variants[Math.floor(Math.random()*variants.length)];
+  el.style.setProperty('--recoil-x',(dir*(special?22:14))+'px');
+  el.style.setProperty('--recoil-angle',(dir*(special?10:6))+'deg');
+  el.style.setProperty('--recoil-skew',(dir*(special?7:4))+'deg');
+  el.classList.add(cls);
+  setTimeout(()=>el.classList.remove(cls),special?300:260);
+}
+
+function updateCamera(){
+  if(!$('fight').classList.contains('active'))return;
+  const d=Math.abs(s.ex-s.bx);
+  const midpoint=(s.ex+s.bx)/2;
+  const zoom=d<18?1.04:d<28?1.025:1.0;
+  const pan=(50-midpoint)*0.12;
+  $('arena').style.transform=`scale(${zoom}) translateX(${pan}px)`;
+
+  const a=$('actionLight');
+  if(a){
+    a.style.left=midpoint+'%';
+    a.style.top='52%';
+  }
+}
+
+function hitStop(ms=55){
+  $('arena').classList.add('hitStop');
+  setTimeout(()=>$('arena').classList.remove('hitStop'),ms);
+}
+
+function roundFlash(){
+  const f=$('roundFlash');
+  f.classList.remove('on');
+  void f.offsetWidth;
+  f.classList.add('on');
+}
+
+function introBanner(text){
+  const b=$('introBanner');
+  b.textContent=text;
+  b.classList.remove('show');
+  void b.offsetWidth;
+  b.classList.add('show');
+}
+
+function walkInIntro(){
+  const p=$('bradley'),e=$('enemy');
+  p.classList.remove('walkInLeft');
+  e.classList.remove('walkInRight');
+  void p.offsetWidth;
+  p.classList.add('walkInLeft');
+  e.classList.add('walkInRight');
+  introBanner(`BRADLEY  VS  ${opponents[s.opponentIndex].name}`);
+  setTimeout(()=>{p.classList.remove('walkInLeft');e.classList.remove('walkInRight')},1200);
+}
+
+function koFall(loser){
+  const el=loser==='p' ? $('bradley') : $('enemy');
+  el.classList.remove('koFallLeft','koFallRight');
+  const cls=loser==='p'?'koFallLeft':'koFallRight';
+  void el.offsetWidth;
+  el.classList.add(cls);
+}
+
+function stepFootwork(el){
+  el.classList.remove('stepFx');
+  void el.offsetWidth;
+  el.classList.add('stepFx');
+  setTimeout(()=>el.classList.remove('stepFx'),190);
+}
+
+function updateComboMeter(){
+  const m=$('comboMeter');
+  if(!m)return;
+  m.textContent='COMBO '+comboCount;
+  if(comboCount>1){
+    m.classList.remove('hot');
+    void m.offsetWidth;
+    m.classList.add('hot');
+  }
+}
+
+function buildCrowd(){
+  const layer=$('crowdLayer');
+  if(layer.children.length)return;
+  const positions=[3,8,13,18,24,30,36,43,49,56,63,70,76,82,88,94];
+  positions.forEach((x,i)=>{
+    const h=document.createElement('div');
+    h.className='crowdHead';
+    h.style.left=x+'%';
+    h.style.transform=`scale(${.72+(i%4)*.08})`;
+    h.style.bottom=((i%3)*3)+'px';
+    layer.appendChild(h);
+  });
+}
+
+function updateDynamicShadows(){
+  if(!$('bradleyShadow')||!$('enemyShadow'))return;
+  $('bradleyShadow').style.left=(s.bx-1.5)+'%';
+  $('enemyShadow').style.left=(s.ex-1.5)+'%';
+
+  const bJump=s.jumping?0.55:1;
+  $('bradleyShadow').style.transform=`scaleX(${bJump})`;
+  $('bradleyShadow').style.opacity=s.jumping?.35:.8;
+}
+
+function spawnMotionTrail(target,type='normal'){
+  const fighter=target==='p' ? $('bradley') : $('enemy');
+  const arenaRect=$('arena').getBoundingClientRect();
+  const r=fighter.getBoundingClientRect();
+
+  const t=document.createElement('div');
+  t.className='motionTrail';
+  t.style.left=(r.left-arenaRect.left)+'px';
+  t.style.top=(r.top-arenaRect.top)+'px';
+  t.style.width=r.width+'px';
+  t.style.height=r.height+'px';
+  t.innerHTML='<div class="trailBody"></div>';
+  if(type==='special')t.style.opacity='.28';
+  $('arena').appendChild(t);
+  setTimeout(()=>t.remove(),320);
+}
+
+function lensFlash(){
+  const l=$('lensFlash');
+  l.classList.remove('on');
+  void l.offsetWidth;
+  l.classList.add('on');
+}
+
+function specialAura(target='p'){
+  const arenaRect=$('arena').getBoundingClientRect();
+  const fighter=(target==='p')?$('bradley'):$('enemy');
+  const r=fighter.getBoundingClientRect();
+  const a=$('specialAura');
+  a.style.left=(r.left-arenaRect.left+r.width/2-75)+'px';
+  a.style.top=(r.top-arenaRect.top+r.height/2-75)+'px';
+  a.classList.remove('on');
+  void a.offsetWidth;
+  a.classList.add('on');
+}
+
+function koCinematic(){
+  const frame=$('cameraFrame');
+  frame.classList.remove('koBars');
+  void frame.offsetWidth;
+  frame.classList.add('koBars');
+  $('arena').classList.add('slowmo');
+  lensFlash();
+  setTimeout(()=>$('arena').classList.remove('slowmo'),950);
+}
 
 function cameraImpact(special=false){
   const a=$('arena');
@@ -871,7 +2643,7 @@ function render(){
     const d=dist();
     $('rangeHint').textContent=d<=10?'PUNCH RANGE':d<=13?'KICK RANGE':d<=17?'SIDE KICK RANGE':d<=20?'SPECIAL RANGE':'MOVE CLOSER TO ATTACK';
   }
-  $('special').classList.toggle('attackReady',s.bp>=40);
+  $('special').classList.toggle('attackReady',s.bp>=40);$('pScore').textContent=s.pScore;$('eScore').textContent=s.eScore;$('targetScore').textContent=s.pointTarget;updateDynamicShadows();updateCamera();updateComboMeter();updateGuards();updateChipBars();updateDangerState();updateSpotlights();
 }
 
 function dist(){return Math.abs(s.ex-s.bx)}
@@ -939,49 +2711,51 @@ function addCombo(){
   comboTimer=setTimeout(()=>{comboCount=0;render()},1200);
 }
 
-function damage(t,base,kn=2,specialHit=false){
+function damage(t,base,kn=2,specialHit=false,moveType='kick'){
   if(t==='e'){
     const blocked=s.eBlocking;
     const d=blocked?Math.max(1,Math.floor(base*.25)):base;
     s.eh=Math.max(0,s.eh-d);
     s.bp=Math.min(100,s.bp+10);
     showImpact('e',d,blocked);if(!blocked){spawnImpactParticles('e',specialHit?18:10,specialHit);cameraImpact(specialHit)}
-    recoil($('enemy'),1,blocked);
+    recoil($('enemy'),1,blocked);if(!blocked){variedRecoil('e',1,specialHit);spawnImpactLine('e',1)}
     hitSound(blocked?'block':specialHit?'special':'hit');
 
     if(!blocked){
+      awardPoints('e',scoreValueForMove(moveType));
       flash($('enemy'));
       knock('e',kn,1);
       addCombo();
       setStun('e',specialHit?430:250);
-      arenaShake();
+      arenaShake();hitStop(specialHit?90:55);
       setCombatText(`HIT! ${d} DAMAGE`);
     }else{
       setStun('e',100);
       setCombatText('BLOCKED!');
     }
-    if(s.eh===0)endRound('p');
+    
   }else{
     const blocked=s.blocking;
     const d=blocked?Math.max(1,Math.floor(base*.25)):base;
     s.bh=Math.max(0,s.bh-d);
     s.ep=Math.min(100,s.ep+10);
     showImpact('p',d,blocked);if(!blocked){spawnImpactParticles('p',specialHit?18:10,specialHit);cameraImpact(specialHit)}
-    recoil($('bradley'),-1,blocked);
+    recoil($('bradley'),-1,blocked);if(!blocked){variedRecoil('p',-1,specialHit);spawnImpactLine('p',-1)}
     hitSound(blocked?'block':specialHit?'special':'hit');
 
     if(!blocked){
+      awardPoints('p',scoreValueForMove(moveType));
       flash($('bradley'));
       knock('p',kn,-1);
       comboCount=0;
       setStun('p',specialHit?430:250);
-      arenaShake();
+      arenaShake();hitStop(specialHit?90:55);
       setCombatText(`${opponents[s.opponentIndex].name} HITS!`);
     }else{
       setStun('p',90);
       setCombatText('BLOCK!');
     }
-    if(s.bh===0)endRound('e');
+    
   }
   render();
 }
@@ -999,6 +2773,10 @@ function attack(type){
     return;
   }
   if(cost)s.bp-=cost;
+  if(type==='special'){
+    $('bradley').classList.add('specialCharge');
+    setTimeout(()=>$('bradley').classList.remove('specialCharge'),360);
+  }
 
   setPlayerBusy(recovery);
 
@@ -1016,11 +2794,11 @@ function attack(type){
   const oldX=s.bx;
   const lunge=type==='punch'?1.0:type==='kick'?1.5:type==='sidekick'?2.0:3.2;
   s.bx=Math.min(s.ex-4,s.bx+lunge);
-  spawnDust(s.bx);attackAnim($('bradley'),type);
+  spawnDust(s.bx);spawnMotionTrail('p',type==='special'?'special':'normal');if(type==='special'){specialAura('p');lensFlash()}attackAnim($('bradley'),type);
   render();
 
   setTimeout(()=>{
-    if(dist()<=range)damage('e',dmg,kn,type==='special'||counter);
+    if(dist()<=range)damage('e',dmg,kn,type==='special'||counter,type);
     else setCombatText('WHIFF — MOVE CLOSER',550);
   },type==='special'?210:95);
 
@@ -1036,17 +2814,17 @@ function comboAttack(){
   setCombatText('3-HIT COMBO!',650);
   s.playerBusy=true;
 
-  attackAnim($('bradley'),'punch');
-  if(dist()<=10)damage('e',7,1);
+  spawnMotionTrail('p');attackAnim($('bradley'),'punch');
+  if(dist()<=10)damage('e',7,1,false,'punch');
 
   setTimeout(()=>{
-    attackAnim($('bradley'),'kick');
-    if(dist()<=13)damage('e',9,2);
+    spawnMotionTrail('p');attackAnim($('bradley'),'kick');
+    if(dist()<=13)damage('e',9,2,false,'kick');
   },230);
 
   setTimeout(()=>{
-    attackAnim($('bradley'),'sidekick');
-    if(dist()<=17)damage('e',13,5);
+    spawnMotionTrail('p');attackAnim($('bradley'),'sidekick');
+    if(dist()<=17)damage('e',13,5,false,'sidekick');
   },500);
 
   setTimeout(()=>{s.playerBusy=false},850);
@@ -1059,13 +2837,13 @@ function enemyAttack(type='kick'){
   let recovery=type==='punch'?220:type==='sidekick'?390:310;
   let specialHit=false;
 
-  spawnDust(s.ex);
+  spawnDust(s.ex);spawnMotionTrail('e',type==='special'?'special':'normal');if(type==='special'){specialAura('e');lensFlash()}
   if(type==='special'&&s.ep>=40){
     dmg=22;
     range=18;
     s.ep-=40;
     recovery=650;
-    specialHit=true;
+    specialHit=true;$('enemy').classList.add('specialCharge');setTimeout(()=>$('enemy').classList.remove('specialCharge'),360);
     attackAnim($('enemy'),'special');
   }else{
     attackAnim($('enemy'),type==='sidekick'?'sidekick':type);
@@ -1073,7 +2851,7 @@ function enemyAttack(type='kick'){
 
   setEnemyBusy(recovery);
   setTimeout(()=>{
-    if(dist()<=range)damage('p',dmg,type==='sidekick'?4:2,specialHit);
+    if(dist()<=range)damage('p',dmg,type==='sidekick'?4:2,specialHit,type);
   },specialHit?210:100);
 }
 function enemyAI(){
@@ -1087,7 +2865,7 @@ function enemyAI(){
   if(o.style==='pressure'){
     if(Math.abs(delta)>11){
       s.enemyAdvancing=true;
-      s.ex+=Math.sign(delta)*1.35;
+      s.ex+=Math.sign(delta)*1.35;if(Math.random()<.25)stepFootwork($('enemy'));
     }else{
       const r=Math.random();
       if(r<.14){
@@ -1103,12 +2881,12 @@ function enemyAI(){
         enemyAttack('sidekick');
       }
     }
-  }else{
+  }else if(o.style==='counter'){
     if(Math.abs(delta)<9){
       s.ex-=Math.sign(delta)*1.0;
     }else if(Math.abs(delta)>15){
       s.enemyAdvancing=true;
-      s.ex+=Math.sign(delta)*.65;
+      s.ex+=Math.sign(delta)*.65;if(Math.random()<.18)stepFootwork($('enemy'));
     }
 
     const r=Math.random();
@@ -1122,23 +2900,191 @@ function enemyAI(){
     }else if(r<.88&&dist()<=10){
       enemyAttack('punch');
     }
+  }else if(o.style==='bossDad'){
+    const pct=s.eScore/s.pointTarget;
+    s.bossPhase=pct>=.65?2:1;
+    $('bossPhase').textContent='DAD • PHASE '+s.bossPhase;
+    const r=Math.random();
+    if(dist()>13){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*(s.bossPhase===1?.9:1.15);
+    }else{
+      if(r<.24){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},420)}
+      else if(r<.50)enemyAttack('punch');
+      else if(r<.78)enemyAttack('kick');
+      else enemyAttack('sidekick');
+    }
+  }else if(o.style==='bossAlex'){
+    const pct=s.eScore/s.pointTarget;
+    s.bossPhase=pct>=.70?3:pct>=.35?2:1;
+    $('bossPhase').textContent='ALEX GEORGE • PHASE '+s.bossPhase;
+    $('enemy').classList.toggle('bossAura',s.bossPhase>=2);
+    const r=Math.random();
+    if(dist()>15){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*(s.bossPhase===1?.8:s.bossPhase===2?1.05:1.3);
+    }else if(dist()<8){
+      s.ex-=Math.sign(delta)*(s.bossPhase===3?1.2:.9);
+    }else{
+      if(r<.18){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},360)}
+      else if(r<.40)enemyAttack('punch');
+      else if(r<.66)enemyAttack('kick');
+      else if(r<.84)enemyAttack('sidekick');
+      else if(s.ep>=40)enemyAttack('special');
+    }
+  }else if(o.style==='bossRyan'){
+    const pct=s.eScore/s.pointTarget;
+    s.bossPhase=pct>=.70?3:pct>=.35?2:1;
+    $('bossPhase').textContent='RYAN • PHASE '+s.bossPhase;
+    $('enemy').classList.toggle('bossAura',s.bossPhase>=2);
+
+    const desired=s.bossPhase===1?12:s.bossPhase===2?10:9;
+
+    if(Math.abs(delta)>desired){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*(s.bossPhase===1?1.35:s.bossPhase===2?1.65:1.9);
+      if(Math.random()<.35)stepFootwork($('enemy'));
+    }else{
+      const r=Math.random();
+      if(s.bossPhase===1){
+        if(r<.18){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},420)}
+        else if(r<.52)enemyAttack('kick');
+        else if(r<.76)enemyAttack('punch');
+        else enemyAttack('sidekick');
+      }else if(s.bossPhase===2){
+        if(r<.16){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},360)}
+        else if(r<.40)enemyAttack('sidekick');
+        else if(r<.68)enemyAttack('kick');
+        else if(r<.82&&s.ep>=40)enemyAttack('special');
+        else enemyAttack('punch');
+      }else{
+        if(r<.12){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},300)}
+        else if(r<.34)enemyAttack('sidekick');
+        else if(r<.56&&s.ep>=40)enemyAttack('special');
+        else if(r<.82)enemyAttack('kick');
+        else enemyAttack('punch');
+      }
+    }
+  }else if(o.style==='bossCamara'){
+    const lead=s.eScore-s.pScore;
+    const pct=s.eScore/s.pointTarget;
+    s.bossPhase=pct>=.72?3:pct>=.38?2:1;
+    $('bossPhase').textContent='MASTER CAMARA • PHASE '+s.bossPhase;
+    $('enemy').classList.toggle('bossAura',s.bossPhase>=2);
+
+    // Camara is patient: he gives ground, blocks, then punishes entries.
+    if(dist()<8){
+      s.ex-=Math.sign(delta)*(s.bossPhase===3?1.35:1.0);
+    }else if(dist()>17 && lead<3){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*(s.bossPhase===1?.55:s.bossPhase===2?.75:.95);
+    }
+
+    const r=Math.random();
+    if(s.bossPhase===1){
+      if(r<.42){
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},560);
+      }else if(r<.62&&dist()<=15){
+        enemyAttack('sidekick');
+      }else if(r<.80&&dist()<=10){
+        enemyAttack('punch');
+      }else if(dist()<=13){
+        enemyAttack('kick');
+      }
+    }else if(s.bossPhase===2){
+      if(r<.34){
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},470);
+      }else if(r<.60&&dist()<=16){
+        enemyAttack('sidekick');
+      }else if(r<.75&&s.ep>=40){
+        enemyAttack('special');
+      }else if(r<.90&&dist()<=13){
+        enemyAttack('kick');
+      }
+    }else{
+      if(r<.27){
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},380);
+      }else if(r<.52&&dist()<=16){
+        enemyAttack('sidekick');
+      }else if(r<.73&&s.ep>=40){
+        enemyAttack('special');
+      }else if(r<.91&&dist()<=13){
+        enemyAttack('kick');
+      }else if(dist()<=10){
+        enemyAttack('punch');
+      }
+    }
+  }else if(o.style==='bossRappold'){
+    const pct=s.eScore/s.pointTarget;
+    s.bossPhase=pct>=.72?3:pct>=.36?2:1;
+    $('bossPhase').textContent='MASTER RAPPOLD • PHASE '+s.bossPhase;
+    $('enemy').classList.toggle('bossAura',s.bossPhase>=2);
+
+    // Rappel's style: feint, retreat, then burst into a score.
+    const r=Math.random();
+
+    if(dist()>16){
+      if(r<.38){
+        s.enemyAdvancing=true;
+        s.ex+=Math.sign(delta)*(s.bossPhase===1?.7:s.bossPhase===2?.95:1.15);
+      }else if(r<.52){
+        $('enemy').classList.add('rappoldFeint');
+        setTimeout(()=>$('enemy').classList.remove('rappoldFeint'),300);
+      }
+    }else if(dist()<9){
+      s.ex-=Math.sign(delta)*(s.bossPhase===3?1.35:1.0);
+      if(r<.30){
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},330);
+      }
+    }else{
+      if(r<.20){
+        $('enemy').classList.add('rappoldFeint');
+        setTimeout(()=>$('enemy').classList.remove('rappoldFeint'),300);
+      }else if(r<.42){
+        $('enemy').classList.add('rappoldBurst');
+        setTimeout(()=>$('enemy').classList.remove('rappoldBurst'),240);
+        enemyAttack('sidekick');
+      }else if(r<.62){
+        enemyAttack('kick');
+      }else if(r<.78&&s.ep>=40){
+        enemyAttack('special');
+      }else if(r<.90){
+        enemyAttack('punch');
+      }else{
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},300);
+      }
+    }
   }
 
   s.ex=Math.max(8,Math.min(92,s.ex));
   render();
 }
-function judgeRound(){endRound(s.bh===s.eh?'draw':s.bh>s.eh?'p':'e')}
+
+function judgeRound(){
+  if(s.pScore===s.eScore){
+    s.time=10;
+    setCombatText('TIE — 10 SECOND OVERTIME!',900);
+    startTimers();
+  }else{
+    endPointMatch(s.pScore>s.eScore?'p':'e');
+  }
+}
 function endRound(w){
   if(s.roundOver)return;
   s.roundOver=true;
   stopTimers();
 
   if(w==='p'){
-    s.bWins++;
+    s.bWins++;koFall('e');
     $('message').textContent='K.O.! BRADLEY WINS THE ROUND!';
-    announce('K.O.!');cinematicTitle('K.O.!');
+    announce('K.O.!');koCinematic();cinematicTitle('K.O.!');koCinematic();
   }else if(w==='e'){
-    s.eWins++;
+    s.eWins++;koFall('p');
     $('message').textContent=opponents[s.opponentIndex].name+' WINS THE ROUND';
     announce('K.O.!');
   }else{
@@ -1152,23 +3098,19 @@ function endRound(w){
     else $('nextRound').style.display='block';
   },700);
 }
-function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins=Math.min(4,save.tournamentWins+1);save.stripe=Math.min(4,save.tournamentWins);save.totalWins+=1;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer();let extra='';
-if(save.tournamentWins===2)extra=' Rex is now unlocked in Fighter Select.';
-if(save.tournamentWins===4)extra=' Kai is now unlocked in Fighter Select.';
-$('ceremonyText').textContent=save.tournamentWins>=4
-  ?'Bradley has won Tournament 4, earned Stripe 4, and is ready for the next belt/degree!'+extra
-  :'Bradley wins the tournament, earns Stripe '+save.stripe+', and receives the 3-foot championship trophy.'+extra;updateCareer();setTimeout(()=>show('ceremony'),500)}}
-function nextOpponent(){s.bWins=0;s.eWins=0;s.round=1;s.over=false;loadOpponent(1);setupRound()}
-function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&!s.paused&&!s.roundLocked&&!s.playerStun&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;render()}requestAnimationFrame(movementLoop)}
-function doJump(){if(s.jumping||s.roundOver||s.over||s.paused||s.roundLocked||s.playerStun)return;s.jumping=true;$('bradley').style.transition='bottom .2s ease-out';$('bradley').style.bottom='35%';setTimeout(()=>{$('bradley').style.transition='bottom .27s ease-in';$('bradley').style.bottom='16%'},210);setTimeout(()=>{s.jumping=false;$('bradley').style.transition=''},520)}
+function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins+=1;save.totalWins+=1;processBeltProgress();localStorage.setItem('pbkSaveV191',JSON.stringify(save));updateCareer();let extra='';
+$('ceremonyText').textContent=`Tournament victory! Bradley is now ${save.belt}, Stripe ${save.stripe} of 4.`;updateCareer();setTimeout(()=>show('ceremony'),500)}}
+function nextOpponent(){s.bWins=0;s.eWins=0;s.round=1;s.over=false;s.pScore=0;s.eScore=0;loadOpponent(1);setupRound()}
+function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&!s.paused&&!s.roundLocked&&!s.playerStun&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;if(Math.random()<.08)stepFootwork($('bradley'));render()}requestAnimationFrame(movementLoop)}
+function doJump(){if(s.jumping||s.roundOver||s.over||s.paused||s.roundLocked||s.playerStun)return;s.jumping=true;$('bradley').style.transition='bottom .2s ease-out';$('bradley').style.bottom='35%';updateDynamicShadows();setTimeout(()=>{$('bradley').style.transition='bottom .27s ease-in';$('bradley').style.bottom='16%';updateDynamicShadows()},210);setTimeout(()=>{s.jumping=false;$('bradley').style.transition=''},520)}
 
 bindTap('pauseBtn',pauseGame);
 bindTap('resumeBtn',resumeGame);
 bindTap('quitMatchBtn',()=>{stopTimers();s.paused=false;$('pausedOverlay').classList.remove('show');updateCareer();show('menu')});
-bindTap('jump',doJump);bindTap('punch',()=>attack('punch'));bindTap('kick',()=>attack('kick'));bindTap('sidekick',()=>attack('sidekick'));bindTap('special',()=>attack('special'));bindTap('comboBtn',comboAttack);bindTap('nextRound',()=>{s.round++;setupRound()});bindTap('nextFight',nextOpponent);bindTap('returnMenu',()=>{updateCareer();show('menu')});bindTap('continueCareer',()=>{updateCareer();show('menu')});
+bindTap('jump',doJump);bindTap('punch',()=>attack('punch'));bindTap('kick',()=>attack('kick'));bindTap('sidekick',()=>attack('sidekick'));bindTap('special',()=>attack('special'));bindTap('comboBtn',comboAttack);bindTap('nextRound',()=>{roundCurtainTransition(()=>{s.round++;setupRound()})});bindTap('nextFight',()=>roundCurtainTransition(nextOpponent));bindTap('returnMenu',()=>{$('bossPhase').classList.remove('show');$('bossIntro').classList.remove('show');$('enemy').classList.remove('bossAura');updateCareer();updateBossProgress();show('menu')});bindTap('continueCareer',()=>{updateCareer();show('menu')});
 bindHold('left',()=>moveDir=-1,()=>moveDir=0);bindHold('right',()=>moveDir=1,()=>moveDir=0);bindHold('block',()=>{if(!s.playerStun&&!s.roundLocked&&!s.paused){s.blocking=true;render()}},()=>{s.blocking=false;render()});
 document.addEventListener('touchmove',e=>{if($('fight').classList.contains('active'))safe(e)},{passive:false});
-updateCareer();movementLoop();
+buildCrowd();updateCareer();updateBossProgress();updateRoster();applySelectedFighter();movementLoop();
 </script>
 </body>
 </html>
