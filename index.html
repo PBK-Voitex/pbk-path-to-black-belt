@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v5.9</title>
+<title>PBK: Path to Black Belt v6.0.2</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -2733,6 +2733,99 @@ body.time-night .building .window{
   }
 }
 
+
+/* v6.0 gameplay polish */
+#townStreetScene .streetNpc .npcBubble{
+  position:absolute;left:50%;top:-30px;transform:translateX(-50%);
+  min-width:110px;padding:5px 7px;border-radius:8px;
+  background:rgba(8,12,16,.92);border:1px solid rgba(255,255,255,.15);
+  color:#eee;font-size:8px;font-weight:900;text-align:center;display:none;
+  box-shadow:0 8px 15px rgba(0,0,0,.28)
+}
+#townStreetScene .streetNpc.nearNpc .npcBubble{display:block}
+#townStreetScene .streetNpc.nearNpc{filter:drop-shadow(0 0 12px rgba(229,199,103,.42))}
+#streetTaskPanel{
+  position:absolute;left:12px;top:70px;z-index:230;width:250px;
+  padding:10px;border-radius:12px;background:rgba(7,11,15,.9);
+  border:1px solid rgba(255,255,255,.14);font-size:9px;line-height:1.45
+}
+#streetTaskPanel strong{font-size:11px}
+#streetTaskProgress{margin-top:6px}
+.streetPickup{
+  position:absolute;z-index:17;width:28px;height:28px;border-radius:50%;
+  display:grid;place-items:center;background:#c69c4c;border:2px solid #f2d77a;
+  box-shadow:0 0 18px rgba(242,215,122,.35);font-size:14px;font-weight:1000
+}
+.streetPickup.collected{display:none}
+#pickup1{left:770px;top:700px}#pickup2{left:1120px;top:650px}#pickup3{left:1500px;top:720px}
+#streetJobBadge{
+  position:absolute;left:50%;top:65px;transform:translateX(-50%);z-index:231;
+  display:none;padding:7px 10px;border-radius:999px;background:#3b3119;border:1px solid #a98c47;
+  font-size:9px;font-weight:1000
+}
+#streetJobBadge.show{display:block}
+
+#mobileLandscapeHint{
+  display:none;position:fixed;left:50%;top:8px;transform:translateX(-50%);
+  z-index:550;padding:6px 9px;border-radius:999px;background:rgba(0,0,0,.78);
+  border:1px solid rgba(255,255,255,.16);font-size:8px;font-weight:900
+}
+.touchDevice #mobileLandscapeHint{display:block}
+@media (orientation:portrait) and (max-width:900px){
+  #mobileLandscapeHint::after{content:' • ROTATE TO LANDSCAPE FOR BEST PLAY'}
+}
+@media (orientation:landscape) and (max-height:600px){
+  #townStreetHud{width:70vw;left:50%}
+  #streetTaskPanel{top:58px;width:210px;padding:7px}
+  #streetInfoPanel{top:58px;width:200px;padding:7px}
+  #townStreetPrompt{bottom:120px}
+  #worldControlDock{transform:scale(.88);transform-origin:left bottom}
+  #fightMovementDock{transform:scale(.88);transform-origin:left bottom}
+  #globalTouchInteract{z-index:700}
+}
+
+#fightActionCluster button.cooldown{
+  opacity:.45;filter:grayscale(.25)
+}
+#fightActionCluster button.readyFlash{
+  animation:readyFlash .45s ease-out
+}
+@keyframes readyFlash{50%{box-shadow:0 0 18px rgba(233,205,105,.7);transform:translateY(-2px)}}
+#fightFootworkStatus.goodRange{border-color:#6ca06d;color:#cfe9cf}
+#fightFootworkStatus.badRange{border-color:#a9685d;color:#efc8c1}
+
+
+/* v6.0.1 dojo/building entry regression fix */
+.streetBuilding.pbk.near{
+  outline:5px solid #f0d36e!important;
+  box-shadow:0 0 42px rgba(240,211,110,.5),0 25px 32px rgba(0,0,0,.3)!important;
+}
+#townStreetPrompt.dojoNear{
+  border-color:#d7b956;
+  color:#f0d77f;
+}
+
+
+/* v6.0.2 direct click/tap building entry */
+.streetBuilding,
+.mapBuilding{
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:rgba(229,199,103,.22);
+}
+.streetBuilding:hover,
+.mapBuilding:hover{filter:brightness(1.08)}
+#directTapHint{
+  position:absolute;left:50%;top:108px;transform:translateX(-50%);
+  z-index:235;padding:7px 10px;border-radius:999px;
+  background:rgba(7,11,15,.86);border:1px solid rgba(255,255,255,.14);
+  font-size:8px;font-weight:1000;letter-spacing:.4px
+}
+.touchDevice #directTapHint::after{content:' • TAP ANY BUILDING'}
+@media (orientation:landscape) and (max-height:600px){
+  #directTapHint{top:52px;font-size:7px;padding:5px 8px}
+}
+
 </style>
 </head>
 <body>
@@ -2798,17 +2891,21 @@ body.time-night .building .window{
       <div class="streetTree" style="left:55px;top:360px"></div><div class="streetTree" style="left:380px;top:390px"></div><div class="streetTree" style="right:380px;top:390px"></div><div class="streetTree" style="right:55px;top:360px"></div>
       <div class="streetLamp" style="left:520px;top:410px"></div><div class="streetLamp" style="right:520px;top:410px"></div>
       <div class="streetBuilding pbk" id="streetB1" data-town-building="dojo"><div class="streetSign" id="streetB1Sign">PBK</div><div class="streetDoorGlow"></div></div>
-      <div class="streetBuilding" id="streetB2" data-town-building="food"><div class="streetSign" id="streetB2Sign">FOOD</div></div><div class="streetDoorGlow"></div></div>
-      <div class="streetBuilding" id="streetB3" data-town-building="shop"><div class="streetSign" id="streetB3Sign">SHOP</div></div><div class="streetDoorGlow"></div></div>
-      <div class="streetBuilding" id="streetB4" data-town-building="life"><div class="streetSign" id="streetB4Sign">APARTMENTS</div></div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB2" data-town-building="food"><div class="streetSign" id="streetB2Sign">FOOD</div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB3" data-town-building="shop"><div class="streetSign" id="streetB3Sign">SHOP</div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB4" data-town-building="life"><div class="streetSign" id="streetB4Sign">APARTMENTS</div><div class="streetDoorGlow"></div></div>
       <div class="streetBuilding" id="streetB5" data-town-building="civic"><div class="streetSign" id="streetB5Sign">TOWN CENTER</div><div class="streetDoorGlow"></div></div>
-      <div class="streetNpc walkingStreet" id="streetNpc1"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
-<div class="streetNpc walkingStreet" id="streetNpc2"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
-<div class="streetNpc walkingStreet" id="streetNpc3"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
-<div class="streetCar" id="streetCar1"></div><div class="streetCar" id="streetCar2"></div><div id="townStreetPlayer" class="rearPlayer casualAvatar"><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div>
+      <div class="streetNpc walkingStreet" id="streetNpc1"><div class="npcBubble" id="streetNpc1Bubble">TALK</div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetNpc walkingStreet" id="streetNpc2"><div class="npcBubble" id="streetNpc2Bubble">TALK</div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetNpc walkingStreet" id="streetNpc3"><div class="npcBubble" id="streetNpc3Bubble">TALK</div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetCar" id="streetCar1"></div><div class="streetCar" id="streetCar2"></div>
+<div id="streetTaskPanel"><strong>LOCAL TASKS</strong><div id="streetTaskText">Talk to people around town or take on a quick errand.</div><div id="streetTaskProgress"></div></div>
+<div id="streetJobBadge">TOWN ERRAND <span id="streetJobCount">0</span> / 3</div>
+<div class="streetPickup" id="pickup1">★</div><div class="streetPickup" id="pickup2">★</div><div class="streetPickup" id="pickup3">★</div>
+<div id="townStreetPlayer" class="rearPlayer casualAvatar"><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div>
     </div>
   </div>
-  <div id="townStreetHud"><strong id="townStreetTitle">NORTON, MA</strong><span id="townStreetRoads">Route 123 • Route 140</span><button id="townExitRegion">REGIONAL MAP</button></div>
+  <div id="directTapHint">CLICK ANY BUILDING TO ENTER</div><div id="townStreetHud"><strong id="townStreetTitle">NORTON, MA</strong><span id="townStreetRoads">Route 123 • Route 140</span><button id="townExitRegion">REGIONAL MAP</button></div>
   <div id="townStreetPrompt">Drag the street view to look around. Use the joystick to move your character.</div>
   <div id="townStreetControls"><div class="gameJoystick" id="townJoy"><div class="joyKnob"></div></div><div id="townStreetActions"><button id="townInteractBtn">INTERACT</button><button id="townCenterCamBtn">CENTER CAMERA</button><button id="townWalkRunBtn">RUN</button><button id="townHomeBtn">HOME</button></div></div>
   <div id="streetInfoPanel"><strong id="streetTownInfo">NORTON STREET VIEW</strong><br><span id="streetClock">DAY 1 • 9:00 AM</span><br><span id="streetActivity">Local traffic and pedestrians are active.</span></div><div id="townCameraBadge">FREE STREET LOOK • DRAG WITH MOUSE/FINGER</div>
@@ -3020,7 +3117,7 @@ body.time-night .building .window{
   <div id="questDetailText">...</div>
   <div id="questDetailActions"></div>
 </div>
-<button id="globalTouchInteract" class="touchOnlyInteract">INTERACT</button><div id="collectionOverlay"><div id="collectionPanel"><h2 id="collectionTitle">COLLECTION</h2><div id="collectionDescription"></div><div id="collectionGrid"></div><button id="collectionClose">CLOSE</button></div></div><div id="dialogueBox">
+<div id="mobileLandscapeHint">TOUCH CONTROLS ACTIVE</div><button id="globalTouchInteract" class="touchOnlyInteract">INTERACT</button><div id="collectionOverlay"><div id="collectionPanel"><h2 id="collectionTitle">COLLECTION</h2><div id="collectionDescription"></div><div id="collectionGrid"></div><button id="collectionClose">CLOSE</button></div></div><div id="dialogueBox">
   <div id="dialogueName">NPC</div>
   <div id="dialogueText">...</div>
   <div id="dialogueActions"></div>
@@ -3446,7 +3543,7 @@ function enterTownWorld(name){
   $('townStreetTitle').textContent=name+', MA';$('townStreetRoads').textContent=cfg.roads;$('streetTownInfo').textContent=name+' STREET WORLD';updateStreetDaypart();randomStreetActivity();
   $('streetB1Sign').textContent='PBK '+name;
   $('streetB2Sign').textContent=cfg.food[0];$('streetB3Sign').textContent=cfg.shop[0];$('streetB4Sign').textContent=cfg.life[0];$('streetB5Sign').textContent=cfg.civic[0];
-  $('streetB2').dataset.enterType=cfg.food[1];$('streetB3').dataset.enterType=cfg.shop[1];$('streetB4').dataset.enterType=cfg.life[1];$('streetB5').dataset.enterType=cfg.civic[1];$('streetB1').dataset.enterType='dojo';
+  $('streetB1').dataset.enterType='dojo';$('streetB2').dataset.enterType=cfg.food[1];$('streetB3').dataset.enterType=cfg.shop[1];$('streetB4').dataset.enterType=cfg.life[1];$('streetB5').dataset.enterType=cfg.civic[1];
   streetPX=1090;streetPY=760;streetCamX=0;streetCamY=0;renderStreetScene();
   $('townStreetView').classList.add('show');
   setTimeout(()=>$('townStreetView').style.display='block',0);
@@ -3461,15 +3558,32 @@ const streetBuildingPos={
   streetB1:{x:245,y:510},streetB2:{x:555,y:450},streetB3:{x:1645,y:450},streetB4:{x:1955,y:510},streetB5:{x:1085,y:415}
 };
 function nearestStreetBuilding(){
-  let best=null,d=999;
-  Object.entries(streetBuildingPos).forEach(([id,p])=>{const nd=Math.hypot(streetPX-p.x,streetPY-p.y);if(nd<d){best={id,...p};d=nd}});
-  return d<=235?best:null;
+  let best=null,d=99999;
+  document.querySelectorAll('.streetBuilding[data-town-building]').forEach(el=>{
+    let x=0,y=0;
+    const fallback=streetBuildingPos[el.id];
+    if(fallback){x=fallback.x;y=fallback.y}
+    const left=parseFloat(getComputedStyle(el).left);
+    const top=parseFloat(getComputedStyle(el).top);
+    if(Number.isFinite(left)) x=left+el.offsetWidth/2;
+    if(Number.isFinite(top)) y=top+el.offsetHeight/2;
+
+    // right-positioned buildings need fallback because computed left can be awkward in transformed scene.
+    if(el.id==='streetB3'||el.id==='streetB4'){
+      if(fallback){x=fallback.x;y=fallback.y}
+    }
+
+    const nd=Math.hypot(streetPX-x,streetPY-y);
+    if(nd<d){best={id:el.id,x,y};d=nd}
+  });
+  return d<=260?best:null;
 }
 function renderStreetScene(){
   $('townStreetScene').style.transform=`translate(${-streetCamX}px,${-streetCamY}px)`;
   $('townStreetPlayer').style.left=streetPX+'px';$('townStreetPlayer').style.top=streetPY+'px';
   document.querySelectorAll('.streetBuilding').forEach(e=>e.classList.remove('near'));
   const n=nearestStreetBuilding();if(n)$(n.id).classList.add('near');
+  $('townStreetPrompt').classList.toggle('dojoNear',!!n&&n.id==='streetB1');
   $('townStreetPrompt').textContent=n?`${interactionVerb()}: ${$(n.id).querySelector('.streetSign').textContent}`:'Drag the street view to look around. Use the joystick to move your character. '+interactionVerb()+' near a building.';
 }
 function moveStreetPlayer(dx,dy){
@@ -3488,14 +3602,188 @@ $('townStreetViewport').addEventListener('pointermove',e=>{
 });
 function endStreetDrag(e){if(streetDrag&&(!e||e.pointerId===streetDrag.id)){streetDrag=null;$('townStreetViewport').classList.remove('dragging')}}
 $('townStreetViewport').addEventListener('pointerup',endStreetDrag);$('townStreetViewport').addEventListener('pointercancel',endStreetDrag);
-$('townInteractBtn').onclick=()=>{
-  const n=nearestStreetBuilding();if(!n){$('townStreetPrompt').textContent='Move closer to a building entrance.';return}
-  const el=$(n.id),type=el.dataset.enterType;
-  exitTownWorld();
-  if(type==='dojo')openDojo();else if(type==='apartment'||type==='auto')openLifeInterior(type);else enterBuilding(type);
-};
-document.querySelectorAll('[data-town-building]').forEach(el=>el.onclick=e=>{e.stopPropagation();const type=el.dataset.enterType||el.dataset.townBuilding;if(el.id==='streetB1')openDojo();else if(type==='apartment'||type==='auto')openLifeInterior(type);else enterBuilding(type)});
 
+function enterStreetBuildingByElement(el){
+  if(!el)return false;
+  const type = el.dataset.enterType || el.dataset.townBuilding;
+  const town = activeStreetTown || state.town;
+  if(town) state.town = town;
+
+  exitTownWorld();
+
+  if(type==='dojo'){
+    openDojo();
+    return true;
+  }
+  if(type==='apartment'||type==='auto'){
+    openLifeInterior(type);
+    return true;
+  }
+  if(type){
+    enterBuilding(type);
+    return true;
+  }
+  return false;
+}
+
+$('townInteractBtn').onclick=()=>{
+  const n=nearestStreetBuilding();
+  if(!n){
+    $('townStreetPrompt').textContent='Move closer to a building entrance.';
+    return;
+  }
+  enterStreetBuildingByElement($(n.id));
+};
+
+let directBuildingPointer=null;
+
+function bindDirectClickTap(el,handler){
+  el.onclick=null;
+
+  el.addEventListener('pointerdown',e=>{
+    e.stopPropagation();
+    directBuildingPointer={id:e.pointerId,x:e.clientX,y:e.clientY,el};
+
+    try{el.setPointerCapture(e.pointerId)}catch(_){}
+  });
+
+  el.addEventListener('pointermove',e=>{
+    if(!directBuildingPointer ||
+       directBuildingPointer.id!==e.pointerId ||
+       directBuildingPointer.el!==el) return;
+    e.stopPropagation();
+  });
+
+  el.addEventListener('pointerup',e=>{
+    if(!directBuildingPointer ||
+       directBuildingPointer.id!==e.pointerId ||
+       directBuildingPointer.el!==el) return;
+
+    e.stopPropagation();
+
+    const moved=Math.hypot(
+      e.clientX-directBuildingPointer.x,
+      e.clientY-directBuildingPointer.y
+    );
+
+    try{el.releasePointerCapture(e.pointerId)}catch(_){}
+    directBuildingPointer=null;
+
+    if(moved<=14){
+      e.preventDefault();
+      handler(el);
+    }
+  });
+
+  el.addEventListener('pointercancel',e=>{
+    if(directBuildingPointer && directBuildingPointer.id===e.pointerId){
+      directBuildingPointer=null;
+    }
+  });
+}
+
+document.querySelectorAll('.streetBuilding[data-town-building]').forEach(el=>{
+  bindDirectClickTap(el,enterStreetBuildingByElement);
+});
+
+
+
+/* v6.0 town NPC interaction and errands */
+let streetErrandActive=false,streetErrandCollected=new Set();
+const streetNpcPositions={
+  streetNpc1:{x:620,y:640,name:'Local Parent'},
+  streetNpc2:{x:1450,y:600,name:'Shop Customer'},
+  streetNpc3:{x:990,y:560,name:'PBK Student'}
+};
+const streetPickupPositions={
+  pickup1:{x:770,y:700},pickup2:{x:1120,y:650},pickup3:{x:1500,y:720}
+};
+
+function nearestStreetNpc(){
+  let best=null,d=999;
+  Object.entries(streetNpcPositions).forEach(([id,p])=>{
+    const el=$(id);
+    const x=parseFloat(el.style.left)||p.x,y=parseFloat(el.style.top)||p.y;
+    const nd=Math.hypot(streetPX-x,streetPY-y);
+    if(nd<d){best={id,name:p.name,x,y};d=nd}
+  });
+  return d<=150?best:null;
+}
+function nearestStreetPickup(){
+  if(!streetErrandActive)return null;
+  let best=null,d=999;
+  Object.entries(streetPickupPositions).forEach(([id,p])=>{
+    if(streetErrandCollected.has(id))return;
+    const nd=Math.hypot(streetPX-p.x,streetPY-p.y);
+    if(nd<d){best={id,...p};d=nd}
+  });
+  return d<=120?best:null;
+}
+function updateTownInteractionState(){
+  if(!$('townStreetView').classList.contains('show'))return;
+  document.querySelectorAll('.streetNpc').forEach(e=>e.classList.remove('nearNpc'));
+  const npc=nearestStreetNpc(),pickup=nearestStreetPickup(),building=nearestStreetBuilding();
+  if(npc)$(npc.id).classList.add('nearNpc');
+  if(pickup){
+    $('townStreetPrompt').textContent=isTouchDevice?'Tap INTERACT to collect the errand item.':'Press E / Enter or click INTERACT to collect the errand item.';
+  }else if(npc){
+    $('townStreetPrompt').textContent=`${interactionVerb()}: TALK TO ${npc.name.toUpperCase()}`;
+  }else if(building){
+    $('townStreetPrompt').textContent=`${interactionVerb()}: ${$(building.id).querySelector('.streetSign').textContent}`;
+  }
+}
+setInterval(updateTownInteractionState,140);
+
+function streetNpcDialogue(npc){
+  const town=activeStreetTown||state.town;
+  const responses={
+    'Local Parent':`We see a lot of PBK students around ${town}. The dojo gets busy before evening classes.`,
+    'Shop Customer':`There are always errands to do around town. Check the local task panel if you want to earn a little cash.`,
+    'PBK Student':`I'm heading to PBK later. You can train, work forms, spar, or talk to the instructors inside.`
+  };
+  const actions=[];
+  if(npc.name==='Shop Customer'&&!streetErrandActive){
+    actions.push({label:'TAKE $20 TOWN ERRAND',fn:()=>{closeDialogue();startStreetErrand()}});
+  }
+  openDialogue(npc.name,responses[npc.name]||'Nice day to be around town.',actions);
+}
+
+function startStreetErrand(){
+  streetErrandActive=true;streetErrandCollected=new Set();
+  document.querySelectorAll('.streetPickup').forEach(e=>e.classList.remove('collected'));
+  $('streetJobBadge').classList.add('show');$('streetJobCount').textContent='0';
+  $('streetTaskText').textContent='Collect 3 marked items around town.';
+  $('streetTaskProgress').textContent='Reward: $20';
+}
+function collectStreetPickup(p){
+  streetErrandCollected.add(p.id);$(p.id).classList.add('collected');
+  $('streetJobCount').textContent=streetErrandCollected.size;
+  if(streetErrandCollected.size>=3){
+    streetErrandActive=false;
+    save.cash+=20;save.rep+=.25;saveGame();
+    $('streetJobBadge').classList.remove('show');
+    $('streetTaskText').textContent='Errand complete. You earned $20.';
+    $('streetTaskProgress').textContent='Talk to people for more opportunities.';
+    openDialogue('ERRAND COMPLETE','You collected all three items and earned $20.');
+  }
+}
+
+const baseTownInteract=$('townInteractBtn').onclick;
+$('townInteractBtn').onclick=()=>{
+  const pickup=nearestStreetPickup();if(pickup){collectStreetPickup(pickup);return}
+  const npc=nearestStreetNpc();if(npc){streetNpcDialogue(npc);return}
+  if(baseTownInteract)baseTownInteract();
+};
+
+const oldTouchContext=touchContext;
+touchContext=function(){
+  const ctx=oldTouchContext();
+  if($('townStreetView')&&$('townStreetView').classList.contains('show')){
+    if(nearestStreetPickup())return {show:true,label:'COLLECT'};
+    if(nearestStreetNpc())return {show:true,label:'TALK'};
+  }
+  return ctx;
+};
 function attachJoystick(id,callback){
   const joy=$(id);if(!joy)return;
   const knob=joy.querySelector('.joyKnob');let active=null;
@@ -3744,7 +4032,23 @@ $('driveBtn').onclick=()=>{if(typeof save!=='undefined'&&!save.vehicle){openDial
 $('worldInteract').onclick=worldEnterNearby;
 $('worldHome').onclick=()=>show('home');
 document.querySelectorAll('[data-fasttown]').forEach(b=>b.onclick=()=>fastTravelTown(b.dataset.fasttown));
-document.querySelectorAll('[data-direct-building]').forEach(el=>{el.onclick=()=>{const info=directBuildingMap[el.id];state.town=info[0];if(info[1]==='dojo')openDojo();else enterBuilding(info[1])}});
+function enterRegionalBuildingByElement(el){
+  const info=directBuildingMap[el.id];
+  if(!info)return false;
+
+  state.town=info[0];
+  activeStreetTown=info[0];
+  const type=info[1];
+
+  if(type==='dojo'){openDojo();return true}
+  if(type==='apartment'||type==='auto'){openLifeInterior(type);return true}
+  enterBuilding(type);
+  return true;
+}
+
+document.querySelectorAll('.mapBuilding[data-direct-building]').forEach(el=>{
+  bindDirectClickTap(el,enterRegionalBuildingByElement);
+});
 
 // Modern world joystick
 const worldStick=$('worldStick'),worldStickKnob=$('worldStickKnob');
@@ -4312,6 +4616,26 @@ function modernAttack(type,label,points,animClass,startup=110,recovery=320){
   },startup);
   return true;
 }
+
+function updateFightRangeFeedback(){
+  if(!$('fight').classList.contains('active'))return;
+  const d=fightDistance(),el=$('fightFootworkStatus');
+  el.classList.remove('goodRange','badRange');
+  if(d>=18&&d<=34){
+    el.classList.add('goodRange');
+    if(!modernAttackLock)el.textContent='GOOD RANGE • GUARD UP • READ THE OPPONENT';
+  }else{
+    el.classList.add('badRange');
+    if(!modernAttackLock)el.textContent=d<18?'TOO CLOSE • CREATE SPACE':'TOO FAR • CLOSE DISTANCE';
+  }
+}
+setInterval(updateFightRangeFeedback,120);
+
+function buttonCooldown(btn,ms){
+  if(!btn)return;
+  btn.classList.add('cooldown');btn.disabled=true;
+  setTimeout(()=>{btn.disabled=false;btn.classList.remove('cooldown');btn.classList.add('readyFlash');setTimeout(()=>btn.classList.remove('readyFlash'),450)},ms);
+}
 function modernFightMove(x){
   if(modernAttackLock||!state.fightActive)return;
   if(Math.abs(x)<.08)return;
@@ -4320,14 +4644,14 @@ function modernFightMove(x){
 attachJoystick('fightJoy',(x,y)=>{fightJoyX=x;fightJoyY=y});
 fightJoyTimer=setInterval(()=>{if($('fight').classList.contains('active'))modernFightMove(fightJoyX)},28);
 $('fightBlockBtn').onpointerdown=()=>{if(guardStamina>0){guardHeld=true;setFightGuard(true)}};$('fightBlockBtn').onpointerup=()=>{guardHeld=false;setFightGuard(false)};$('fightBlockBtn').onpointerleave=()=>{guardHeld=false;setFightGuard(false)};
-$('fightPunchBtn').onclick=()=>modernAttack('punch','PUNCH',1,'realPunch',80,230);
-$('fightRoundBtn').onclick=()=>modernAttack('kick','ROUND KICK',2,'roundKicking',145,360);
-$('fightSideBtn').onclick=()=>modernAttack('side','SIDE KICK',2,'sideKicking',120,340);
+$('fightPunchBtn').onclick=()=>{if(modernAttack('punch','PUNCH',1,'realPunch',80,230))buttonCooldown($('fightPunchBtn'),260)};
+$('fightRoundBtn').onclick=()=>{if(modernAttack('kick','ROUND KICK',2,'roundKicking',145,360))buttonCooldown($('fightRoundBtn'),420)};
+$('fightSideBtn').onclick=()=>{if(modernAttack('side','SIDE KICK',2,'sideKicking',120,340))buttonCooldown($('fightSideBtn'),400)};
 $('fightDefSideBtn').onclick=()=>{
   if(counterWindowOpen){counterWindowOpen=false;$('counterWindow').classList.remove('show');modernAttack('defside','DEFENSIVE SIDE KICK COUNTER',2,'sideKicking',65,300)}
   else $('fightMessage').textContent='WAIT FOR THE COUNTER WINDOW';
 };
-$('fightBTwistBtn').onclick=()=>modernAttack('twist','B-TWIST KICK',2,'twisting',210,480);
+$('fightBTwistBtn').onclick=()=>{if(modernAttack('twist','B-TWIST KICK',2,'twisting',210,480))buttonCooldown($('fightBTwistBtn'),560)};
 $('fightDashBtn').onclick=doDash;$('fightBackBtn').onclick=doBackstep;$('fightSpecialModern').onclick=doSpecial;
 document.querySelectorAll('[data-fight]').forEach(b=>b.onclick=()=>{
   const a=b.dataset.fight,p=$('playerFight');
