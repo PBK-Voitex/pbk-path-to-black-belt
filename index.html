@@ -82,13 +82,395 @@ h1,h2,h3{margin:0}
 @keyframes glowPulse{0%{opacity:0}35%{opacity:1}100%{opacity:0}}
 .attackReady{outline:2px solid rgba(255,255,255,.8)}
 
+
+/* v0.9 combat systems */
+#arena.shake{animation:arenaShake .18s linear}
+@keyframes arenaShake{
+  0%{transform:translate(0,0)}
+  20%{transform:translate(-5px,2px)}
+  40%{transform:translate(5px,-2px)}
+  60%{transform:translate(-3px,1px)}
+  80%{transform:translate(3px,-1px)}
+  100%{transform:translate(0,0)}
+}
+.fighter.stunned{filter:brightness(1.65)}
+.fighter.counterFx{animation:counterFlash .32s ease-out}
+@keyframes counterFlash{
+  0%{filter:brightness(1)}
+  35%{filter:brightness(2.4)}
+  100%{filter:brightness(1)}
+}
+#announcer{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:54px;font-weight:1000;letter-spacing:2px;z-index:30;pointer-events:none;
+  text-shadow:0 4px 8px #000;opacity:0
+}
+#announcer.show{animation:announce .9s ease-out}
+@keyframes announce{
+  0%{opacity:0;transform:scale(.6)}
+  25%{opacity:1;transform:scale(1.12)}
+  65%{opacity:1;transform:scale(1)}
+  100%{opacity:0;transform:scale(.95)}
+}
+#pauseBtn{
+  position:absolute;right:10px;bottom:8px;z-index:20;
+  padding:8px 12px;font-size:12px;border-radius:8px
+}
+#pausedOverlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.72);z-index:29;
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px
+}
+#pausedOverlay.show{display:flex}
+#pausedOverlay h2{font-size:42px}
+#pausedOverlay button{min-width:180px}
+#counterTip{
+  position:absolute;right:10px;bottom:48px;z-index:6;
+  padding:6px 9px;background:rgba(0,0,0,.45);border-radius:8px;font-size:12px;
+  max-width:220px;text-align:right
+}
+.cooldown{opacity:.45}
+
+
+/* v1.0 3-D fighter art + sparring guard */
+.fighter{
+  perspective:420px;
+  filter:drop-shadow(0 10px 7px rgba(0,0,0,.48));
+}
+.fighter .head{
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,.28) 0 9%, transparent 10%),
+    radial-gradient(circle at 65% 60%, rgba(0,0,0,.12) 0 35%, transparent 36%),
+    linear-gradient(135deg,#e5b486 0%,#c98f62 58%,#9e6847 100%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:
+    inset 4px 3px 5px rgba(255,255,255,.18),
+    inset -5px -4px 7px rgba(0,0,0,.22),
+    0 2px 4px rgba(0,0,0,.35);
+}
+#bradley .body,#bradley .arm,#bradley .leg{
+  background:
+    linear-gradient(90deg,#020304 0%,#111317 33%,#060708 70%,#010203 100%);
+  border:1px solid #454a50;
+  box-shadow:
+    inset 4px 0 5px rgba(255,255,255,.05),
+    inset -5px 0 7px rgba(0,0,0,.72),
+    0 2px 4px rgba(0,0,0,.45);
+}
+#enemy .body,#enemy .arm,#enemy .leg{
+  background:
+    linear-gradient(90deg,#2a0909 0%,#6c2222 34%,#441414 70%,#210707 100%);
+  border:1px solid #7f4848;
+  box-shadow:
+    inset 4px 0 5px rgba(255,255,255,.06),
+    inset -5px 0 7px rgba(0,0,0,.55),
+    0 2px 4px rgba(0,0,0,.42);
+}
+.fighter .body{
+  transform:rotateX(-3deg);
+  box-shadow:
+    inset 7px 0 10px rgba(255,255,255,.05),
+    inset -8px 0 10px rgba(0,0,0,.58),
+    0 5px 7px rgba(0,0,0,.35);
+}
+.fighter .belt{
+  background:linear-gradient(#171717,#020202);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.12),0 2px 2px rgba(0,0,0,.5);
+}
+.fighter .stripe{
+  background:linear-gradient(90deg,#f7f7f7,#a7a7a7);
+  box-shadow:0 0 2px #fff;
+}
+
+/* neutral sparring guard */
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.blocking):not(.recoilFx) .arm.l{
+  left:22px;
+  top:38px;
+  transform:rotate(-62deg) translateY(-3px);
+}
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.blocking):not(.recoilFx) .arm.r{
+  right:13px;
+  top:34px;
+  transform:rotate(48deg) translateY(-5px);
+}
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.blocking):not(.recoilFx) .leg.l{
+  left:11px;
+  transform:rotate(5deg);
+  transform-origin:top center;
+}
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.blocking):not(.recoilFx) .leg.r{
+  right:9px;
+  transform:rotate(-10deg);
+  transform-origin:top center;
+}
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.blocking):not(.recoilFx) .body{
+  transform:rotate(-2deg) skewX(-2deg);
+}
+.fighter .tag{
+  text-shadow:0 2px 2px rgba(0,0,0,.8);
+}
+
+/* slight bounce so idle stance feels alive */
+.fighter:not(.punchFx):not(.kickFx):not(.sideFx):not(.specialFx):not(.recoilFx){
+  animation:guardBounce 1.15s ease-in-out infinite alternate;
+}
+@keyframes guardBounce{
+  0%{margin-bottom:0}
+  100%{margin-bottom:3px}
+}
+
+/* grounded shadow for depth */
+.fighter:after{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  bottom:-8px;
+  height:11px;
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.58),rgba(0,0,0,0) 72%);
+  transform:scaleX(1.15);
+  z-index:-1;
+}
+
+/* gi lapels for more dimensional chest shape */
+.fighter .body:before,
+.fighter .body:after{
+  content:"";
+  position:absolute;
+  top:4px;
+  width:13px;
+  height:45px;
+  border-radius:3px;
+  opacity:.8;
+}
+#bradley .body:before,#bradley .body:after{
+  background:linear-gradient(#17191c,#050607);
+}
+#enemy .body:before,#enemy .body:after{
+  background:linear-gradient(#6f2626,#2b0a0a);
+}
+.fighter .body:before{left:8px;transform:rotate(18deg)}
+.fighter .body:after{right:8px;transform:rotate(-18deg)}
+
+/* gloves/hands illusion */
+.fighter .arm:after{
+  content:"";
+  position:absolute;
+  left:-1px;
+  bottom:-4px;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#d7a576,#9f6848);
+  box-shadow:inset 2px 2px 3px rgba(255,255,255,.15),inset -2px -2px 3px rgba(0,0,0,.24);
+}
+
+/* feet illusion, still barefoot */
+.fighter .leg:after{
+  content:"";
+  position:absolute;
+  left:-2px;
+  bottom:-3px;
+  width:21px;
+  height:9px;
+  border-radius:55% 45% 50% 40%;
+  background:linear-gradient(90deg,#c99469,#9f6848);
+  box-shadow:inset 2px 1px 2px rgba(255,255,255,.12),0 2px 2px rgba(0,0,0,.35);
+}
+
+/* stronger attack poses */
+.fighter.punchFx .arm.r{
+  transform:rotate(-93deg) translateY(-3px);
+  right:-25px;
+}
+.fighter.kickFx .leg.r{
+  transform:rotate(-78deg) translate(22px,-22px);
+  transform-origin:top center;
+}
+.fighter.sideFx .leg.r{
+  transform:rotate(-96deg) translate(26px,-29px);
+  transform-origin:top center;
+}
+.fighter.blocking .arm.l{
+  left:20px;
+  top:28px;
+  transform:rotate(-78deg);
+}
+.fighter.blocking .arm.r{
+  right:18px;
+  top:26px;
+  transform:rotate(72deg);
+}
+
+
+/* v1.1 cinematic visual pass */
+#arena{
+  background:
+    radial-gradient(circle at 50% 12%,rgba(245,235,210,.14),transparent 25%),
+    linear-gradient(to bottom,#1d232c 0%,#11161c 42%,#24201b 58%,#4a3828 58%,#2d2118 100%);
+  perspective:900px;
+  transform-style:preserve-3d;
+}
+#arena:before{
+  content:"";
+  position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,transparent 0 7%,rgba(255,255,255,.025) 7% 7.4%,transparent 7.4% 20%,rgba(255,255,255,.018) 20% 20.4%,transparent 20.4% 80%,rgba(255,255,255,.018) 80% 80.4%,transparent 80.4% 93%,rgba(255,255,255,.025) 93% 93.4%,transparent 93.4%),
+    linear-gradient(to bottom,rgba(255,255,255,.02),rgba(0,0,0,.18));
+  pointer-events:none;
+  z-index:1;
+}
+#arena:after{
+  content:"";
+  position:absolute;left:0;right:0;bottom:0;height:44%;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 85px),
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 2px,transparent 2px 58px);
+  transform:perspective(700px) rotateX(63deg) translateY(24%);
+  transform-origin:bottom;
+  opacity:.55;
+  pointer-events:none;
+  z-index:1;
+}
+#cinematicLights{
+  position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden;
+}
+.lightCone{
+  position:absolute;top:-28%;width:34%;height:95%;
+  background:linear-gradient(to bottom,rgba(255,244,214,.2),rgba(255,244,214,.02) 60%,transparent 100%);
+  filter:blur(10px);
+  transform:rotate(8deg);
+  opacity:.42;
+}
+.lightCone.left{left:4%}
+.lightCone.right{right:3%;transform:rotate(-8deg)}
+#vignette{
+  position:absolute;inset:0;pointer-events:none;z-index:18;
+  box-shadow:inset 0 0 120px rgba(0,0,0,.82),inset 0 0 35px rgba(0,0,0,.55);
+}
+#filmGrain{
+  position:absolute;inset:0;pointer-events:none;z-index:17;
+  opacity:.08;
+  background-image:
+    radial-gradient(circle at 10% 20%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 60% 70%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 30% 80%,#fff 0 1px,transparent 1.4px),
+    radial-gradient(circle at 80% 30%,#fff 0 1px,transparent 1.4px);
+  background-size:7px 7px,9px 9px,11px 11px,13px 13px;
+  mix-blend-mode:soft-light;
+}
+#backWall{
+  position:absolute;left:8%;right:8%;top:18%;height:33%;z-index:0;
+  border:1px solid rgba(255,255,255,.06);
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.4),transparent 12%,transparent 88%,rgba(0,0,0,.4)),
+    linear-gradient(#242a31,#15191f);
+  box-shadow:0 18px 45px rgba(0,0,0,.45),inset 0 0 35px rgba(255,255,255,.025);
+}
+#backWall:before{
+  content:"PBK MARTIAL ARTS";
+  position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);
+  font-size:clamp(18px,3vw,38px);font-weight:1000;letter-spacing:6px;
+  color:rgba(255,255,255,.12);text-shadow:0 2px 10px rgba(0,0,0,.8);
+}
+.wallPanel{
+  position:absolute;top:8%;bottom:8%;width:12%;
+  background:linear-gradient(#15191f,#0c0f13);
+  border:1px solid rgba(255,255,255,.045);
+}
+.wallPanel.p1{left:5%}.wallPanel.p2{left:22%}.wallPanel.p3{right:22%}.wallPanel.p4{right:5%}
+
+.fighter{
+  z-index:8;
+  transform-style:preserve-3d;
+  filter:drop-shadow(0 18px 12px rgba(0,0,0,.55));
+}
+.fighter .body{
+  border-radius:14px 14px 7px 7px;
+  box-shadow:
+    inset 9px 0 12px rgba(255,255,255,.035),
+    inset -12px 0 15px rgba(0,0,0,.6),
+    0 8px 14px rgba(0,0,0,.38);
+}
+.fighter .head{
+  box-shadow:
+    inset 5px 3px 6px rgba(255,255,255,.18),
+    inset -6px -5px 9px rgba(0,0,0,.24),
+    0 5px 7px rgba(0,0,0,.4);
+}
+.fighter .arm,.fighter .leg{
+  box-shadow:
+    inset 4px 0 5px rgba(255,255,255,.04),
+    inset -5px 0 7px rgba(0,0,0,.52),
+    0 4px 6px rgba(0,0,0,.35);
+}
+.fighter:before{
+  content:"";
+  position:absolute;left:10px;right:10px;top:20px;height:120px;
+  border-radius:40%;
+  background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 35%,rgba(0,0,0,.16));
+  pointer-events:none;mix-blend-mode:screen;
+}
+.fighter.idleBreath .body{animation:breathBody 1.6s ease-in-out infinite alternate}
+@keyframes breathBody{
+  0%{transform:rotate(-2deg) skewX(-2deg) scaleY(1)}
+  100%{transform:rotate(-2deg) skewX(-2deg) scaleY(1.018)}
+}
+
+#arena.cameraImpact{animation:cameraPunch .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes cameraPunch{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.018) translateX(-4px)}
+  70%{transform:scale(1.008) translateX(3px)}
+  100%{transform:scale(1)}
+}
+#arena.specialCamera{animation:specialCamera .62s ease-out}
+@keyframes specialCamera{
+  0%{transform:scale(1)}
+  25%{transform:scale(1.045)}
+  68%{transform:scale(1.028)}
+  100%{transform:scale(1)}
+}
+
+.vfxParticle{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:#fff;box-shadow:0 0 12px #fff;z-index:20;pointer-events:none;
+  animation:particleFly .55s ease-out forwards;
+}
+@keyframes particleFly{
+  from{opacity:1;transform:translate(0,0) scale(1)}
+  to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}
+}
+.dustParticle{
+  position:absolute;width:20px;height:8px;border-radius:50%;
+  background:rgba(210,190,160,.16);filter:blur(2px);z-index:4;pointer-events:none;
+  animation:dustFloat .8s ease-out forwards;
+}
+@keyframes dustFloat{
+  from{opacity:.55;transform:translateY(0) scale(.7)}
+  to{opacity:0;transform:translateY(-20px) scale(1.7)}
+}
+#roundCinematic{
+  position:absolute;inset:0;z-index:25;pointer-events:none;
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:18%;
+  font-weight:1000;font-size:clamp(24px,5vw,58px);letter-spacing:4px;
+  text-shadow:0 5px 12px rgba(0,0,0,.8);opacity:0;
+}
+#roundCinematic.show{animation:cinematicTitle 1.1s ease-out}
+@keyframes cinematicTitle{
+  0%{opacity:0;transform:translateY(24px) scale(.92)}
+  28%{opacity:1;transform:translateY(0) scale(1.04)}
+  70%{opacity:1;transform:scale(1)}
+  100%{opacity:0}
+}
+
 </style>
 </head>
 <body>
 
 <div id="menu" class="screen active">
   <h1>PBK: PATH TO BLACK BELT</h1>
-  <div>Combat Prototype v0.8.1</div>
+  <div>Cinematic Prototype v1.1.1</div>
   <div class="menuBtns">
     <button id="playBtn">PLAY</button>
     <button id="careerBtn">BELT LADDER</button>
@@ -111,7 +493,7 @@ h1,h2,h3{margin:0}
   <div class="cardgrid">
     <div class="card">
       <h3>Bradley</h3>
-      <p>Fast, tricky, counter-oriented.</p>
+      <p>Fast, tricky, counter-oriented. Fights from a compact sparring guard.</p>
       <div class="stat"><span>Speed</span><span>9/10</span></div><div class="meter"><div style="width:90%"></div></div>
       <div class="stat"><span>Power</span><span>7/10</span></div><div class="meter"><div style="width:70%"></div></div>
       <div class="stat"><span>Defense</span><span>8/10</span></div><div class="meter"><div style="width:80%"></div></div>
@@ -212,13 +594,28 @@ h1,h2,h3{margin:0}
     <div class="panel"><div id="enemyName" class="name" style="text-align:right">REX</div><div class="bar"><div id="ehp" class="fill"></div></div><div class="bar power"><div id="epw" class="fill"></div></div><div id="eRounds" style="text-align:right">Rounds: 0</div></div>
   </div>
   <div id="arena">
+    <div id="backWall">
+      <div class="wallPanel p1"></div><div class="wallPanel p2"></div>
+      <div class="wallPanel p3"></div><div class="wallPanel p4"></div>
+    </div>
+    <div id="cinematicLights"><div class="lightCone left"></div><div class="lightCone right"></div></div>
+    <div id="filmGrain"></div><div id="vignette"></div>
+    <div id="roundCinematic"></div>
     <div id="arenaTitle">PBK TRAINING HALL</div><div id="message">FIGHT!</div>
-    <div id="bradley" class="fighter" style="left:20%"><div class="tag">BRADLEY</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"><div class="stripe"></div></div><div class="leg l"></div><div class="leg r"></div></div>
-    <div id="enemy" class="fighter" style="left:73%"><div class="tag" id="enemyTag">REX</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="bradley" class="fighter idleBreath" style="left:20%"><div class="tag">BRADLEY</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"><div class="stripe"></div></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="enemy" class="fighter idleBreath" style="left:73%"><div class="tag" id="enemyTag">REX</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="announcer"></div>
+    <div id="pausedOverlay">
+      <h2>PAUSED</h2>
+      <button id="resumeBtn">RESUME</button>
+      <button id="quitMatchBtn">QUIT MATCH</button>
+    </div>
     <div id="impactSpark"></div>
     <div id="combatText"></div>
     <div id="specialGlow"></div>
     <div id="rangeHint">Move close enough to strike</div>
+    <div id="counterTip">Defensive Side Kick gets bonus damage when timed into an advancing opponent.</div>
+    <button id="pauseBtn">PAUSE</button>
     <div id="combo">Combo: 0</div>
     <button id="nextRound" class="overlaybtn">NEXT ROUND</button><button id="nextFight" class="overlaybtn">NEXT FIGHT</button><button id="returnMenu" class="overlaybtn">RETURN TO MENU</button>
   </div>
@@ -284,12 +681,176 @@ document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('poin
 function startFocus(){clearInterval(focusTimer);focusTimer=setInterval(()=>{focus+=focusDir*2;if(focus>=100){focus=100;focusDir=-1}if(focus<=0){focus=0;focusDir=1}$('focusFill').style.width=focus+'%'},35)}
 bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
 
-function resetFightState(){s={bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,bWins:0,eWins:0,round:1,time:60,over:false,roundOver:false,blocking:false,eBlocking:false,jumping:false,opponentIndex:0}}
+function resetFightState(){s={
+      bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,bWins:0,eWins:0,round:1,time:60,
+      over:false,roundOver:false,blocking:false,eBlocking:false,jumping:false,
+      opponentIndex:0,playerStun:false,enemyStun:false,playerBusy:false,enemyBusy:false,
+      enemyAdvancing:false,paused:false,roundLocked:false
+    }}
 function startTournament(){resetFightState();show('fight');loadOpponent(0);setupRound()}
 function loadOpponent(i){s.opponentIndex=i;const o=opponents[i];$('enemyName').textContent=o.name;$('enemyTag').textContent=o.name;$('enemy').querySelector('.body').style.background=o.color;$('stageLabel').textContent=i===0?'SEMIFINAL':'CHAMPIONSHIP'}
-function setupRound(){Object.assign(s,{bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,time:60,roundOver:false,blocking:false,eBlocking:false});$('nextRound').style.display='none';$('nextFight').style.display='none';$('returnMenu').style.display='none';$('message').textContent=`ROUND ${s.round} — FIGHT!`;startTimers();render()}
-function startTimers(){stopTimers();timerInt=setInterval(()=>{if(!s.roundOver&&!s.over){s.time--;if(s.time<=0){s.time=0;judgeRound()}render()}},1000);aiInt=setInterval(enemyAI,500)}
+function announce(text){
+  const a=$('announcer');
+  a.textContent=text;
+  a.classList.remove('show');
+  void a.offsetWidth;
+  a.classList.add('show');
+}
+
+function arenaShake(){
+  const a=$('arena');
+  a.classList.remove('shake');
+  void a.offsetWidth;
+  a.classList.add('shake');
+}
+
+let audioCtx=null;
+function tone(freq=220,duration=.08,type='square',volume=.05){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator();
+    const gain=audioCtx.createGain();
+    osc.type=type;
+    osc.frequency.value=freq;
+    gain.gain.value=volume;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+    osc.stop(audioCtx.currentTime+duration);
+  }catch(e){}
+}
+
+function hitSound(kind='hit'){
+  if(kind==='block')tone(120,.06,'square',.035);
+  else if(kind==='special'){
+    tone(90,.12,'sawtooth',.06);
+    setTimeout(()=>tone(180,.12,'square',.05),70);
+  }else tone(170,.06,'square',.045);
+}
+
+function setStun(target,ms){
+  if(target==='p'){
+    s.playerStun=true;
+    $('bradley').classList.add('stunned');
+    setTimeout(()=>{s.playerStun=false;$('bradley').classList.remove('stunned')},ms);
+  }else{
+    s.enemyStun=true;
+    $('enemy').classList.add('stunned');
+    setTimeout(()=>{s.enemyStun=false;$('enemy').classList.remove('stunned')},ms);
+  }
+}
+
+function setPlayerBusy(ms){
+  s.playerBusy=true;
+  ['punch','kick','sidekick','special','comboBtn'].forEach(id=>$(id).classList.add('cooldown'));
+  setTimeout(()=>{
+    s.playerBusy=false;
+    ['punch','kick','sidekick','special','comboBtn'].forEach(id=>$(id).classList.remove('cooldown'));
+  },ms);
+}
+
+function setEnemyBusy(ms){
+  s.enemyBusy=true;
+  setTimeout(()=>s.enemyBusy=false,ms);
+}
+
+function pauseGame(){
+  if(!$('fight').classList.contains('active')||s.over)return;
+  s.paused=true;
+  $('pausedOverlay').classList.add('show');
+  stopTimers();
+}
+
+function resumeGame(){
+  if(!s.paused)return;
+  s.paused=false;
+  $('pausedOverlay').classList.remove('show');
+  if(!s.roundOver&&!s.over&&!s.roundLocked)startTimers();
+}
+
+function setupRound(){
+  Object.assign(s,{
+    bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,time:60,roundOver:false,
+    blocking:false,eBlocking:false,playerStun:false,enemyStun:false,
+    playerBusy:false,enemyBusy:false,enemyAdvancing:false,paused:false,roundLocked:true
+  });
+  $('nextRound').style.display='none';
+  $('nextFight').style.display='none';
+  $('returnMenu').style.display='none';
+  $('pausedOverlay').classList.remove('show');
+  $('message').textContent='';
+  render();
+  announce('ROUND '+s.round);cinematicTitle('ROUND '+s.round);
+  setTimeout(()=>{announce('FIGHT!');cinematicTitle('FIGHT!')},700);
+  setTimeout(()=>{
+    s.roundLocked=false;
+    $('message').textContent='FIGHT!';
+    startTimers();
+  },1250);
+}
+function startTimers(){
+  stopTimers();
+  if(s.paused||s.roundLocked||s.roundOver||s.over)return;
+  timerInt=setInterval(()=>{
+    if(!s.roundOver&&!s.over&&!s.paused){
+      s.time--;
+      if(s.time<=0){s.time=0;judgeRound()}
+      render();
+    }
+  },1000);
+  aiInt=setInterval(enemyAI,430);
+}
 function stopTimers(){if(timerInt)clearInterval(timerInt);if(aiInt)clearInterval(aiInt);timerInt=aiInt=null}
+
+function cameraImpact(special=false){
+  const a=$('arena');
+  const cls=special?'specialCamera':'cameraImpact';
+  a.classList.remove('cameraImpact','specialCamera');
+  void a.offsetWidth;
+  a.classList.add(cls);
+  setTimeout(()=>a.classList.remove(cls),special?650:250);
+}
+
+function cinematicTitle(text){
+  const el=$('roundCinematic');
+  el.textContent=text;
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+}
+
+function spawnImpactParticles(target,count=10,special=false){
+  const arenaRect=$('arena').getBoundingClientRect();
+  const targetRect=(target==='e' ? $('enemy') : $('bradley')).getBoundingClientRect();
+  const x=targetRect.left-arenaRect.left+targetRect.width/2;
+  const y=targetRect.top-arenaRect.top+targetRect.height*.42;
+
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='vfxParticle';
+    const angle=(Math.PI*2*i/count)+(Math.random()-.5)*.5;
+    const distance=(special?55:32)+Math.random()*(special?45:25);
+    p.style.left=x+'px';
+    p.style.top=y+'px';
+    p.style.setProperty('--dx',Math.cos(angle)*distance+'px');
+    p.style.setProperty('--dy',Math.sin(angle)*distance+'px');
+    $('arena').appendChild(p);
+    setTimeout(()=>p.remove(),650);
+  }
+}
+
+function spawnDust(xPercent){
+  for(let i=0;i<3;i++){
+    const d=document.createElement('div');
+    d.className='dustParticle';
+    d.style.left=(xPercent+Math.random()*4-2)+'%';
+    d.style.bottom=(14+Math.random()*3)+'%';
+    $('arena').appendChild(d);
+    setTimeout(()=>d.remove(),850);
+  }
+}
+
 function render(){
   $('bradley').style.left=s.bx+'%';
   $('enemy').style.left=s.ex+'%';
@@ -302,6 +863,8 @@ function render(){
   $('bRounds').textContent='Rounds: '+s.bWins;
   $('eRounds').textContent='Rounds: '+s.eWins;
   $('bradley').classList.toggle('blocking',!!s.blocking);
+  $('bradley').classList.toggle('idleBreath',!s.playerBusy&&!s.playerStun&&!s.blocking);
+  $('enemy').classList.toggle('idleBreath',!s.enemyBusy&&!s.enemyStun&&!s.eBlocking);
   $('enemy').classList.toggle('blocking',!!s.eBlocking);
   $('combo').textContent='Combo: '+comboCount;
   if($('rangeHint')){
@@ -376,47 +939,60 @@ function addCombo(){
   comboTimer=setTimeout(()=>{comboCount=0;render()},1200);
 }
 
-function damage(t,base,kn=2){
+function damage(t,base,kn=2,specialHit=false){
   if(t==='e'){
     const blocked=s.eBlocking;
     const d=blocked?Math.max(1,Math.floor(base*.25)):base;
     s.eh=Math.max(0,s.eh-d);
     s.bp=Math.min(100,s.bp+10);
-    showImpact('e',d,blocked);
+    showImpact('e',d,blocked);if(!blocked){spawnImpactParticles('e',specialHit?18:10,specialHit);cameraImpact(specialHit)}
     recoil($('enemy'),1,blocked);
+    hitSound(blocked?'block':specialHit?'special':'hit');
+
     if(!blocked){
       flash($('enemy'));
       knock('e',kn,1);
       addCombo();
+      setStun('e',specialHit?430:250);
+      arenaShake();
       setCombatText(`HIT! ${d} DAMAGE`);
-    }else setCombatText('BLOCKED!');
+    }else{
+      setStun('e',100);
+      setCombatText('BLOCKED!');
+    }
     if(s.eh===0)endRound('p');
   }else{
     const blocked=s.blocking;
     const d=blocked?Math.max(1,Math.floor(base*.25)):base;
     s.bh=Math.max(0,s.bh-d);
     s.ep=Math.min(100,s.ep+10);
-    showImpact('p',d,blocked);
+    showImpact('p',d,blocked);if(!blocked){spawnImpactParticles('p',specialHit?18:10,specialHit);cameraImpact(specialHit)}
     recoil($('bradley'),-1,blocked);
+    hitSound(blocked?'block':specialHit?'special':'hit');
+
     if(!blocked){
       flash($('bradley'));
       knock('p',kn,-1);
       comboCount=0;
+      setStun('p',specialHit?430:250);
+      arenaShake();
       setCombatText(`${opponents[s.opponentIndex].name} HITS!`);
-    }else setCombatText('BLOCK!');
+    }else{
+      setStun('p',90);
+      setCombatText('BLOCK!');
+    }
     if(s.bh===0)endRound('e');
   }
   render();
 }
-
 function attack(type){
-  if(s.roundOver||s.over)return;
+  if(s.roundOver||s.over||s.paused||s.roundLocked||s.playerStun||s.playerBusy)return;
 
-  let dmg=0,range=0,cost=0,kn=2;
-  if(type==='punch'){dmg=8;range=10}
-  if(type==='kick'){dmg=12;range=13}
-  if(type==='sidekick'){dmg=16;range=17;kn=5}
-  if(type==='special'){dmg=28;range=20;cost=40;kn=7}
+  let dmg=0,range=0,cost=0,kn=2,recovery=260;
+  if(type==='punch'){dmg=8;range=10;recovery=220}
+  if(type==='kick'){dmg=12;range=13;recovery=300}
+  if(type==='sidekick'){dmg=16;range=17;kn=5;recovery=380}
+  if(type==='special'){dmg=28;range=20;cost=40;kn=7;recovery=650}
 
   if(cost&&s.bp<cost){
     setCombatText('BEAT TWIST KICK NEEDS 40 POWER',900);
@@ -424,19 +1000,29 @@ function attack(type){
   }
   if(cost)s.bp-=cost;
 
+  setPlayerBusy(recovery);
+
+  let counter=false;
+  if(type==='sidekick'&&s.enemyAdvancing&&dist()<=18){
+    counter=true;
+    dmg=24;
+    kn=8;
+    $('bradley').classList.add('counterFx');
+    setTimeout(()=>$('bradley').classList.remove('counterFx'),330);
+    setCombatText('COUNTER SIDE KICK!',800);
+    tone(260,.08,'square',.06);
+  }
+
   const oldX=s.bx;
-  const lunge=type==='punch'?1.0:type==='kick'?1.5:type==='sidekick'?2.3:3.2;
+  const lunge=type==='punch'?1.0:type==='kick'?1.5:type==='sidekick'?2.0:3.2;
   s.bx=Math.min(s.ex-4,s.bx+lunge);
-  attackAnim($('bradley'),type);
+  spawnDust(s.bx);attackAnim($('bradley'),type);
   render();
 
   setTimeout(()=>{
-    if(dist()<=range){
-      damage('e',dmg,kn);
-    }else{
-      setCombatText('WHIFF — MOVE CLOSER',550);
-    }
-  },type==='special'?210:90);
+    if(dist()<=range)damage('e',dmg,kn,type==='special'||counter);
+    else setCombatText('WHIFF — MOVE CLOSER',550);
+  },type==='special'?210:95);
 
   setTimeout(()=>{
     if(!s.roundOver&&!s.over){
@@ -445,34 +1031,127 @@ function attack(type){
     }
   },type==='special'?520:260);
 }
-
 function comboAttack(){
-  if(s.roundOver||s.over)return;
+  if(s.roundOver||s.over||s.paused||s.roundLocked||s.playerStun||s.playerBusy)return;
   setCombatText('3-HIT COMBO!',650);
-  attack('punch');
-  setTimeout(()=>attack('kick'),220);
-  setTimeout(()=>attack('sidekick'),480);
-}
+  s.playerBusy=true;
 
+  attackAnim($('bradley'),'punch');
+  if(dist()<=10)damage('e',7,1);
+
+  setTimeout(()=>{
+    attackAnim($('bradley'),'kick');
+    if(dist()<=13)damage('e',9,2);
+  },230);
+
+  setTimeout(()=>{
+    attackAnim($('bradley'),'sidekick');
+    if(dist()<=17)damage('e',13,5);
+  },500);
+
+  setTimeout(()=>{s.playerBusy=false},850);
+}
 function enemyAttack(type='kick'){
+  if(s.enemyStun||s.enemyBusy||s.paused||s.roundLocked)return;
+
   let dmg=type==='punch'?7:type==='sidekick'?14:11;
   let range=type==='punch'?10:type==='sidekick'?16:13;
+  let recovery=type==='punch'?220:type==='sidekick'?390:310;
+  let specialHit=false;
+
+  spawnDust(s.ex);
   if(type==='special'&&s.ep>=40){
     dmg=22;
     range=18;
     s.ep-=40;
+    recovery=650;
+    specialHit=true;
     attackAnim($('enemy'),'special');
   }else{
     attackAnim($('enemy'),type==='sidekick'?'sidekick':type);
   }
-  setTimeout(()=>{
-    if(dist()<=range)damage('p',dmg,type==='sidekick'?4:2);
-  },type==='special'?210:100);
-}
 
-function enemyAI(){if(s.roundOver||s.over||!$('fight').classList.contains('active'))return;const o=opponents[s.opponentIndex],delta=s.bx-s.ex;s.eBlocking=false;if(o.style==='pressure'){if(Math.abs(delta)>11)s.ex+=Math.sign(delta)*1.5;else{const r=Math.random();if(r<.15){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},500)}else if(r<.28&&s.ep>=40)enemyAttack('special');else if(r<.58)enemyAttack('kick');else if(r<.82)enemyAttack('punch');else enemyAttack('sidekick')}}else{if(Math.abs(delta)<9)s.ex-=Math.sign(delta);else if(Math.abs(delta)>15)s.ex+=Math.sign(delta)*.7;const r=Math.random();if(r<.32){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},650)}else if(r<.6&&dist()<=15)enemyAttack('sidekick');else if(r<.76&&s.ep>=40)enemyAttack('special')}s.ex=Math.max(8,Math.min(92,s.ex));render()}
+  setEnemyBusy(recovery);
+  setTimeout(()=>{
+    if(dist()<=range)damage('p',dmg,type==='sidekick'?4:2,specialHit);
+  },specialHit?210:100);
+}
+function enemyAI(){
+  if(s.roundOver||s.over||s.paused||s.roundLocked||s.enemyStun||s.enemyBusy||!$('fight').classList.contains('active'))return;
+
+  const o=opponents[s.opponentIndex];
+  const delta=s.bx-s.ex;
+  s.eBlocking=false;
+  s.enemyAdvancing=false;
+
+  if(o.style==='pressure'){
+    if(Math.abs(delta)>11){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*1.35;
+    }else{
+      const r=Math.random();
+      if(r<.14){
+        s.eBlocking=true;
+        setTimeout(()=>{s.eBlocking=false;render()},500);
+      }else if(r<.27&&s.ep>=40){
+        enemyAttack('special');
+      }else if(r<.55){
+        enemyAttack('kick');
+      }else if(r<.78){
+        enemyAttack('punch');
+      }else{
+        enemyAttack('sidekick');
+      }
+    }
+  }else{
+    if(Math.abs(delta)<9){
+      s.ex-=Math.sign(delta)*1.0;
+    }else if(Math.abs(delta)>15){
+      s.enemyAdvancing=true;
+      s.ex+=Math.sign(delta)*.65;
+    }
+
+    const r=Math.random();
+    if(r<.34){
+      s.eBlocking=true;
+      setTimeout(()=>{s.eBlocking=false;render()},650);
+    }else if(r<.60&&dist()<=15){
+      enemyAttack('sidekick');
+    }else if(r<.76&&s.ep>=40){
+      enemyAttack('special');
+    }else if(r<.88&&dist()<=10){
+      enemyAttack('punch');
+    }
+  }
+
+  s.ex=Math.max(8,Math.min(92,s.ex));
+  render();
+}
 function judgeRound(){endRound(s.bh===s.eh?'draw':s.bh>s.eh?'p':'e')}
-function endRound(w){if(s.roundOver)return;s.roundOver=true;stopTimers();if(w==='p'){s.bWins++;$('message').textContent='K.O.! BRADLEY WINS THE ROUND!'}else if(w==='e'){s.eWins++;$('message').textContent=opponents[s.opponentIndex].name+' WINS THE ROUND'}else $('message').textContent='ROUND DRAW';render();setTimeout(()=>{if(s.bWins>=2||s.eWins>=2)endFight(s.bWins>s.eWins);else $('nextRound').style.display='block'},500)}
+function endRound(w){
+  if(s.roundOver)return;
+  s.roundOver=true;
+  stopTimers();
+
+  if(w==='p'){
+    s.bWins++;
+    $('message').textContent='K.O.! BRADLEY WINS THE ROUND!';
+    announce('K.O.!');cinematicTitle('K.O.!');
+  }else if(w==='e'){
+    s.eWins++;
+    $('message').textContent=opponents[s.opponentIndex].name+' WINS THE ROUND';
+    announce('K.O.!');
+  }else{
+    $('message').textContent='ROUND DRAW';
+    announce('DRAW');
+  }
+
+  render();
+  setTimeout(()=>{
+    if(s.bWins>=2||s.eWins>=2)endFight(s.bWins>s.eWins);
+    else $('nextRound').style.display='block';
+  },700);
+}
 function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins=Math.min(4,save.tournamentWins+1);save.stripe=Math.min(4,save.tournamentWins);save.totalWins+=1;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer();let extra='';
 if(save.tournamentWins===2)extra=' Rex is now unlocked in Fighter Select.';
 if(save.tournamentWins===4)extra=' Kai is now unlocked in Fighter Select.';
@@ -480,11 +1159,14 @@ $('ceremonyText').textContent=save.tournamentWins>=4
   ?'Bradley has won Tournament 4, earned Stripe 4, and is ready for the next belt/degree!'+extra
   :'Bradley wins the tournament, earns Stripe '+save.stripe+', and receives the 3-foot championship trophy.'+extra;updateCareer();setTimeout(()=>show('ceremony'),500)}}
 function nextOpponent(){s.bWins=0;s.eWins=0;s.round=1;s.over=false;loadOpponent(1);setupRound()}
-function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;render()}requestAnimationFrame(movementLoop)}
-function doJump(){if(s.jumping||s.roundOver||s.over)return;s.jumping=true;$('bradley').style.transition='bottom .2s ease-out';$('bradley').style.bottom='35%';setTimeout(()=>{$('bradley').style.transition='bottom .27s ease-in';$('bradley').style.bottom='16%'},210);setTimeout(()=>{s.jumping=false;$('bradley').style.transition=''},520)}
+function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&!s.paused&&!s.roundLocked&&!s.playerStun&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;render()}requestAnimationFrame(movementLoop)}
+function doJump(){if(s.jumping||s.roundOver||s.over||s.paused||s.roundLocked||s.playerStun)return;s.jumping=true;$('bradley').style.transition='bottom .2s ease-out';$('bradley').style.bottom='35%';setTimeout(()=>{$('bradley').style.transition='bottom .27s ease-in';$('bradley').style.bottom='16%'},210);setTimeout(()=>{s.jumping=false;$('bradley').style.transition=''},520)}
 
+bindTap('pauseBtn',pauseGame);
+bindTap('resumeBtn',resumeGame);
+bindTap('quitMatchBtn',()=>{stopTimers();s.paused=false;$('pausedOverlay').classList.remove('show');updateCareer();show('menu')});
 bindTap('jump',doJump);bindTap('punch',()=>attack('punch'));bindTap('kick',()=>attack('kick'));bindTap('sidekick',()=>attack('sidekick'));bindTap('special',()=>attack('special'));bindTap('comboBtn',comboAttack);bindTap('nextRound',()=>{s.round++;setupRound()});bindTap('nextFight',nextOpponent);bindTap('returnMenu',()=>{updateCareer();show('menu')});bindTap('continueCareer',()=>{updateCareer();show('menu')});
-bindHold('left',()=>moveDir=-1,()=>moveDir=0);bindHold('right',()=>moveDir=1,()=>moveDir=0);bindHold('block',()=>{s.blocking=true;render()},()=>{s.blocking=false;render()});
+bindHold('left',()=>moveDir=-1,()=>moveDir=0);bindHold('right',()=>moveDir=1,()=>moveDir=0);bindHold('block',()=>{if(!s.playerStun&&!s.roundLocked&&!s.paused){s.blocking=true;render()}},()=>{s.blocking=false;render()});
 document.addEventListener('touchmove',e=>{if($('fight').classList.contains('active'))safe(e)},{passive:false});
 updateCareer();movementLoop();
 </script>
