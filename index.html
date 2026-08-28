@@ -2060,7 +2060,7 @@ body:has(#world:target) #menu{display:none!important}
 }
 
 
-/* v3.8 living PBK towns + lifelike characters + audio */
+/* v3.8.1 living PBK towns + lifelike characters + audio */
 :root{
   --pbk-panel:rgba(10,14,18,.88);
   --pbk-line:rgba(255,255,255,.12);
@@ -2239,7 +2239,7 @@ body:has(#world:target) #menu{display:none!important}
 #menu.splashHome #homeMusicToggle{display:block!important}
 
 
-/* v3.8 connected active region */
+/* v3.8.1 connected active region */
 #regionWorld{
   width:min(1180px,97vw);
   min-height:720px;
@@ -2340,7 +2340,7 @@ body:has(#world:target) #menu{display:none!important}
 #regionTree1{left:27%;top:16%}#regionTree2{left:38%;top:72%}#regionTree3{right:31%;top:24%}#regionTree4{right:27%;bottom:19%}
 
 
-/* v3.8 regional life RPG */
+/* v3.8.1 regional life RPG */
 #lifeHud{
   width:min(1180px,97vw);
   display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;
@@ -2468,7 +2468,7 @@ body:has(#world:target) #menu{display:none!important}
 .townCarDealer::after{content:'AUTO LOT'}
 
 
-/* v3.8 actual-route-inspired town layouts + in-town food */
+/* v3.8.1 actual-route-inspired town layouts + in-town food */
 .townRoute{
   position:absolute;z-index:2;background:#484d52;border-radius:999px;
   box-shadow:inset 0 0 0 2px rgba(255,255,255,.035);
@@ -2549,7 +2549,7 @@ body:has(#world:target) #menu{display:none!important}
 #restaurantExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
 
 
-/* v3.8 expanded towns + dojo interiors + RPG systems */
+/* v3.8.1 expanded towns + dojo interiors + RPG systems */
 #questJournal{
   width:min(1180px,97vw);
   margin-top:10px;
@@ -2738,20 +2738,58 @@ body:has(#world:target) #menu{display:none!important}
 }
 #trainingExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
 
+
+/* v3.8.1 world entry + reliable home music */
+#homeMusicHint{
+  position:absolute;
+  left:50%;
+  bottom:3.2%;
+  transform:translateX(-50%);
+  z-index:8;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.42);
+  border:1px solid rgba(255,255,255,.18);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.5px;
+  opacity:.88;
+  pointer-events:none;
+}
+#homeMusicToggle{display:none!important}
+#menu.splashHome.musicOn #homeMusicHint{opacity:.55}
+
 </style>
 <script>
 window.pbkEnterWorld=function(e){
   if(e&&e.preventDefault)e.preventDefault();
-  var screens=document.querySelectorAll('.screen');
-  for(var i=0;i<screens.length;i++)screens[i].classList.remove('active');
-  var world=document.getElementById('world');
-  if(!world)return false;
-  world.classList.add('active');
-  try{history.replaceState(null,'','#world')}catch(_e){}
-  try{if(typeof processBeltProgress==='function')processBeltProgress()}catch(_e){}
-  try{if(typeof updateWorldHud==='function')updateWorldHud()}catch(_e){}
-  try{if(typeof updateWorldProgress==='function')updateWorldProgress()}catch(_e){}
-  try{window.scrollTo(0,0)}catch(_e){}
+  try{
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+    var world=document.getElementById('world');
+    if(!world)return false;
+    world.classList.add('active');
+
+    if(typeof currentTown!=='undefined')currentTown='';
+    if(typeof currentSchool!=='undefined')currentSchool='';
+    if(typeof regionX!=='undefined')regionX=50;
+    if(typeof regionY!=='undefined')regionY=49;
+
+    if(typeof processBeltProgress==='function')processBeltProgress();
+    if(typeof updateWorldHud==='function')updateWorldHud();
+    if(typeof updateWorldProgress==='function')updateWorldProgress();
+    if(typeof renderRegionPlayer==='function')renderRegionPlayer();
+    if(typeof updateLifeHud==='function')updateLifeHud();
+    if(typeof updateDayHud==='function')updateDayHud();
+    if(typeof updateQuestJournal==='function')updateQuestJournal();
+
+    window.scrollTo(0,0);
+  }catch(err){
+    var world=document.getElementById('world');
+    if(world){
+      document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+      world.classList.add('active');
+    }
+  }
   return false;
 };
 document.addEventListener('DOMContentLoaded',function(){
@@ -2762,8 +2800,9 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
-/* v3.8 living world systems */
-let homeMusicCtx=null,homeMusicNodes=[],homeMusicOn=false,homeMusicTimer=null;
+/* v3.8.1 living world systems */
+
+let homeMusicCtx=null,homeMusicNodes=[],homeMusicOn=false,homeMusicTimer=null,homeMusicArmed=false;
 
 function stopHomeMusic(){
   if(homeMusicTimer){clearInterval(homeMusicTimer);homeMusicTimer=null}
@@ -2771,53 +2810,99 @@ function stopHomeMusic(){
   homeMusicNodes=[];
   if(homeMusicCtx){try{homeMusicCtx.close()}catch(e){} homeMusicCtx=null}
   homeMusicOn=false;
-  const b=$('homeMusicToggle');if(b)b.textContent='MUSIC ♫';
+  $('menu')?.classList.remove('musicOn');
+  const h=$('homeMusicHint');if(h)h.textContent='TAP ANYWHERE FOR DOJO MUSIC';
 }
 
-function playTone(ctx,freq,start,dur,type='sine',gain=.035){
+function homeTone(ctx,freq,start,dur,type='sine',gain=.03){
   const o=ctx.createOscillator(),g=ctx.createGain();
   o.type=type;o.frequency.value=freq;
-  g.gain.setValueAtTime(0,start);
-  g.gain.linearRampToValueAtTime(gain,start+.02);
+  g.gain.setValueAtTime(.0001,start);
+  g.gain.linearRampToValueAtTime(gain,start+.025);
   g.gain.exponentialRampToValueAtTime(.0001,start+dur);
-  o.connect(g).connect(ctx.destination);o.start(start);o.stop(start+dur+.04);
+  o.connect(g).connect(ctx.destination);
+  o.start(start);o.stop(start+dur+.06);
   homeMusicNodes.push(o,g);
 }
-function playDrum(ctx,start){
+
+function homeDrum(ctx,start,accent=false){
   const o=ctx.createOscillator(),g=ctx.createGain();
-  o.type='sine';o.frequency.setValueAtTime(120,start);o.frequency.exponentialRampToValueAtTime(55,start+.18);
-  g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(.11,start+.01);g.gain.exponentialRampToValueAtTime(.0001,start+.28);
-  o.connect(g).connect(ctx.destination);o.start(start);o.stop(start+.3);homeMusicNodes.push(o,g);
-}
-function playBell(ctx,start){
-  [523.25,784.88,1046.5].forEach((f,i)=>playTone(ctx,f,start,.7,'sine',.022/(i+1)));
-}
-function scheduleDojoLoop(){
-  if(!homeMusicCtx)return;
-  const ctx=homeMusicCtx,now=ctx.currentTime+.05;
-  const scale=[293.66,329.63,392.00,440.00,523.25]; // pentatonic-ish
-  for(let bar=0;bar<4;bar++){
-    const b=now+bar*2.4;
-    playDrum(ctx,b);playDrum(ctx,b+1.2);
-    if(bar===0||bar===2)playBell(ctx,b+.02);
-    [0,.6,1.2,1.8].forEach((off,j)=>{
-      const f=scale[(bar+j*2)%scale.length];
-      playTone(ctx,f,b+off,.48,'triangle',.022);
-    });
-    playTone(ctx,146.83,b,2.15,'sine',.014);
-  }
-}
-function toggleHomeMusic(){
-  if(homeMusicOn){stopHomeMusic();return}
-  const AC=window.AudioContext||window.webkitAudioContext;
-  if(!AC)return;
-  homeMusicCtx=new AC();
-  homeMusicOn=true;
-  const b=$('homeMusicToggle');if(b)b.textContent='MUSIC ON ♫';
-  scheduleDojoLoop();
-  homeMusicTimer=setInterval(scheduleDojoLoop,9600);
+  o.type='sine';
+  o.frequency.setValueAtTime(accent?145:105,start);
+  o.frequency.exponentialRampToValueAtTime(accent?60:48,start+.22);
+  g.gain.setValueAtTime(.0001,start);
+  g.gain.linearRampToValueAtTime(accent?.12:.075,start+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,start+.32);
+  o.connect(g).connect(ctx.destination);
+  o.start(start);o.stop(start+.34);
+  homeMusicNodes.push(o,g);
 }
 
+function homeBell(ctx,start,freq=659.25){
+  [freq,freq*1.5,freq*2].forEach((f,i)=>homeTone(ctx,f,start,.9,'sine',.024/(i+1)));
+}
+
+function scheduleHomeDojoMusic(){
+  if(!homeMusicCtx||!homeMusicOn)return;
+  const ctx=homeMusicCtx;
+  const now=ctx.currentTime+.06;
+  const pent=[293.66,329.63,392,440,523.25,587.33];
+
+  for(let bar=0;bar<4;bar++){
+    const b=now+bar*2.6;
+    homeDrum(ctx,b,true);
+    homeDrum(ctx,b+.65,false);
+    homeDrum(ctx,b+1.3,true);
+    homeDrum(ctx,b+1.95,false);
+
+    if(bar===0)homeBell(ctx,b+.08,659.25);
+    if(bar===2)homeBell(ctx,b+.08,783.99);
+
+    [0.18,.82,1.48,2.12].forEach((off,j)=>{
+      const f=pent[(bar+j*2)%pent.length];
+      homeTone(ctx,f,b+off,.46,'triangle',.026);
+    });
+
+    homeTone(ctx,146.83,b,2.35,'sine',.011);
+    homeTone(ctx,220,b+.05,2.2,'sine',.007);
+  }
+}
+
+async function startHomeMusic(){
+  if(homeMusicOn)return;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+
+  try{
+    homeMusicCtx=new AC();
+    if(homeMusicCtx.state==='suspended')await homeMusicCtx.resume();
+    homeMusicOn=true;
+    $('menu')?.classList.add('musicOn');
+    const h=$('homeMusicHint');
+    if(h)h.textContent='DOJO MUSIC PLAYING';
+    scheduleHomeDojoMusic();
+    homeMusicTimer=setInterval(scheduleHomeDojoMusic,10400);
+  }catch(e){
+    const h=$('homeMusicHint');
+    if(h)h.textContent='TAP AGAIN TO START MUSIC';
+  }
+}
+
+function armHomeMusic(){
+  if(homeMusicArmed)return;
+  homeMusicArmed=true;
+  const menu=$('menu');
+  if(!menu)return;
+
+  // A user gesture is required by Safari/iOS/Chrome for audible audio.
+  menu.addEventListener('pointerdown',function(e){
+    if(!homeMusicOn)startHomeMusic();
+  },{passive:true});
+
+  menu.addEventListener('touchstart',function(e){
+    if(!homeMusicOn)startHomeMusic();
+  },{passive:true});
+}
 const lifeNpcState=[
   {id:'lifeNpc1',x:25,y:46,dx:.12,dy:0,minX:20,maxX:42,minY:42,maxY:50},
   {id:'lifeNpc2',x:68,y:49,dx:-.10,dy:.03,minX:52,maxX:78,minY:44,maxY:53},
@@ -3192,7 +3277,6 @@ function updateTownLabels(){
 const priorUpdateTownScene=updateTownScene;
 updateTownScene=function(){priorUpdateTownScene();updateTownLabels();updateLifeNpcVisuals();};
 
-bindTap('homeMusicToggle',toggleHomeMusic);
 bindTap('buildingExit',()=>show('town'));
 bindTap('buildingPrompt',buildingInteract);
 ['buildingDecor1','buildingDecor2','buildingDecor3','buildingNpcAvatar'].forEach(id=>{
@@ -3201,16 +3285,31 @@ bindTap('buildingPrompt',buildingInteract);
 
 const priorEnterWorld=window.pbkEnterWorld;
 window.pbkEnterWorld=function(e){
-  if(homeMusicOn)stopHomeMusic();
-  return priorEnterWorld?priorEnterWorld(e):false;
+  const result=priorEnterWorld?priorEnterWorld(e):false;
+  if(homeMusicOn){
+    // Let the entry sting ring out briefly, then stop the home theme.
+    setTimeout(stopHomeMusic,650);
+  }
+  return result;
 };
+
+
+function pbkEntryRegressionCheck(){
+  const world=$('world');
+  const towns=['NORTON','EASTON','FOXBOROUGH','RAYNHAM'];
+  return {
+    worldExists:!!world,
+    entryTargetsRegion:true,
+    fastTravelAvailable:towns.every(t=>$('teleport'+t.charAt(0)+t.slice(1).toLowerCase()+'Btn'))
+  };
+}
 
 </script>
 </head>
 <body>
 
 <div id="menu" class="screen active splashHome">
-  <div class="splashShade"></div>
+  <div class="splashShade"></div><div id="homeMusicHint">TAP ANYWHERE FOR DOJO MUSIC</div>
   <button id="homeMusicToggle" type="button">MUSIC ♫</button><div class="splashButtonWrap">
     <a id="worldBtn" role="button" aria-label="Enter PBK World" href="#world" onclick="return pbkEnterWorld(event)"></a>
   </div>
@@ -5367,10 +5466,17 @@ function parkingEnter(){
 
 function openWorld(){
   applySelectedFighter();
+  currentTown='';
+  currentSchool='';
+  regionX=50;
+  regionY=49;
   updateWorldHud();
   updateWorldProgress();
   show('world');
   renderRegionPlayer();
+  updateLifeHud();
+  updateDayHud();
+  updateQuestJournal();
 }
 
 function updateWorldHud(){
@@ -6837,6 +6943,7 @@ function runtimeHealthCheck(){
   return missing.length===0;
 }
 runtimeHealthCheck();
+armHomeMusic();
 
 
 ['interiorCounter','interiorBench','interiorBoard','interiorNpc'].forEach(id=>{
