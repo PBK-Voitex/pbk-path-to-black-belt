@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v6.6.1</title>
+<title>PBK: Path to Black Belt v6.7</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -4170,6 +4170,85 @@ body.time-night .building .window{
   }
 }
 
+
+/* v6.7 CORE MARTIAL ARTS DEPTH */
+
+/* ---------- TRAINING ---------- */
+#trainingTargetLight{
+  position:absolute;left:50%;top:150px;transform:translateX(-50%);z-index:82;
+  width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
+  background:#222b31;border:3px solid #4f5b63;font-size:9px;font-weight:1000;
+  box-shadow:0 0 0 rgba(0,0,0,0);transition:.12s
+}
+#trainingTargetLight.live{
+  background:#715b20;border-color:#efd477;color:#fff4bf;
+  box-shadow:0 0 28px rgba(238,210,112,.45)
+}
+#trainingTargetLight.miss{
+  background:#6c332f;border-color:#c86c62;color:#f6d0cb
+}
+#trainingStanceHud{
+  position:absolute;left:14px;top:152px;z-index:78;width:185px;padding:8px 9px;border-radius:11px;
+  background:rgba(15,23,29,.74);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  font-size:8px;line-height:1.5
+}
+#trainingStanceHud strong{font-size:10px}
+#trainingLevelProgress{
+  height:6px;border-radius:999px;background:#202a31;overflow:hidden;margin-top:5px
+}
+#trainingLevelProgress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#69916b,#d4bb61);transition:width .18s}
+#reactionDrillBtn{border-color:#8b7441!important;color:#efd98b!important}
+#coachCircuitBtn{border-color:#667f8f!important}
+
+/* ---------- FORMS ---------- */
+#formsRoutinePanel{
+  position:absolute;left:14px;top:214px;z-index:70;width:210px;padding:8px 9px;border-radius:11px;
+  background:rgba(16,24,30,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  font-size:8px;line-height:1.45
+}
+#formsRoutinePanel strong{font-size:10px}
+#formsRequirementList{margin-top:5px}
+.formReq{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.formReq.done{color:#bfe0bd}
+.formReq.missing{color:#efd49b}
+#formsTimingHud{
+  position:absolute;right:14px;top:214px;z-index:70;width:185px;padding:8px 9px;border-radius:11px;
+  background:rgba(16,24,30,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  font-size:8px;line-height:1.45;text-align:right
+}
+#formsTempoGrade{font-size:12px;font-weight:1000}
+#routineTraditionalBtn,#routineCreativeBtn{font-size:7px;padding:5px 7px}
+
+/* ---------- SPARRING ---------- */
+#fightTacticalRead{
+  position:absolute;left:50%;top:132px;transform:translateX(-50%);z-index:136;
+  min-width:300px;max-width:64vw;padding:6px 10px;border-radius:999px;
+  background:rgba(13,20,26,.7);border:1px solid rgba(255,255,255,.12);
+  font-size:8px;font-weight:900;text-align:center;backdrop-filter:blur(8px)
+}
+#fightTacticalRead.good{border-color:#6d9b72;color:#c9e7c8}
+#fightTacticalRead.warn{border-color:#bd7463;color:#f1c2b8}
+#fightBoundaryLeft,#fightBoundaryRight{
+  position:absolute;top:18%;bottom:13%;width:8px;z-index:50;
+  background:linear-gradient(transparent,#d3b95c 30%,#d3b95c 70%,transparent);
+  opacity:.28;pointer-events:none
+}
+#fightBoundaryLeft{left:8%}#fightBoundaryRight{right:8%}
+#fightBoundaryWarning{
+  position:absolute;left:50%;bottom:138px;transform:translateX(-50%);z-index:140;
+  display:none;padding:6px 9px;border-radius:999px;background:rgba(88,45,37,.84);
+  border:1px solid #c97867;font-size:8px;font-weight:1000
+}
+#fightBoundaryWarning.show{display:block}
+#fightDefenseStats{
+  position:absolute;left:12px;top:166px;z-index:135;width:165px;padding:7px 9px;
+  border-radius:10px;background:rgba(13,20,26,.6);border:1px solid rgba(255,255,255,.1);
+  font-size:8px;line-height:1.45;backdrop-filter:blur(7px)
+}
+#fightDefenseStats strong{font-size:10px}
+#fightActionCluster button.readable{border-color:#718895}
+#fightActionCluster button.readable.good{border-color:#72a376;color:#cfe9cf}
+
 </style>
 </head>
 <body>
@@ -4411,7 +4490,7 @@ body.time-night .building .window{
   <div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK TRAINING FLOOR</strong><span class="small">Move on the mat • work mitts • hit the bag</span><button class="roomBack">BACK TO DOJO</button></div>
   <div id="trainingRoom">
     <div class="trainingModeBar"><button id="mittModeBtn" class="active">MITT WORK</button><button id="bagModeBtn">HEAVY BAG</button><button id="reactionModeBtn">REACTION COACH</button></div>
-    <div id="trainingCoachLevel"><strong>COACH LEVEL <span id="trainingDifficulty">1</span></strong><br>COMBO STREAK <span id="trainingComboStreak">0</span><br>BEST ROUND <span id="trainingBestRound">--</span></div><div id="trainingFeedbackFeed">Coach feedback will appear here.</div><div id="trainingRoundHud"><strong><span id="trainingRoundTime">--</span>s</strong><br>HITS <span id="trainingRoundHits">0</span> • MISSES <span id="trainingRoundMisses">0</span><br>PACE <span id="trainingRoundPace">--</span></div><div id="trainingRoundSummary"><strong>ROUND COMPLETE</strong><div id="trainingRoundSummaryText"></div><button id="trainingRoundClose">CONTINUE TRAINING</button></div><div id="trainingCoachCall">COACH: MOVE INTO RANGE</div><div id="trainingGrade">TECHNIQUE GRADE: --</div><div id="trainingScoreHud">MODE <span id="trainingModeLabel">MITTS</span><br>HITS <span id="trainingHits">0</span><br>COMBO <span id="trainingCombo">0</span><br>ACCURACY <span id="trainingAccuracy">100%</span></div>
+    <div id="trainingCoachLevel"><strong>COACH LEVEL <span id="trainingDifficulty">1</span></strong><br>COMBO STREAK <span id="trainingComboStreak">0</span><br>BEST ROUND <span id="trainingBestRound">--</span></div><div id="trainingFeedbackFeed">Coach feedback will appear here.</div><div id="trainingRoundHud"><strong><span id="trainingRoundTime">--</span>s</strong><br>HITS <span id="trainingRoundHits">0</span> • MISSES <span id="trainingRoundMisses">0</span><br>PACE <span id="trainingRoundPace">--</span></div><div id="trainingRoundSummary"><strong>ROUND COMPLETE</strong><div id="trainingRoundSummaryText"></div><button id="trainingRoundClose">CONTINUE TRAINING</button></div><div id="trainingTargetLight">WAIT</div><div id="trainingStanceHud"><strong>TRAINING CONTROL</strong><br>STANCE <span id="trainingStance">READY</span><br>RANGE <span id="trainingRangeState">OUT</span><div id="trainingLevelProgress"><span id="trainingLevelFill"></span></div></div><div id="trainingCoachCall">COACH: MOVE INTO RANGE</div><div id="trainingGrade">TECHNIQUE GRADE: --</div><div id="trainingScoreHud">MODE <span id="trainingModeLabel">MITTS</span><br>HITS <span id="trainingHits">0</span><br>COMBO <span id="trainingCombo">0</span><br>ACCURACY <span id="trainingAccuracy">100%</span></div>
     <div class="simMat" id="trainingMat"><div class="matBoundary"></div>
       <div id="trainingPlayer"><div class="simFighter"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div></div>
       <div id="trainingCoach"><div class="simFighter"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div></div>
@@ -4425,7 +4504,7 @@ body.time-night .building .window{
     </div>
     <div id="trainingDrillControls">
       <button id="coachComboBtn">COACH COMBO</button><button id="speedBurstBtn">SPEED BURST</button>
-      <button id="precisionBtn">PRECISION DRILL</button><button id="freeTrainBtn">FREE TRAIN</button><button id="startRoundBtn">30 SEC ROUND</button>
+      <button id="precisionBtn">PRECISION DRILL</button><button id="freeTrainBtn">FREE TRAIN</button><button id="startRoundBtn">30 SEC ROUND</button><button id="reactionDrillBtn">REACTION LIGHTS</button><button id="coachCircuitBtn">COACH CIRCUIT</button>
     </div><div id="drillGrid"></div><div id="trainingStatus">Training floor active.</div><div id="reactionPanel"></div>
   </div>
 </section>
@@ -4442,7 +4521,7 @@ body.time-night .building .window{
       VARIETY <div class="formMeter"><span id="formVarietyMeter"></span></div>
       PRESENTATION <div class="formMeter"><span id="formPresentationMeter"></span></div>
     </div>
-    <div id="formsBestHud">BEST TRADITIONAL <span id="bestTraditional">--</span><br>BEST CREATIVE <span id="bestCreative">--</span><br>SCHOOL CHALLENGES <span id="schoolChallengeCount">0/4</span></div><div id="formsFlowBadge">FLOW <span id="formsFlow">100</span>%<br>KI-AI <span id="formsKiaiCount">0</span><br>BOUNDARY <span id="formsBoundary">GOOD</span></div>
+    <div id="formsRoutinePanel"><strong>ROUTINE REQUIREMENTS</strong><div><button id="routineTraditionalBtn">TRADITIONAL</button> <button id="routineCreativeBtn">CREATIVE</button></div><div id="formsRequirementList"></div></div><div id="formsTimingHud">TEMPO <span id="formsTempoGrade">--</span><br>AVG GAP <span id="formsAvgGap">--</span><br>LONG PAUSES <span id="formsLongPauses">0</span></div><div id="formsBestHud">BEST TRADITIONAL <span id="bestTraditional">--</span><br>BEST CREATIVE <span id="bestCreative">--</span><br>SCHOOL CHALLENGES <span id="schoolChallengeCount">0/4</span></div><div id="formsFlowBadge">FLOW <span id="formsFlow">100</span>%<br>KI-AI <span id="formsKiaiCount">0</span><br>BOUNDARY <span id="formsBoundary">GOOD</span></div>
     <div id="formsScoreHud">STYLE <span id="formsStyleLabel">TRADITIONAL</span><br>MOVES <span id="formsMoveCount">0</span><br>DIRECTION <span id="formsDirection">NORTH</span><br>STANCE <span id="formsStance">READY</span></div>
     <div class="simMat" id="formsMat"><div class="matBoundary"></div><div id="formsPath"></div>
       <div id="formsJudges"><div class="formsJudge"><div class="formsJudgeScore" id="judge1Score">--</div></div><div class="formsJudge"><div class="formsJudgeScore" id="judge2Score">--</div></div><div class="formsJudge"><div class="formsJudgeScore" id="judge3Score">--</div></div></div>
@@ -4471,7 +4550,7 @@ body.time-night .building .window{
   <div id="arena"><div id="fightStage"><div id="fightCrowdGlow"></div><div class="distanceShadow"></div><div class="ringBoundary"></div><div class="centerMark"></div><div class="hitMarker" id="hitMarker"></div><div id="fightLightCone"></div><div class="fightRef"></div><div class="fightJudge j1"></div><div class="fightJudge j2"></div><div id="stageBackWall"></div><div id="stageLights"></div><div id="stageSideLeft"></div><div id="stageSideRight"></div><div id="arenaMatLogo">PBK</div><div id="stageNameplate">PBK ARENA</div><div id="rangeGuide">RANGE: LONG</div><div id="impactParticles"></div><div id="whiffText">WHIFF</div><div id="fightClockBar"><div id="fightClockFill"></div></div><div id="enemyIntent">WATCHING</div><div id="fightCombo">COMBO 0</div><div id="counterWindow">COUNTER WINDOW — SIDE KICK NOW!</div><div id="roundResult"></div><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
     <div class="fighterReal" id="playerFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
     <div class="fighterReal" id="enemyFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
-  </div><div id="refereeCount">3</div><div id="fightPhaseBadge">REGULATION</div><div id="fightStyleScout">OPPONENT STYLE: BALANCED</div><div id="fightSummary"><h2 id="fightSummaryTitle">MATCH COMPLETE</h2><div id="fightSummaryGrid"></div><div id="fightSummaryRead"></div><div id="fightCoachingTip"></div><div id="fightSummaryActions"><button id="fightRematchBtn">REMATCH</button><button id="fightSummaryExitBtn">RETURN TO DOJO</button></div></div><div id="fightStatsPanel">ATTEMPTS <span id="fightAttempts">0</span><br>LANDING <span id="fightLanded">0</span><br>ACCURACY <span id="fightAccuracy">0%</span><br>WHIFFS <span id="fightWhiffs">0</span><br>COUNTERS <span id="fightCounters">0</span></div>
+  </div><div id="refereeCount">3</div><div id="fightBoundaryLeft"></div><div id="fightBoundaryRight"></div><div id="fightBoundaryWarning">BOUNDARY — CREATE SPACE</div><div id="fightTacticalRead">READ: CALIBRATING RANGE</div><div id="fightDefenseStats"><strong>DEFENSE</strong><br>BLOCKS <span id="fightBlocks">0</span><br>EVADES <span id="fightEvades">0</span><br>COUNTER WINDOWS <span id="fightCounterWindows">0</span></div><div id="fightPhaseBadge">REGULATION</div><div id="fightStyleScout">OPPONENT STYLE: BALANCED</div><div id="fightSummary"><h2 id="fightSummaryTitle">MATCH COMPLETE</h2><div id="fightSummaryGrid"></div><div id="fightSummaryRead"></div><div id="fightCoachingTip"></div><div id="fightSummaryActions"><button id="fightRematchBtn">REMATCH</button><button id="fightSummaryExitBtn">RETURN TO DOJO</button></div></div><div id="fightStatsPanel">ATTEMPTS <span id="fightAttempts">0</span><br>LANDING <span id="fightLanded">0</span><br>ACCURACY <span id="fightAccuracy">0%</span><br>WHIFFS <span id="fightWhiffs">0</span><br>COUNTERS <span id="fightCounters">0</span></div>
     <div id="fightAdaptPanel">OPPONENT READ<br><span id="fightOpponentRead">CALIBRATING</span></div>
     <div id="judgeCall">POINT!</div><div id="fightVignette"></div><div id="roundIntro"></div><div id="bossTag"></div><div id="instructorFightTag">BLACK BELT INSTRUCTOR TRAINING</div><div id="pointResetOverlay"><div id="pointResetCard">POINT • RESET</div></div><div id="specialCallout"></div></div>
   <button id="fightExitModern">EXIT SPARRING</button><div id="fightMovementDock"><div class="gameJoystick" id="fightJoy"><div class="joyKnob"></div></div><div id="fightActionCluster">
@@ -5944,6 +6023,94 @@ function updateTrainingHud(){
 
 
 
+
+/* v6.7 reaction lights + coach circuits */
+let trainingReactionActive=false,trainingReactionLive=false,trainingReactionTimer=null;
+let trainingReactionHits=0,trainingReactionMisses=0,trainingCircuitIndex=0,trainingCircuitActive=false;
+const trainingCircuit=[
+  {mode:'mitts',call:'PUNCH → PUNCH → SIDE KICK',seq:['punch','punch','side']},
+  {mode:'bag',call:'POWER ROUND KICK',seq:['round']},
+  {mode:'mitts',call:'PUNCH → ROUND KICK',seq:['punch','round']},
+  {mode:'bag',call:'SIDE KICK',seq:['side']},
+  {mode:'mitts',call:'B-TWIST FINISH',seq:['twist']}
+];
+
+function updateTrainingControlHud(){
+  const d=trainingDistance();
+  $('trainingRangeState').textContent=d<=26?'GOOD':d<=36?'CLOSE':'OUT';
+  $('trainingRangeState').style.color=d<=26?'#bfe0bd':d<=36?'#efd49b':'#efb1a8';
+  $('trainingStance').textContent=trainingX<48?'LEFT LEAD':trainingX>52?'RIGHT LEAD':'READY';
+  $('trainingLevelFill').style.width=(trainingDifficulty/5*100)+'%';
+}
+setInterval(()=>{if($('training').classList.contains('active'))updateTrainingControlHud()},160);
+
+function setReactionLight(state){
+  const e=$('trainingTargetLight');
+  e.classList.remove('live','miss');
+  if(state==='live'){e.classList.add('live');e.textContent='GO!'}
+  else if(state==='miss'){e.classList.add('miss');e.textContent='MISS'}
+  else e.textContent='WAIT';
+}
+
+function reactionCycle(){
+  if(!trainingReactionActive)return;
+  trainingReactionLive=false;setReactionLight('wait');
+  const delay=700+Math.random()*1500;
+  trainingReactionTimer=setTimeout(()=>{
+    if(!trainingReactionActive)return;
+    trainingReactionLive=true;setReactionLight('live');
+    const liveFor=Math.max(340,720-trainingDifficulty*70);
+    trainingReactionTimer=setTimeout(()=>{
+      if(trainingReactionLive){
+        trainingReactionLive=false;trainingReactionMisses++;setReactionLight('miss');
+        addTrainingFeedback('Reaction window missed.',false);
+        setTimeout(reactionCycle,420);
+      }
+    },liveFor);
+  },delay);
+}
+
+function startReactionDrill(){
+  trainingReactionActive=true;trainingCircuitActive=false;
+  trainingReactionHits=0;trainingReactionMisses=0;
+  setCoachCall('REACTION LIGHTS — STRIKE ONLY ON GO',true);
+  reactionCycle();
+}
+$('reactionDrillBtn').onclick=startReactionDrill;
+
+function startCoachCircuit(){
+  trainingReactionActive=false;
+  if(trainingReactionTimer)clearTimeout(trainingReactionTimer);
+  trainingCircuitActive=true;trainingCircuitIndex=0;
+  loadCoachCircuitStep();
+}
+function loadCoachCircuitStep(){
+  const step=trainingCircuit[trainingCircuitIndex];
+  if(!step){
+    trainingCircuitActive=false;
+    setCoachCall('CIRCUIT COMPLETE',false);
+    $('trainingGrade').textContent='CIRCUIT COMPLETE • '+trainingCircuit.length+' STATIONS';
+    save.trainingScore+=5;save.rep+=.2;saveGame();
+    return;
+  }
+  setTrainingMode(step.mode);
+  trainingDrill='combo';trainingRequired=step.seq.slice();trainingRequiredIndex=0;trainingDrillStart=performance.now();
+  renderTrainingSequence();setCoachCall(step.call,true);
+}
+$('coachCircuitBtn').onclick=startCoachCircuit;
+
+function handleReactionStrike(hit){
+  if(!trainingReactionActive)return;
+  if(trainingReactionLive&&hit){
+    trainingReactionLive=false;trainingReactionHits++;setReactionLight('wait');
+    addTrainingFeedback('Fast reaction — clean touch.',true);
+    if(trainingReactionTimer)clearTimeout(trainingReactionTimer);
+    setTimeout(reactionCycle,280);
+  }else{
+    trainingReactionMisses++;
+    addTrainingFeedback('Too early / wrong timing.',false);
+  }
+}
 /* v6.6 adaptive coach */
 let trainingDifficulty=1,trainingComboStreak=0,trainingFeedback=[];
 function addTrainingFeedback(text,good=true){
@@ -6069,6 +6236,11 @@ function evaluateTrainingDrill(type,hit){
       const grade=elapsed<1800?'A+':elapsed<2600?'A':elapsed<3600?'B':'C';
       $('trainingGrade').textContent='TECHNIQUE GRADE: '+grade+' • '+(elapsed/1000).toFixed(2)+'s';
       setCoachCall('GOOD COMBINATION — RESET',false);
+      if(trainingCircuitActive){
+        trainingCircuitIndex++;
+        setTimeout(loadCoachCircuitStep,650);
+        return;
+      }
       trainingCombo+=2;save.trainingScore+=2;save.rep+=.1;saveGame();
       setTimeout(()=>trainingDrill==='speed'?startSpeedBurst():startCoachCombo(),850);
     }
@@ -6106,7 +6278,7 @@ function trainingStrike(type){
     trainingCombo=0;
     $('trainingPrompt').textContent=trainingMode==='reaction'?'TOO EARLY / LATE — WAIT FOR THE CUE':'OUT OF RANGE — ADJUST YOUR FEET';
   }
-  evaluateTrainingDrill(type,hit);adaptTrainingDifficulty(hit);addTrainingFeedback(hit?('Clean '+(trainingMoveLabels[type]||type.toUpperCase())):'Miss / range error',hit);updateBagPower(type,hit);updateTrainingHud();if(trainingRoundActive)updateTrainingRoundHud();
+  handleReactionStrike(hit);evaluateTrainingDrill(type,hit);adaptTrainingDifficulty(hit);addTrainingFeedback(hit?('Clean '+(trainingMoveLabels[type]||type.toUpperCase())):'Miss / range error',hit);updateBagPower(type,hit);updateTrainingHud();if(trainingRoundActive)updateTrainingRoundHud();
 }
 document.querySelectorAll('[data-trainattack]').forEach(b=>b.onclick=()=>trainingStrike(b.dataset.trainattack));
 applyVisualProfileToFighter($('trainingPlayer'),'Bradley');applyVisualProfileToFighter($('trainingCoach'),leadInstructorForTown());setTrainingMode('mitts');renderTrainingPlayer();
@@ -6115,6 +6287,46 @@ applyVisualProfileToFighter($('trainingPlayer'),'Bradley');applyVisualProfileToF
 
 
 
+
+/* v6.7 forms routine requirements + tempo */
+let formsGapSamples=[],formsLongPauses=0;
+const formsRoutineRequirements={
+  traditional:[
+    ['Defined Stance',()=>formLiveMoves.some(x=>x.includes('Stance'))],
+    ['Block',()=>formLiveMoves.includes('Block')],
+    ['Punch',()=>formLiveMoves.includes('Punch')],
+    ['Kick',()=>formLiveMoves.some(x=>x.includes('Kick'))],
+    ['Turn',()=>formLiveMoves.some(x=>x.includes('Turn'))],
+    ['Kiai',()=>formKiaiCount>=1],
+    ['Formal Finish',()=>formLiveMoves.includes('Bow / Finish')]
+  ],
+  creative:[
+    ['Defined Stance',()=>formLiveMoves.some(x=>x.includes('Stance'))],
+    ['3+ Kick Types',()=>new Set(formLiveMoves.filter(x=>x.includes('Kick'))).size>=3],
+    ['Turn / Direction Change',()=>formLiveMoves.some(x=>x.includes('Turn'))],
+    ['Creative Skill',()=>formLiveMoves.includes('Tornado Kick')],
+    ['Kiai',()=>formKiaiCount>=1],
+    ['Formal Finish',()=>formLiveMoves.includes('Bow / Finish')]
+  ]
+};
+
+function renderFormsRequirements(){
+  const reqs=formsRoutineRequirements[formStyle]||formsRoutineRequirements.traditional;
+  $('formsRequirementList').innerHTML=reqs.map(([name,test])=>`<div class="formReq ${test()?'done':'missing'}"><span>${name}</span><span>${test()?'✓':'—'}</span></div>`).join('');
+}
+function updateFormsTempo(){
+  if(!formsGapSamples.length){
+    $('formsTempoGrade').textContent='--';$('formsAvgGap').textContent='--';$('formsLongPauses').textContent=formsLongPauses;return;
+  }
+  const avg=formsGapSamples.reduce((a,b)=>a+b,0)/formsGapSamples.length;
+  const grade=formsLongPauses===0&&avg>=320&&avg<=1250?'A':
+              formsLongPauses<=1&&avg>=240&&avg<=1600?'B':'C';
+  $('formsTempoGrade').textContent=grade;
+  $('formsAvgGap').textContent=Math.round(avg)+'ms';
+  $('formsLongPauses').textContent=formsLongPauses;
+}
+$('routineTraditionalBtn').onclick=()=>{$('traditionalFormBtn').click();renderFormsRequirements()};
+$('routineCreativeBtn').onclick=()=>{$('creativeFormBtn').click();renderFormsRequirements()};
 /* v6.6 forms progression */
 function updateFormsBestHud(){
   $('bestTraditional').textContent=save.formsBest.traditional?save.formsBest.traditional.toFixed(1):'--';
@@ -6219,15 +6431,17 @@ function recordFormMove(name){
   const now=performance.now();
   if(formLastMoveTime){
     const gap=now-formLastMoveTime;
-    if(gap>2400)formFlow=Math.max(40,formFlow-8);
+    formsGapSamples.push(gap);
+    if(gap>2400){formFlow=Math.max(40,formFlow-8);formsLongPauses++}
     else if(gap<220)formFlow=Math.max(40,formFlow-3);
     else formFlow=Math.min(100,formFlow+1.5);
+    updateFormsTempo();
   }
   formLastMoveTime=now;
   formLiveMoves.push(name);state.forms=formLiveMoves.slice(-30);leaveFormTrail();renderFormsPlayer();checkSchoolChallengeMove(name);
   if(formLiveX<14||formLiveX>81||formLiveY<40||formLiveY>72)formBoundaryPenalty+=5;
   $('formsPrompt').textContent='Sequence: '+formLiveMoves.slice(-6).join(' → ');
-  updateFormsQualityHud();
+  updateFormsQualityHud();renderFormsRequirements();updateFormsTempo();
 }
 function stepForm(forward=true){
   const delta=5*(forward?1:-1),rad=(formFacing*90-90)*Math.PI/180;
@@ -6260,7 +6474,7 @@ document.querySelectorAll('[data-formlive]').forEach(b=>b.onclick=()=>liveFormTe
 $('traditionalFormBtn').onclick=()=>{formStyle='traditional';$('traditionalFormBtn').classList.add('active');$('creativeFormBtn').classList.remove('active');$('formsStyleLabel').textContent='TRADITIONAL'};
 $('creativeFormBtn').onclick=()=>{formStyle='creative';$('creativeFormBtn').classList.add('active');$('traditionalFormBtn').classList.remove('active');$('formsStyleLabel').textContent='CREATIVE'};
 $('resetLiveFormBtn').onclick=()=>{
-  formLiveX=48;formLiveY=58;formFacing=0;formLiveMoves=[];formStance='ready';state.forms=[];formKiaiCount=0;formFlow=100;formBoundaryPenalty=0;formFinished=false;formLastMoveTime=0;updateFormsQualityHud();$('formsJudgeBreakdown').classList.remove('show');$('formsDeductionPanel').classList.remove('show');
+  formLiveX=48;formLiveY=58;formFacing=0;formLiveMoves=[];formStance='ready';state.forms=[];formKiaiCount=0;formFlow=100;formBoundaryPenalty=0;formFinished=false;formLastMoveTime=0;formsGapSamples=[];formsLongPauses=0;updateFormsQualityHud();renderFormsRequirements();updateFormsTempo();$('formsJudgeBreakdown').classList.remove('show');$('formsDeductionPanel').classList.remove('show');
   $('judge1Score').textContent=$('judge2Score').textContent=$('judge3Score').textContent='--';$('instructorResult').classList.remove('show');
   $('formsPlayer').classList.remove('forwardStance','backStance');$('formsPrompt').textContent='Form reset. Begin in ready stance.';renderFormsPlayer();
 };
@@ -6808,7 +7022,7 @@ function specialCallout(text){
   const el=$('specialCallout');el.textContent=text;el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
 }
 function doBackstep(){
-  const p=$('playerFight');playerEvading=true;
+  fightEvades++;updateDefenseHud();const p=$('playerFight');playerEvading=true;
   p.classList.add('dash');
   moveFighter(p,-10,6,70);
   setTimeout(()=>{playerEvading=false;p.classList.remove('dash')},380);
@@ -6852,9 +7066,39 @@ function setFightPhase(phase){
   if(phase==='OVERTIME')e.classList.add('overtime');
   if(phase==='SUDDEN DEATH')e.classList.add('sudden');
 }
+
+/* v6.7 fight IQ + boundary management */
+let fightEvades=0,fightCounterWindows=0;
+function updateDefenseHud(){
+  $('fightBlocks').textContent=fightStats.blocks||0;
+  $('fightEvades').textContent=fightEvades;
+  $('fightCounterWindows').textContent=fightCounterWindows;
+}
+function updateFightTacticalRead(){
+  if(!$('fight').classList.contains('active'))return;
+  const d=fightDistance(),e=$('fightTacticalRead'),p=parseFloat($('playerFight').style.left)||18;
+  e.classList.remove('good','warn');
+  if(p<10||p>68){
+    e.textContent='READ: NEAR BOUNDARY — ANGLE OUT';
+    e.classList.add('warn');$('fightBoundaryWarning').classList.add('show');
+  }else{
+    $('fightBoundaryWarning').classList.remove('show');
+    if(d>=18&&d<=30){e.textContent='READ: SCORING RANGE — STAY DISCIPLINED';e.classList.add('good')}
+    else if(d<18){e.textContent='READ: TOO CLOSE — CREATE SPACE';e.classList.add('warn')}
+    else{e.textContent='READ: OUTSIDE RANGE — DRAW THE ENTRY'}
+  }
+}
+setInterval(updateFightTacticalRead,140);
+
+const oldOpenCounterWindow=openCounterWindow;
+openCounterWindow=function(){
+  fightCounterWindows++;updateDefenseHud();
+  oldOpenCounterWindow();
+};
 function fightCoachingMessage(){
   const attempts=fightStats.attempts,landed=fightStats.landed,acc=attempts?landed/attempts:0;
   if(fightStats.whiffs>=4)return 'Coach: You are attacking from too far away. Establish range before firing.';
+  if(fightEvades>=4)return 'Coach: Good survival movement, but make sure the backstep sets up a return attack.';
   if(fightStats.counters>=2)return 'Coach: Excellent timing on the counter. Keep making the opponent commit first.';
   if(acc<.45&&attempts>=5)return 'Coach: Slow the attack selection down. Create the opening before throwing.';
   const recent=playerTechniqueHistory.slice(-5);
@@ -6908,7 +7152,7 @@ function showFightSummary(winner){
 $('fightSummaryExitBtn').onclick=()=>{$('fightSummary').classList.remove('show');exitSparring()};
 $('fightRematchBtn').onclick=()=>{$('fightSummary').classList.remove('show');startFight(lastFightName,lastFightTarget)};
 const oldStartFight=startFight;
-startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFightPhase('REGULATION');suddenDeath=false;$('fightSummary').classList.remove('show');fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};playerTechniqueHistory=[];updateFightStats();modernAttackLock=false;aiActionLocked=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);updateFightStyleScout();
+startFight=function(name,target){lastFightName=name;lastFightTarget=target;setFightPhase('REGULATION');suddenDeath=false;$('fightSummary').classList.remove('show');fightStats={attempts:0,landed:0,whiffs:0,counters:0,blocks:0};fightEvades=0;fightCounterWindows=0;updateDefenseHud();playerTechniqueHistory=[];updateFightStats();modernAttackLock=false;aiActionLocked=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);updateFightStyleScout();
   clearFightLoops();
   oldStartFight(name,target);
   fightSeconds=60;
@@ -7003,7 +7247,7 @@ function enemyScore(pts,label){
   if(!state.fightActive)return;
   if(playerEvading){$('fightMessage').textContent='EVADED!';addMeter('p',8);return}
   if(state.block){
-    $('fightMessage').textContent='BLOCKED!';
+    fightStats.blocks=(fightStats.blocks||0)+1;updateDefenseHud();$('fightMessage').textContent='BLOCKED!';
     state.block=false;return;
   }
   state.eScore+=pts;$('eScore').textContent=state.eScore;setCombo(0);if(suddenDeath){clearFightLoops();state.fightActive=false;$('roundResult').textContent='OPPONENT WINS • SUDDEN DEATH';$('roundResult').classList.add('show');setTimeout(()=>showFightSummary('OPPONENT'),450);return;}addMeter('e',pts===2?16:9);cameraPunch(pts===2?170:100);strongImpact(pts);
@@ -7079,6 +7323,7 @@ $('formsScoreBtn').onclick=()=>{
   if(state.formsChallengeInstructor)completeInstructorForms(state.formsChallengeInstructor,final);
 };
 
+try{renderFormsRequirements();updateFormsTempo();updateDefenseHud();updateTrainingControlHud();}catch(_){ }
 try{updateTrainingCoachHud();updateFormsBestHud();}catch(_){ }
 try{updateFormsQualityHud();}catch(_){ }
 </script>
