@@ -62,7 +62,7 @@ h1,h2,h3{margin:0}
 
 <div id="menu" class="screen active">
   <h1>PBK: PATH TO BLACK BELT</h1>
-  <div>Career Prototype v0.7</div>
+  <div>Career Prototype v0.7.1</div>
   <div class="menuBtns">
     <button id="playBtn">PLAY</button>
     <button id="careerBtn">BELT LADDER</button>
@@ -205,7 +205,7 @@ h1,h2,h3{margin:0}
 <script>
 const $=id=>document.getElementById(id),screens=['menu','select','career','modes','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
-let save=JSON.parse(localStorage.getItem('pbkSaveV07')||'{"tournamentWins":0,"belt":"Black Belt","stripe":0,"totalWins":0,"formsDone":false,"breakingDone":false}');
+let save=JSON.parse(localStorage.getItem('pbkSaveV071')||'{"tournamentWins":0,"belt":"Black Belt","stripe":0,"totalWins":0,"formsDone":false,"breakingDone":false}');
 let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formStep=0,focus=0,focusDir=1,focusTimer=null,boards=0;
 const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'}];
 const formSeq=['BLOCK','KICK','PUNCH','KICK'];
@@ -239,15 +239,6 @@ function updateCareer(){
 
   $('nextBeltStep').classList.toggle('locked', save.stripe < 4);
   if(save.stripe >= 4) $('nextBeltStep').querySelector('span:last-child').textContent = 'READY';
-} • Stripe ${save.stripe} • Tournament wins ${save.tournamentWins}/4`;
-  
-  
-  
-  $('totalWins').textContent=save.totalWins;
-  $('rexUnlock').textContent=save.tournamentWins>=1?'UNLOCKED':'Win 2 tournaments to unlock';
-  $('kaiUnlock').textContent=save.tournamentWins>=2?'UNLOCKED':'Win 2 tournaments to unlock';
-  $('rexCard').classList.toggle('locked',save.tournamentWins<1);
-  $('kaiCard').classList.toggle('locked',save.tournamentWins<2);
 }
 function safe(e){if(e&&e.cancelable)e.preventDefault()}
 function bindTap(id,fn){const el=$(id);el.addEventListener('pointerup',e=>{safe(e);fn()},{passive:false})}
@@ -258,10 +249,10 @@ bindTap('playBtn',()=>show('modes'));bindTap('careerBtn',()=>show('career'));bin
 bindTap('sparBtn',startTournament);bindTap('formsBtn',()=>{formStep=0;$('formsScore').textContent='0';$('formsMsg').textContent='Score 4 to complete the form.';show('forms')});
 bindTap('breakingBtn',()=>{boards=0;focus=0;$('boards').textContent='0 / 3';$('breakMsg').textContent='Time the strike near full focus.';show('breaking');startFocus()});
 
-document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
+document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
 
 function startFocus(){clearInterval(focusTimer);focusTimer=setInterval(()=>{focus+=focusDir*2;if(focus>=100){focus=100;focusDir=-1}if(focus<=0){focus=0;focusDir=1}$('focusFill').style.width=focus+'%'},35)}
-bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
+bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
 
 function resetFightState(){s={bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,bWins:0,eWins:0,round:1,time:60,over:false,roundOver:false,blocking:false,eBlocking:false,jumping:false,opponentIndex:0}}
 function startTournament(){resetFightState();show('fight');loadOpponent(0);setupRound()}
@@ -280,7 +271,7 @@ function enemyAttack(type='kick'){let dmg=type==='punch'?7:type==='sidekick'?14:
 function enemyAI(){if(s.roundOver||s.over||!$('fight').classList.contains('active'))return;const o=opponents[s.opponentIndex],delta=s.bx-s.ex;s.eBlocking=false;if(o.style==='pressure'){if(Math.abs(delta)>11)s.ex+=Math.sign(delta)*1.5;else{const r=Math.random();if(r<.15){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},500)}else if(r<.28&&s.ep>=40)enemyAttack('special');else if(r<.58)enemyAttack('kick');else if(r<.82)enemyAttack('punch');else enemyAttack('sidekick')}}else{if(Math.abs(delta)<9)s.ex-=Math.sign(delta);else if(Math.abs(delta)>15)s.ex+=Math.sign(delta)*.7;const r=Math.random();if(r<.32){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},650)}else if(r<.6&&dist()<=15)enemyAttack('sidekick');else if(r<.76&&s.ep>=40)enemyAttack('special')}s.ex=Math.max(8,Math.min(92,s.ex));render()}
 function judgeRound(){endRound(s.bh===s.eh?'draw':s.bh>s.eh?'p':'e')}
 function endRound(w){if(s.roundOver)return;s.roundOver=true;stopTimers();if(w==='p'){s.bWins++;$('message').textContent='K.O.! BRADLEY WINS THE ROUND!'}else if(w==='e'){s.eWins++;$('message').textContent=opponents[s.opponentIndex].name+' WINS THE ROUND'}else $('message').textContent='ROUND DRAW';render();setTimeout(()=>{if(s.bWins>=2||s.eWins>=2)endFight(s.bWins>s.eWins);else $('nextRound').style.display='block'},500)}
-function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins=Math.min(4,save.tournamentWins+1);save.stripe=Math.min(4,save.tournamentWins);save.totalWins+=1;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer();let extra='';
+function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins=Math.min(4,save.tournamentWins+1);save.stripe=Math.min(4,save.tournamentWins);save.totalWins+=1;localStorage.setItem('pbkSaveV071',JSON.stringify(save));updateCareer();let extra='';
 if(save.tournamentWins===2)extra=' Rex is now unlocked in Fighter Select.';
 if(save.tournamentWins===4)extra=' Kai is now unlocked in Fighter Select.';
 $('ceremonyText').textContent=save.tournamentWins>=4
