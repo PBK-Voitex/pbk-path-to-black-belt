@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v7.0.1</title>
+<title>PBK: Path to Black Belt v7.3</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -4675,14 +4675,275 @@ body.time-night .building .window{
   }
 }
 
+
+/* v7.1 GAMEPLAY LOOP UPGRADE */
+
+/* SESSION PROGRESS */
+#sessionProgressHud{
+  position:absolute;left:50%;top:52px;transform:translateX(-50%);z-index:92;
+  display:flex;gap:5px;padding:5px 7px;border-radius:999px;
+  background:rgba(12,18,23,.68);border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);font-size:7px;font-weight:1000
+}
+.sessionGoal{
+  padding:4px 7px;border-radius:999px;background:#1b252d;border:1px solid #43515c
+}
+.sessionGoal.done{background:#375f3c;border-color:#6ea573;color:#d4ecd2}
+.sessionGoal.current{border-color:#c8ac54;color:#efd98c}
+
+/* TRAINING MASTERY */
+#masteryHud{
+  position:absolute;right:14px;bottom:132px;z-index:78;width:180px;padding:8px 9px;
+  border-radius:11px;background:rgba(15,23,29,.72);border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);font-size:8px;line-height:1.5
+}
+.masteryRow{display:grid;grid-template-columns:58px 1fr 28px;gap:5px;align-items:center}
+.masteryBar{height:5px;background:#202a31;border-radius:999px;overflow:hidden}
+.masteryBar span{display:block;height:100%;background:linear-gradient(90deg,#6d956d,#d4bc61);transition:width .15s}
+
+/* SPARRING MOMENTUM */
+#fightMomentum{
+  position:absolute;left:50%;bottom:84px;transform:translateX(-50%);z-index:138;
+  width:250px;padding:6px 8px;border-radius:11px;background:rgba(11,17,22,.68);
+  border:1px solid rgba(255,255,255,.12);font-size:7px;text-align:center
+}
+#momentumBar{height:6px;margin-top:5px;border-radius:999px;background:#222c32;overflow:hidden}
+#momentumFill{height:100%;width:50%;background:linear-gradient(90deg,#a05545,#d5bc61,#5d9565);transition:width .2s}
+#momentumText{font-weight:1000}
+
+/* FORMS PROGRESSION */
+#formsProgressionHud{
+  position:absolute;left:14px;bottom:14px;z-index:70;width:210px;padding:8px 9px;
+  border-radius:11px;background:rgba(16,24,30,.72);border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);font-size:8px;line-height:1.45
+}
+#formsStars{font-size:13px;letter-spacing:2px}
+#formsUnlockText{margin-top:4px;color:#d6dcdf}
+
+/* reward toast */
+#gameplayRewardToast{
+  position:fixed;left:50%;top:14%;transform:translateX(-50%);z-index:999;
+  display:none;padding:10px 14px;border-radius:12px;background:rgba(16,24,30,.94);
+  border:1px solid #a68b46;box-shadow:0 12px 36px rgba(0,0,0,.35);
+  font-size:10px;font-weight:1000;color:#f1dc91
+}
+#gameplayRewardToast.show{display:block;animation:rewardPop .6s ease-out}
+@keyframes rewardPop{0%{opacity:0;scale:.8}50%{opacity:1;scale:1.05}100%{opacity:1;scale:1}}
+
+@media (max-height:700px) and (pointer:coarse),(max-width:980px) and (pointer:coarse){
+  #sessionProgressHud{top:42px;font-size:5px;padding:3px 5px}
+  .sessionGoal{padding:3px 5px}
+  #masteryHud,#formsProgressionHud{transform:scale(.76);transform-origin:bottom left}
+  #fightMomentum{bottom:66px;width:190px;font-size:6px}
+}
+
+
+/* v7.2 REGIONAL WORLD VISUAL / GAMEPLAY REBUILD */
+
+/* softer ground + land variation */
+#regionWorld{
+  background:
+    radial-gradient(circle at 15% 20%,rgba(134,166,116,.55),transparent 18%),
+    radial-gradient(circle at 78% 18%,rgba(111,143,98,.5),transparent 19%),
+    radial-gradient(circle at 72% 76%,rgba(122,153,105,.45),transparent 18%),
+    linear-gradient(#7ea171,#6d9166)!important;
+}
+
+/* land zones */
+.worldPark,.worldWater,.worldPlaza,.worldParking,.worldNeighborhood,.worldTownCenter{
+  position:absolute;z-index:1;pointer-events:none;
+}
+.worldPark{
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 20% 30%,#486d42 0 14px,transparent 15px),
+    radial-gradient(circle at 45% 60%,#52784a 0 18px,transparent 19px),
+    radial-gradient(circle at 72% 35%,#456841 0 16px,transparent 17px),
+    radial-gradient(circle at 84% 70%,#557b4d 0 14px,transparent 15px),
+    rgba(83,125,72,.56);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.04);
+}
+.worldWater{
+  border-radius:48% 52% 42% 58%;
+  background:linear-gradient(135deg,#5c8da2,#79a8b8);
+  box-shadow:inset 0 0 18px rgba(255,255,255,.13),0 6px 18px rgba(0,0,0,.1);
+}
+.worldWater::after{
+  content:'';position:absolute;inset:18% 10%;border-radius:50%;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.14) 0 2px,transparent 2px 10px)
+}
+.worldParking{
+  border-radius:10px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.18) 22px 24px,transparent 24px 46px),
+    #555d61;
+}
+.worldPlaza{
+  border-radius:8px;background:#6b7477;box-shadow:0 6px 14px rgba(0,0,0,.11)
+}
+.worldTownCenter{
+  border-radius:26px;
+  background:
+    linear-gradient(90deg,transparent 0 45%,rgba(70,74,78,.85) 45% 55%,transparent 55%),
+    linear-gradient(transparent 0 45%,rgba(70,74,78,.85) 45% 55%,transparent 55%),
+    rgba(128,146,117,.22);
+}
+.worldNeighborhood{
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 16% 24%,#9e876e 0 12px,transparent 13px),
+    radial-gradient(circle at 33% 62%,#ab9276 0 13px,transparent 14px),
+    radial-gradient(circle at 54% 30%,#967f68 0 13px,transparent 14px),
+    radial-gradient(circle at 72% 67%,#a68e72 0 13px,transparent 14px),
+    radial-gradient(circle at 87% 28%,#9a836b 0 12px,transparent 13px),
+    rgba(95,129,84,.24);
+}
+
+/* realistic road hierarchy */
+.bigRoad{
+  border-radius:18px!important;
+}
+.bigRoad.arterial{
+  background:linear-gradient(#4a4f53,#3f4549)!important;
+}
+.bigRoad.arterial::before,
+.bigRoad.arterial::after{
+  content:'';position:absolute;left:0;right:0;height:2px;
+  background:repeating-linear-gradient(90deg,#d8c66b 0 38px,transparent 38px 75px);
+}
+.bigRoad.arterial::before{top:48%}.bigRoad.arterial::after{top:52%}
+.bigRoad.local{
+  background:#565b5f!important;
+  opacity:.9;
+}
+.roadIntersection{
+  position:absolute;z-index:4;width:92px;height:92px;border-radius:12px;
+  background:
+    linear-gradient(90deg,transparent 43%,rgba(235,235,235,.18) 43% 45%,transparent 45% 55%,rgba(235,235,235,.18) 55% 57%,transparent 57%),
+    linear-gradient(transparent 43%,rgba(235,235,235,.18) 43% 45%,transparent 45% 55%,rgba(235,235,235,.18) 55% 57%,transparent 57%),
+    #484e52;
+  box-shadow:0 5px 10px rgba(0,0,0,.12)
+}
+.crosswalk{
+  position:absolute;z-index:5;width:70px;height:20px;
+  background:repeating-linear-gradient(90deg,#ddd 0 5px,transparent 5px 10px);
+  opacity:.55;pointer-events:none
+}
+
+/* named roadside landmarks */
+.worldLandmark{
+  position:absolute;z-index:7;border-radius:8px;
+  box-shadow:0 8px 15px rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(#8f7860,#5d4b3c);
+  pointer-events:none
+}
+.worldLandmark::after{
+  position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);
+  padding:3px 6px;border-radius:6px;background:rgba(11,16,20,.68);color:#edf1f2;
+  font-size:6px;font-weight:1000;white-space:nowrap
+}
+.worldLandmark.school{background:linear-gradient(#9e7a5c,#72533e)}
+.worldLandmark.school::after{content:'SCHOOL'}
+.worldLandmark.grocery{background:linear-gradient(#7c936a,#56684d)}
+.worldLandmark.grocery::after{content:'MARKET'}
+.worldLandmark.gas{background:linear-gradient(#89939a,#5d656b)}
+.worldLandmark.gas::after{content:'GAS'}
+.worldLandmark.rec{background:linear-gradient(#728897,#4e616e)}
+.worldLandmark.rec::after{content:'REC CENTER'}
+.worldLandmark.restaurant{background:linear-gradient(#a16e55,#704c3c)}
+.worldLandmark.restaurant::after{content:'DINER'}
+
+/* moving traffic */
+.worldTrafficCar{
+  position:absolute;z-index:8;width:24px;height:12px;border-radius:5px;
+  background:linear-gradient(#b8c0c4,#667078);box-shadow:0 4px 7px rgba(0,0,0,.18);
+  pointer-events:none
+}
+.worldTrafficCar::before{
+  content:'';position:absolute;left:4px;right:4px;top:2px;height:4px;border-radius:3px;background:#526772
+}
+.worldTrafficCar::after{
+  content:'';position:absolute;left:2px;right:2px;bottom:-3px;height:3px;
+  background:radial-gradient(circle at 15% 50%,#111 0 2px,transparent 3px),radial-gradient(circle at 85% 50%,#111 0 2px,transparent 3px)
+}
+.worldTrafficCar.vertical{rotate:90deg}
+
+/* directional guide */
+#worldRoadPrompt{
+  position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:256;
+  padding:6px 10px;border-radius:999px;background:rgba(11,17,22,.52);
+  border:1px solid rgba(255,255,255,.09);font-size:7px;font-weight:900;
+  backdrop-filter:blur(7px);pointer-events:none
+}
+
+/* camera feel */
+#regionViewport{
+  perspective:900px;
+}
+#regionWorld{
+  transform-origin:50% 50%;
+  transition:filter .2s ease;
+}
+#world.driveMode #regionWorld{
+  filter:saturate(1.03) contrast(1.02);
+}
+
+/* cleaner labels */
+.routeShield{opacity:.82!important}
+.roadsideSign,.speedLimitSign{opacity:.5!important}
+.mapBuilding .mbSign{opacity:.78}
+.mapBuilding:hover .mbSign{opacity:1}
+
+/* mobile */
+@media (max-height:700px) and (pointer:coarse),(max-width:980px) and (pointer:coarse){
+  #worldRoadPrompt{bottom:8px;font-size:5px;padding:4px 7px}
+  .worldTrafficCar{transform:scale(.8)}
+  .worldLandmark::after{font-size:5px}
+}
+
+</style>
+<style>
+/* v7.3 COMBAT DECISION / TIMING UPGRADE */
+#fightDecisionHud{position:absolute;left:50%;top:74px;transform:translateX(-50%);z-index:95;display:flex;gap:6px;align-items:center;justify-content:center;pointer-events:none}
+.fightDecisionChip{min-width:105px;padding:6px 9px;border-radius:999px;background:rgba(9,13,17,.86);border:1px solid #45515c;font-size:8px;font-weight:1000;text-align:center;letter-spacing:.4px}
+#fightFocusBar{width:115px;height:7px;border-radius:99px;background:#222b32;overflow:hidden;margin-top:3px;border:1px solid #46525c}
+#fightFocusFill{height:100%;width:50%;background:linear-gradient(90deg,#9a7b2f,#f0d36c);transition:width .18s ease}
+#fightReadChip.hot{border-color:#c69f3f;box-shadow:0 0 12px rgba(198,159,63,.28)}
+#fightPerfectCall{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.85);z-index:120;opacity:0;pointer-events:none;font-size:21px;font-weight:1000;letter-spacing:1px;text-shadow:0 4px 16px #000;transition:.12s}
+#fightPerfectCall.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#fightTacticBanner{position:absolute;right:15px;top:116px;z-index:92;max-width:210px;padding:8px 10px;border-radius:9px;background:rgba(8,12,16,.86);border:1px solid #414c56;font-size:8px;font-weight:900;line-height:1.35;pointer-events:none}
+#fightGradeChip{margin-top:8px;padding:8px;border-radius:8px;background:#0d1318;border:1px solid #3f4a54;font-size:10px;font-weight:1000;text-align:center}
+#fightBlockBtn.perfectReady{box-shadow:0 0 0 2px #d5b65c inset,0 0 14px rgba(213,182,92,.32)}
+@media(max-width:700px){#fightDecisionHud{top:64px;gap:3px}.fightDecisionChip{min-width:78px;padding:4px 5px;font-size:6px}#fightFocusBar{width:78px}#fightTacticBanner{top:103px;right:6px;max-width:142px;font-size:6px;padding:5px 6px}#fightPerfectCall{font-size:16px}}
 </style>
 </head>
-<body>
+<body><div id="gameplayRewardToast"></div>
 
 <section id="home" class="screen active">
   <div id="homeArt"></div><div id="homeShade"></div>
   <div id="musicHint">TAP ANYWHERE FOR DOJO MUSIC</div>
-  <button id="homeEnter" aria-label="Enter PBK World">ENTER PBK WORLD</button>
+  <button id="homeEnter" aria-label="Enter PBK World" onclick="document.getElementById('home').classList.remove('active');document.getElementById('world').classList.add('active');window.scrollTo(0,0);return false;">ENTER PBK WORLD</button>
+  <script>
+  /* v7.2.1 Android hard-entry bootstrap: intentionally independent of the main game script. */
+  (function(){
+    var btn=document.getElementById('homeEnter');
+    if(!btn)return;
+    function hardEnter(ev){
+      if(ev){try{ev.preventDefault()}catch(_){} try{ev.stopPropagation()}catch(_){}}
+      var home=document.getElementById('home'), world=document.getElementById('world');
+      if(home)home.classList.remove('active');
+      if(world)world.classList.add('active');
+      try{window.scrollTo(0,0)}catch(_){}
+      setTimeout(function(){
+        try{if(typeof renderRegionCamera==='function')renderRegionCamera()}catch(_){}
+        try{if(typeof updateGlobalTouchInteract==='function')updateGlobalTouchInteract()}catch(_){}
+      },0);
+      return false;
+    }
+    btn.addEventListener('pointerdown',hardEnter,{passive:false});
+    btn.addEventListener('touchstart',hardEnter,{passive:false});
+  })();
+  </script>
 </section>
 
 <section id="world" class="screen">
@@ -4728,7 +4989,40 @@ body.time-night .building .window{
       <div class="speedLimitSign" id="speedFox">SPEED<span>25</span></div><div class="speedLimitSign" id="speedNorton">SPEED<span>25</span></div><div class="speedLimitSign" id="speedEaston">SPEED<span>25</span></div><div class="speedLimitSign" id="speedRay">SPEED<span>25</span></div><div class="roadsideSign" id="signFox">FOXBOROUGH</div><div class="roadsideSign" id="signNorton">NORTON</div><div class="roadsideSign" id="signEaston">EASTON</div><div class="roadsideSign" id="signRay">RAYNHAM</div>
       <div class="regionPedestrian" id="regionPed1"><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
       <div class="regionPedestrian" id="regionPed2"><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
-      <div id="regionPlayer"><div id="regionVehicle"></div><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
+      
+<div class="worldPark" style="left:420px;top:310px;width:280px;height:190px"></div>
+<div class="worldPark" style="left:1610px;top:1080px;width:320px;height:220px"></div>
+<div class="worldWater" style="left:1280px;top:250px;width:240px;height:130px"></div>
+<div class="worldWater" style="left:460px;top:1420px;width:210px;height:120px"></div>
+
+<div class="worldNeighborhood" style="left:250px;top:760px;width:310px;height:210px"></div>
+<div class="worldNeighborhood" style="left:1400px;top:440px;width:320px;height:210px"></div>
+<div class="worldNeighborhood" style="left:1610px;top:1430px;width:300px;height:190px"></div>
+
+<div class="worldTownCenter" style="left:620px;top:920px;width:360px;height:280px"></div>
+<div class="worldTownCenter" style="left:1570px;top:470px;width:360px;height:280px"></div>
+
+<div class="worldParking" style="left:1040px;top:770px;width:300px;height:180px"></div>
+<div class="worldPlaza" style="left:1075px;top:800px;width:118px;height:70px"></div>
+<div class="worldPlaza" style="left:1210px;top:835px;width:95px;height:60px"></div>
+
+<div class="roadIntersection" style="left:710px;top:1025px"></div>
+<div class="roadIntersection" style="left:1750px;top:590px"></div>
+<div class="roadIntersection" style="left:1710px;top:1360px"></div>
+<div class="crosswalk" style="left:720px;top:1060px"></div>
+<div class="crosswalk" style="left:1760px;top:625px"></div>
+
+<div class="worldLandmark school" style="left:560px;top:590px;width:90px;height:60px"></div>
+<div class="worldLandmark grocery" style="left:1080px;top:820px;width:100px;height:62px"></div>
+<div class="worldLandmark gas" style="left:980px;top:1260px;width:78px;height:48px"></div>
+<div class="worldLandmark rec" style="left:1540px;top:980px;width:110px;height:68px"></div>
+<div class="worldLandmark restaurant" style="left:830px;top:1240px;width:82px;height:52px"></div>
+
+<div class="worldTrafficCar" id="trafficA" style="left:400px;top:1040px"></div>
+<div class="worldTrafficCar" id="trafficB" style="left:920px;top:1040px"></div>
+<div class="worldTrafficCar vertical" id="trafficC" style="left:1765px;top:330px"></div>
+<div class="worldTrafficCar vertical" id="trafficD" style="left:1765px;top:1260px"></div>
+<div id="regionPlayer"><div id="regionVehicle"></div><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
     </div>
   </div>
 
@@ -4766,7 +5060,7 @@ body.time-night .building .window{
       <div class="miniTown" id="mmFox"></div><div class="miniTown" id="mmNorton"></div><div class="miniTown" id="mmEaston"></div><div class="miniTown" id="mmRay"></div><div id="miniPlayer"></div>
     </div></div>
     <div id="vehicleHud">FUEL <span id="fuelText">100%</span><span id="fuelBar"><span id="fuelFill"></span></span><span id="roadStatus">WALKING</span></div>
-    <div id="driveObjective" style="position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:255;padding:6px 10px;border-radius:999px;background:rgba(12,18,23,.48);border:1px solid rgba(255,255,255,.09);font-size:7px;font-weight:900;backdrop-filter:blur(7px);pointer-events:none">EXPLORE • FOLLOW ROADS • ENTER ANY PBK</div><div id="regionTopHud">
+    <div id="worldRoadPrompt">FOLLOW THE ROAD • EXPLORE ANY TOWN</div><div id="regionTopHud">
     <div class="panel"><strong>PBK WORLD</strong><div class="small">Massachusetts Region</div></div>
     <div class="panel">
       <strong id="worldRank">White Belt</strong>
@@ -4912,11 +5206,21 @@ body.time-night .building .window{
   <div class="perspObj" id="officeDesk"><div class="interactionIcon">!</div>INSTRUCTOR DESK</div><div class="perspObj" id="officeCertificates"><div class="interactionIcon">!</div>CERTIFICATES</div><div class="perspObj" id="officeRankWall"><div class="interactionIcon">!</div>RANK WALL</div><div class="perspObj" id="officeBossDoor"><div class="interactionIcon">!</div>ADVANCED CHALLENGES</div><div class="perspObj" id="officeInstructor"><div class="interactionIcon">!</div></div>
   <div class="rearPlayer giAvatar" id="officeRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div><div id="officePrompt3D">Walk up to the instructor to talk.</div>
   <div id="office3DControls"><div class="gameJoystick indoorJoystick" id="officeJoy"><div class="joyKnob"></div></div><button data-officemove="left">◀</button><button data-officemove="forward">▲ FORWARD</button><button data-officemove="back">▼ BACK</button><button data-officemove="right">▶</button><button id="officeRun">WALK / RUN</button><button id="officeInteract">INTERACT</button></div>
-</div></section><section id="training" class="screen">
+</div></section><section id="training" class="screen"><div id="sessionProgressHud">
+  <span class="sessionGoal" id="goalTraining">TRAIN</span>
+  <span class="sessionGoal" id="goalForms">FORMS</span>
+  <span class="sessionGoal" id="goalSparring">SPAR</span>
+</div>
   <div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK TRAINING FLOOR</strong><span class="small">Move on the mat • work mitts • hit the bag</span><button class="roomBack">BACK TO DOJO</button></div>
   <div id="trainingRoom">
     <div class="trainingModeBar"><button id="mittModeBtn" class="active">MITT WORK</button><button id="bagModeBtn">HEAVY BAG</button><button id="reactionModeBtn">REACTION COACH</button></div>
-    <div id="trainingCoachLevel"><strong>COACH LEVEL <span id="trainingDifficulty">1</span></strong><br>COMBO STREAK <span id="trainingComboStreak">0</span><br>BEST ROUND <span id="trainingBestRound">--</span></div><div id="trainingFeedbackFeed">Coach feedback will appear here.</div><div id="trainingRoundHud"><strong><span id="trainingRoundTime">--</span>s</strong><br>HITS <span id="trainingRoundHits">0</span> • MISSES <span id="trainingRoundMisses">0</span><br>PACE <span id="trainingRoundPace">--</span></div><div id="trainingRoundSummary"><strong>ROUND COMPLETE</strong><div id="trainingRoundSummaryText"></div><button id="trainingRoundClose">CONTINUE TRAINING</button></div><div id="trainingTargetLight">WAIT</div><div id="trainingStanceHud"><strong>TRAINING CONTROL</strong><br>STANCE <span id="trainingStance">READY</span><br>RANGE <span id="trainingRangeState">OUT</span><div id="trainingLevelProgress"><span id="trainingLevelFill"></span></div></div><div id="trainingCoachCall">COACH: MOVE INTO RANGE</div><div id="trainingGrade">TECHNIQUE GRADE: --</div><div id="trainingScoreHud">MODE <span id="trainingModeLabel">MITTS</span><br>HITS <span id="trainingHits">0</span><br>COMBO <span id="trainingCombo">0</span><br>ACCURACY <span id="trainingAccuracy">100%</span></div>
+    <div id="trainingCoachLevel"><strong>COACH LEVEL <span id="trainingDifficulty">1</span></strong><br>COMBO STREAK <span id="trainingComboStreak">0</span><br>BEST ROUND <span id="trainingBestRound">--</span></div><div id="masteryHud"><strong>TECHNIQUE MASTERY</strong>
+      <div class="masteryRow">PUNCH<div class="masteryBar"><span id="masteryPunch"></span></div><span id="masteryPunchN">0</span></div>
+      <div class="masteryRow">ROUND<div class="masteryBar"><span id="masteryRound"></span></div><span id="masteryRoundN">0</span></div>
+      <div class="masteryRow">SIDE<div class="masteryBar"><span id="masterySide"></span></div><span id="masterySideN">0</span></div>
+      <div class="masteryRow">DEF SIDE<div class="masteryBar"><span id="masteryDefside"></span></div><span id="masteryDefsideN">0</span></div>
+      <div class="masteryRow">B-TWIST<div class="masteryBar"><span id="masteryTwist"></span></div><span id="masteryTwistN">0</span></div>
+    </div><div id="trainingFeedbackFeed">Coach feedback will appear here.</div><div id="trainingRoundHud"><strong><span id="trainingRoundTime">--</span>s</strong><br>HITS <span id="trainingRoundHits">0</span> • MISSES <span id="trainingRoundMisses">0</span><br>PACE <span id="trainingRoundPace">--</span></div><div id="trainingRoundSummary"><strong>ROUND COMPLETE</strong><div id="trainingRoundSummaryText"></div><button id="trainingRoundClose">CONTINUE TRAINING</button></div><div id="trainingTargetLight">WAIT</div><div id="trainingStanceHud"><strong>TRAINING CONTROL</strong><br>STANCE <span id="trainingStance">READY</span><br>RANGE <span id="trainingRangeState">OUT</span><div id="trainingLevelProgress"><span id="trainingLevelFill"></span></div></div><div id="trainingCoachCall">COACH: MOVE INTO RANGE</div><div id="trainingGrade">TECHNIQUE GRADE: --</div><div id="trainingScoreHud">MODE <span id="trainingModeLabel">MITTS</span><br>HITS <span id="trainingHits">0</span><br>COMBO <span id="trainingCombo">0</span><br>ACCURACY <span id="trainingAccuracy">100%</span></div>
     <div class="simMat" id="trainingMat"><div class="matBoundary"></div>
       <div id="trainingPlayer"><div class="simFighter"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div></div>
       <div id="trainingCoach"><div class="simFighter"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div></div>
@@ -4935,7 +5239,11 @@ body.time-night .building .window{
   </div>
 </section>
 
-<section id="forms" class="screen">
+<section id="forms" class="screen"><div id="sessionProgressHudForms">
+  <span class="sessionGoal" id="goalTraining">TRAIN</span>
+  <span class="sessionGoal" id="goalForms">FORMS</span>
+  <span class="sessionGoal" id="goalSparring">SPAR</span>
+</div>
   <div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK FORMS MAT</strong><span class="small">Control the character and perform the form live.</span><button class="roomBack">BACK TO DOJO</button></div>
   <div id="formsRoom">
     <div id="formsChallengeBanner"></div><div id="instructorResult"></div>
@@ -4947,7 +5255,11 @@ body.time-night .building .window{
       VARIETY <div class="formMeter"><span id="formVarietyMeter"></span></div>
       PRESENTATION <div class="formMeter"><span id="formPresentationMeter"></span></div>
     </div>
-    <div id="formsRoutinePanel"><strong>ROUTINE REQUIREMENTS</strong><div><button id="routineTraditionalBtn">TRADITIONAL</button> <button id="routineCreativeBtn">CREATIVE</button></div><div id="formsRequirementList"></div></div><div id="formsTimingHud">TEMPO <span id="formsTempoGrade">--</span><br>AVG GAP <span id="formsAvgGap">--</span><br>LONG PAUSES <span id="formsLongPauses">0</span></div><div id="formsBestHud">BEST TRADITIONAL <span id="bestTraditional">--</span><br>BEST CREATIVE <span id="bestCreative">--</span><br>SCHOOL CHALLENGES <span id="schoolChallengeCount">0/4</span></div><div id="formsFlowBadge">FLOW <span id="formsFlow">100</span>%<br>KI-AI <span id="formsKiaiCount">0</span><br>BOUNDARY <span id="formsBoundary">GOOD</span></div>
+    <div id="formsRoutinePanel"><strong>ROUTINE REQUIREMENTS</strong><div><button id="routineTraditionalBtn">TRADITIONAL</button> <button id="routineCreativeBtn">CREATIVE</button></div><div id="formsRequirementList"></div></div><div id="formsTimingHud">TEMPO <span id="formsTempoGrade">--</span><br>AVG GAP <span id="formsAvgGap">--</span><br>LONG PAUSES <span id="formsLongPauses">0</span></div><div id="formsProgressionHud"><strong>FORM PROGRESSION</strong><br>
+      TRADITIONAL <span id="traditionalStars">☆☆☆</span><br>
+      CREATIVE <span id="creativeStars">☆☆☆</span>
+      <div id="formsUnlockText">Earn stars by scoring well with complete routines.</div>
+    </div><div id="formsBestHud">BEST TRADITIONAL <span id="bestTraditional">--</span><br>BEST CREATIVE <span id="bestCreative">--</span><br>SCHOOL CHALLENGES <span id="schoolChallengeCount">0/4</span></div><div id="formsFlowBadge">FLOW <span id="formsFlow">100</span>%<br>KI-AI <span id="formsKiaiCount">0</span><br>BOUNDARY <span id="formsBoundary">GOOD</span></div>
     <div id="formsScoreHud">STYLE <span id="formsStyleLabel">TRADITIONAL</span><br>MOVES <span id="formsMoveCount">0</span><br>DIRECTION <span id="formsDirection">NORTH</span><br>STANCE <span id="formsStance">READY</span></div>
     <div class="simMat" id="formsMat"><div class="matBoundary"></div><div id="formsPath"></div>
       <div id="formsJudges"><div class="formsJudge"><div class="formsJudgeScore" id="judge1Score">--</div></div><div class="formsJudge"><div class="formsJudgeScore" id="judge2Score">--</div></div><div class="formsJudge"><div class="formsJudgeScore" id="judge3Score">--</div></div></div>
@@ -4971,7 +5283,11 @@ body.time-night .building .window{
 <section id="lifeInterior" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong id="lifeHudTitle">LIFE LOCATION</strong><button id="lifeBackTop">BACK</button></div><div id="lifeRoom"><div id="lifeTitle">LIFE LOCATION</div><div class="lifeObj" id="lifeObj1">OPTION</div><div class="lifeObj" id="lifeObj2">OPTION</div><div class="lifeObj" id="lifeObj3">DETAILS</div><div id="lifeActions"></div><button id="lifeExit">EXIT</button></div></section>
 <section id="tournament" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK TOURNAMENT</strong><button id="tournamentBackTop">BACK TO DOJO</button></div><div id="tournamentRoom"><div id="tournamentTitle">TOURNAMENT BRACKET</div><div id="bracketGrid"><div class="bracketCol"><strong>ROUND 1</strong><div class="bracketMatch">Bradley vs Local Fighter</div></div><div class="bracketCol"><strong>SEMIFINAL</strong><div class="bracketMatch">Winner advances</div></div><div class="bracketCol"><strong>FINAL</strong><div class="bracketMatch">Championship Match</div></div><div class="bracketCol"><strong>REWARD</strong><div class="bracketMatch">3-Foot Trophy</div><div class="bracketMatch">Stripe Progress</div></div></div><div id="tournamentActions"><button id="startTournamentBtn">START TOURNAMENT</button></div><button id="tournamentExit">EXIT</button></div></section>
 <section id="bosses" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK BOSS PATH</strong><button id="bossBackTop">BACK TO DOJO</button></div><div id="bossRoom"><div id="bossTitle">BLACK BELT ROAD</div><div id="bossGrid"></div><button id="bossExit">EXIT</button></div></section>
-<section id="fight" class="screen">
+<section id="fight" class="screen"><div id="sessionProgressHudFight">
+  <span class="sessionGoal" id="goalTraining">TRAIN</span>
+  <span class="sessionGoal" id="goalForms">FORMS</span>
+  <span class="sessionGoal" id="goalSparring">SPAR</span>
+</div>
 <div id="fightSetupOverlay">
   <div id="fightSetupCard">
     <h2>SPARRING MATCH SETUP</h2>
@@ -5011,7 +5327,7 @@ body.time-night .building .window{
   <div id="arena"><div id="fightStage"><div id="fightCrowdGlow"></div><div class="distanceShadow"></div><div class="ringBoundary"></div><div class="centerMark"></div><div class="hitMarker" id="hitMarker"></div><div id="fightLightCone"></div><div class="fightRef"></div><div class="fightJudge j1"></div><div class="fightJudge j2"></div><div id="stageBackWall"></div><div id="stageLights"></div><div id="stageSideLeft"></div><div id="stageSideRight"></div><div id="arenaMatLogo">PBK</div><div id="stageNameplate">PBK ARENA</div><div id="rangeGuide">RANGE: LONG</div><div id="impactParticles"></div><div id="whiffText">WHIFF</div><div id="fightClockBar"><div id="fightClockFill"></div></div><div id="enemyIntent">WATCHING</div><div id="fightCombo">COMBO 0</div><div id="counterWindow">COUNTER WINDOW — SIDE KICK NOW!</div><div id="roundResult"></div><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
     <div class="fighterReal fighter-bradley" id="playerFight"><div class="fighterNamePlate" id="playerFightName">BRADLEY</div><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
     <div class="fighterReal fighter-ryan" id="enemyFight"><div class="fighterNamePlate" id="enemyFightName">RYAN</div><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
-  </div><div id="refereeCount">3</div><div id="fightBoundaryLeft"></div><div id="fightBoundaryRight"></div><div id="fightBoundaryWarning">BOUNDARY — CREATE SPACE</div><div id="fightTacticalRead">READ: CALIBRATING RANGE</div><div id="fightDefenseStats"><strong>DEFENSE</strong><br>BLOCKS <span id="fightBlocks">0</span><br>EVADES <span id="fightEvades">0</span><br>COUNTER WINDOWS <span id="fightCounterWindows">0</span></div><div id="fightPhaseBadge">REGULATION</div><div id="fightStyleScout">OPPONENT STYLE: BALANCED</div><div id="fightSummary"><h2 id="fightSummaryTitle">MATCH COMPLETE</h2><div id="fightSummaryGrid"></div><div id="fightSummaryRead"></div><div id="fightCoachingTip"></div><div id="fightSummaryActions"><button id="fightRematchBtn">REMATCH</button><button id="fightSummaryExitBtn">RETURN TO DOJO</button></div></div><div id="fightStatsPanel">ATTEMPTS <span id="fightAttempts">0</span><br>LANDING <span id="fightLanded">0</span><br>ACCURACY <span id="fightAccuracy">0%</span><br>WHIFFS <span id="fightWhiffs">0</span><br>COUNTERS <span id="fightCounters">0</span></div>
+  </div><div id="refereeCount">3</div><div id="fightMomentum"><span id="momentumText">EVEN MATCH</span><div id="momentumBar"><div id="momentumFill"></div></div></div><div id="fightBoundaryLeft"></div><div id="fightBoundaryRight"></div><div id="fightBoundaryWarning">BOUNDARY — CREATE SPACE</div><div id="fightTacticalRead">READ: CALIBRATING RANGE</div><div id="fightDefenseStats"><strong>DEFENSE</strong><br>BLOCKS <span id="fightBlocks">0</span><br>EVADES <span id="fightEvades">0</span><br>COUNTER WINDOWS <span id="fightCounterWindows">0</span></div><div id="fightPhaseBadge">REGULATION</div><div id="fightStyleScout">OPPONENT STYLE: BALANCED</div><div id="fightSummary"><h2 id="fightSummaryTitle">MATCH COMPLETE</h2><div id="fightSummaryGrid"></div><div id="fightSummaryRead"></div><div id="fightCoachingTip"></div><div id="fightSummaryActions"><button id="fightRematchBtn">REMATCH</button><button id="fightSummaryExitBtn">RETURN TO DOJO</button></div></div><div id="fightStatsPanel">ATTEMPTS <span id="fightAttempts">0</span><br>LANDING <span id="fightLanded">0</span><br>ACCURACY <span id="fightAccuracy">0%</span><br>WHIFFS <span id="fightWhiffs">0</span><br>COUNTERS <span id="fightCounters">0</span></div>
     <div id="fightAdaptPanel">OPPONENT READ<br><span id="fightOpponentRead">CALIBRATING</span></div>
     <div id="judgeCall">POINT!</div><div id="fightVignette"></div><div id="roundIntro"></div><div id="bossTag"></div><div id="instructorFightTag">BLACK BELT INSTRUCTOR TRAINING</div><div id="pointResetOverlay"><div id="pointResetCard">POINT • RESET</div></div><div id="specialCallout"></div></div>
   <button id="fightExitModern">EXIT SPARRING</button><div id="fightMovementDock"><div class="gameJoystick" id="fightJoy"><div class="joyKnob"></div></div><div id="fightActionCluster">
@@ -5062,6 +5378,11 @@ try{Object.assign(save,JSON.parse(localStorage.getItem('pbkV43')||'{}'))}catch(e
 if(!save.trainingBest)save.trainingBest={grade:'',accuracy:0,hits:0};
 if(!save.formsBest)save.formsBest={traditional:0,creative:0};
 if(!save.schoolChallenges)save.schoolChallenges={NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false};
+if(!save.techniqueMastery)save.techniqueMastery={punch:0,round:0,side:0,defside:0,twist:0};
+if(!save.sessionGoals)save.sessionGoals={training:false,forms:false,sparring:false};
+if(!save.formsStars)save.formsStars={traditional:0,creative:0};
+if(!save.sessionCompletions)save.sessionCompletions=0;
+
 if(save.bosses&&save.bosses.bradley===undefined)save.bosses.bradley=false;
 
 function saveGame(){try{localStorage.setItem('pbkV43',JSON.stringify(save))}catch(e){}updateRpgHud();updateDojoMeta();renderBosses()}
@@ -6774,7 +7095,7 @@ function trainingStrike(type){
     trainingCombo=0;
     $('trainingPrompt').textContent=trainingMode==='reaction'?'TOO EARLY / LATE — WAIT FOR THE CUE':'OUT OF RANGE — ADJUST YOUR FEET';
   }
-  handleReactionStrike(hit);evaluateTrainingDrill(type,hit);adaptTrainingDifficulty(hit);addTrainingFeedback(hit?('Clean '+(trainingMoveLabels[type]||type.toUpperCase())):'Miss / range error',hit);updateBagPower(type,hit);updateTrainingHud();if(trainingRoundActive)updateTrainingRoundHud();
+  if(hit){addTechniqueMastery(type,1.5);completeSessionGoal('training')}handleReactionStrike(hit);evaluateTrainingDrill(type,hit);adaptTrainingDifficulty(hit);addTrainingFeedback(hit?('Clean '+(trainingMoveLabels[type]||type.toUpperCase())):'Miss / range error',hit);updateBagPower(type,hit);updateTrainingHud();if(trainingRoundActive)updateTrainingRoundHud();
 }
 document.querySelectorAll('[data-trainattack]').forEach(b=>b.onclick=()=>trainingStrike(b.dataset.trainattack));
 applyVisualProfileToFighter($('trainingPlayer'),'Bradley');applyVisualProfileToFighter($('trainingCoach'),leadInstructorForTown());setTrainingMode('mitts');renderTrainingPlayer();
@@ -7245,7 +7566,7 @@ function awardPlayerPointAccessible(points,label){
     state.fightActive=false;
     $('roundResult').textContent=fighterDisplayName(fightPlayerChoice)+' WINS • SUDDEN DEATH';
     $('roundResult').classList.add('show');
-    setTimeout(()=>showFightSummary('BRADLEY'),450);
+    completeSessionGoal('sparring');setTimeout(()=>showFightSummary('BRADLEY'),450);
     return true;
   }
 
@@ -7267,6 +7588,7 @@ function awardPlayerPointAccessible(points,label){
     if(state.fightContext==='instructorSpar'&&state.activeInstructor){
       completeInstructorSparWin(state.activeInstructor);
     }
+    completeSessionGoal('sparring');
     setTimeout(()=>showFightSummary('BRADLEY'),450);
   }else{
     state.fightActive=false;
@@ -7295,7 +7617,7 @@ function modernAttack(type,label,points,animClass,startup=110,recovery=320){
       liveRange=isAttackInAccessibleRange(type);
     }
     if(liveRange){
-      fightStats.landed++;updateFightStats();showJudgeCall(label+' • '+points+' POINT'+(points>1?'S':''));
+      fightStats.landed++;addTechniqueMastery(type,2.5);updateFightStats();showJudgeCall(label+' • '+points+' POINT'+(points>1?'S':''));
       const e=$('enemyFight');e.classList.add('recoil');setTimeout(()=>e.classList.remove('recoil'),260);
       awardPlayerPointAccessible(points,label);
     }else{fightStats.whiffs++;updateFightStats();whiff();addMeter('p',2)}
@@ -8034,7 +8356,7 @@ $('formsScoreBtn').onclick=()=>{
   $('formsDeductionPanel').classList.add('show');
   $('formsStatus').textContent='Judges: '+final.toFixed(1)+' / 30 • '+(final>=25?'EXCELLENT':final>=23?'PASS':'KEEP TRAINING');
   $('formsPrompt').textContent='FINAL SCORE '+final.toFixed(1)+' / 30 • TECHNIQUE '+Math.round(q.technique)+' • STANCE '+Math.round(q.stance)+' • BALANCE '+Math.round(q.balance);
-  save.trainingScore+=final>=23?2:1;saveGame();
+  awardFormStars(formStyle,final);completeSessionGoal('forms');save.trainingScore+=final>=23?2:1;saveGame();
   if(state.formsChallengeInstructor)completeInstructorForms(state.formsChallengeInstructor,final);
 };
 
@@ -8080,6 +8402,234 @@ setInterval(()=>{
   if(fightHeldKeys.has('a'))modernFightMove(-.7);
   if(fightHeldKeys.has('d'))modernFightMove(.7);
 },35);
+
+/* v7.1 connected gameplay loop */
+function rewardToast(text){
+  const e=$('gameplayRewardToast');if(!e)return;
+  e.textContent=text;e.classList.remove('show');void e.offsetWidth;e.classList.add('show');
+  setTimeout(()=>e.classList.remove('show'),1400);
+}
+function allSessionGoalsComplete(){
+  const g=save.sessionGoals;
+  return !!(g.training&&g.forms&&g.sparring);
+}
+function updateSessionGoalHud(){
+  const ids=[['goalTraining','training'],['goalForms','forms'],['goalSparring','sparring']];
+  document.querySelectorAll('[id^="sessionProgressHud"]').forEach(hud=>{
+    ids.forEach(([id,key])=>{
+      const target=hud.querySelector('#'+id) || hud.querySelector('[id="'+id+'"]');
+      if(target)target.classList.toggle('done',!!save.sessionGoals[key]);
+    });
+  });
+}
+function completeSessionGoal(type){
+  if(save.sessionGoals[type])return;
+  save.sessionGoals[type]=true;
+  rewardToast(type.toUpperCase()+' GOAL COMPLETE');
+  if(allSessionGoalsComplete()){
+    save.sessionCompletions++;
+    save.cash+=25;save.rep+=.5;
+    rewardToast('FULL MARTIAL ARTS SESSION COMPLETE • +$25 • +REP');
+    save.sessionGoals={training:false,forms:false,sparring:false};
+  }
+  saveGame();updateSessionGoalHud();
+}
+
+function updateMasteryHud(){
+  const m=save.techniqueMastery||{};
+  const map=[['Punch','punch'],['Round','round'],['Side','side'],['Defside','defside'],['Twist','twist']];
+  map.forEach(([cap,key])=>{
+    const v=Math.min(100,Math.round(m[key]||0));
+    const b=$('mastery'+cap),n=$('mastery'+cap+'N');
+    if(b)b.style.width=v+'%';if(n)n.textContent=v;
+  });
+}
+function addTechniqueMastery(type,amount){
+  const key={kick:'round',punch:'punch',round:'round',side:'side',defside:'defside',twist:'twist'}[type]||type;
+  if(save.techniqueMastery[key]===undefined)return;
+  const before=save.techniqueMastery[key];
+  save.techniqueMastery[key]=Math.min(100,before+amount);
+  if(before<25&&save.techniqueMastery[key]>=25)rewardToast((key==='defside'?'DEF. SIDE':key.toUpperCase())+' MASTERY 25');
+  if(before<50&&save.techniqueMastery[key]>=50)rewardToast((key==='defside'?'DEF. SIDE':key.toUpperCase())+' MASTERY 50');
+  if(before<100&&save.techniqueMastery[key]>=100)rewardToast((key==='defside'?'DEF. SIDE':key.toUpperCase())+' MASTERED');
+  saveGame();updateMasteryHud();
+}
+
+function updateFightMomentum(){
+  if(!$('fight').classList.contains('active'))return;
+  const delta=state.pScore-state.eScore;
+  const pct=Math.max(10,Math.min(90,50+delta*14+(fightStats.landed-fightStats.whiffs)*2));
+  $('momentumFill').style.width=pct+'%';
+  $('momentumText').textContent=pct>=68?'YOU CONTROL THE MATCH':pct<=32?'OPPONENT HAS MOMENTUM':'EVEN MATCH';
+}
+setInterval(updateFightMomentum,180);
+
+function starString(n){return '★'.repeat(n)+'☆'.repeat(3-n)}
+function updateFormsProgressionHud(){
+  $('traditionalStars').textContent=starString(save.formsStars.traditional||0);
+  $('creativeStars').textContent=starString(save.formsStars.creative||0);
+}
+function awardFormStars(style,score){
+  let stars=score>=27?3:score>=24?2:score>=21?1:0;
+  if(formLiveMoves.length<8 || !formLiveMoves.includes('Bow / Finish'))stars=Math.min(stars,1);
+  const key=style==='creative'?'creative':'traditional';
+  if(stars>(save.formsStars[key]||0)){
+    save.formsStars[key]=stars;rewardToast(key.toUpperCase()+' FORM • '+stars+' STAR'+(stars===1?'':'S'));
+    saveGame();updateFormsProgressionHud();
+  }
+}
+
+try{updateSessionGoalHud();updateMasteryHud();updateFormsProgressionHud();}catch(_){}
+
+/* v7.2 living regional world */
+let trafficTick=0;
+function updateRegionalTraffic(){
+  if(!$('world').classList.contains('active'))return;
+  trafficTick+=1;
+  const a=$('trafficA'),b=$('trafficB'),c=$('trafficC'),d=$('trafficD');
+  if(a)a.style.left=(320+(trafficTick*3.2)%1050)+'px';
+  if(b)b.style.left=(1320-((trafficTick*2.5)%920))+'px';
+  if(c)c.style.top=(260+(trafficTick*2.8)%1120)+'px';
+  if(d)d.style.top=(1450-((trafficTick*2.2)%980))+'px';
+}
+setInterval(updateRegionalTraffic,80);
+
+function updateWorldRoadPrompt(){
+  const e=$('worldRoadPrompt');if(!e||!$('world').classList.contains('active'))return;
+  const d=currentDistrict(),g=nearGasStation();
+  if(g)e.textContent='GAS STATION NEARBY';
+  else if(d)e.textContent=d+' • TAP/CLICK BUILDING OR ENTER TOWN';
+  else if(gpsTarget)e.textContent='FOLLOW GPS ROUTE';
+  else e.textContent=state.travel==='drive'?'DRIVE • FOLLOW ROADS • EXPLORE':'WALK • FOLLOW ROADS • EXPLORE';
+  $('world').classList.toggle('driveMode',state.travel==='drive');
+}
+setInterval(updateWorldRoadPrompt,180);
+
+
+/* v7.3 COMBAT DECISION / TIMING UPGRADE */
+let fightFocus=50;
+let perfectGuardUntil=0;
+let lastPlayerScoreTime=0;
+let lastPlayerMoveTime=0;
+let tacticalMessage='READ THE OPPONENT';
+
+function ensureV73FightHud(){
+  if(!$('fightDecisionHud')){
+    const hud=document.createElement('div');hud.id='fightDecisionHud';hud.innerHTML=`
+      <div class="fightDecisionChip">FOCUS<div id="fightFocusBar"><div id="fightFocusFill"></div></div></div>
+      <div class="fightDecisionChip" id="fightRangeChip">RANGE: LONG</div>
+      <div class="fightDecisionChip" id="fightReadChip">READ: NEUTRAL</div>`;
+    $('arena').appendChild(hud);
+  }
+  if(!$('fightPerfectCall')){const e=document.createElement('div');e.id='fightPerfectCall';$('arena').appendChild(e)}
+  if(!$('fightTacticBanner')){const e=document.createElement('div');e.id='fightTacticBanner';e.textContent='COACH: ESTABLISH RANGE';$('arena').appendChild(e)}
+}
+function setFightFocus(delta){fightFocus=Math.max(0,Math.min(100,fightFocus+delta));const f=$('fightFocusFill');if(f)f.style.width=fightFocus+'%'}
+function fightCallout(text){const e=$('fightPerfectCall');if(!e)return;e.textContent=text;e.classList.remove('show');void e.offsetWidth;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),650)}
+function v73RangeBand(){const d=fightDistance();if(d<15)return 'CLINCHED';if(d<20)return 'CLOSE';if(d<=29)return 'SWEET SPOT';if(d<=35)return 'KICK RANGE';return 'LONG'}
+function updateV73FightRead(){
+  if(!$('fight').classList.contains('active'))return;
+  ensureV73FightHud();
+  const band=v73RangeBand(),r=$('fightRangeChip');if(r)r.textContent='RANGE: '+band;
+  const recent=playerTechniqueHistory.slice(-4),counts={};recent.forEach(x=>counts[x]=(counts[x]||0)+1);
+  const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  const read=top&&top[1]>=3?('OPPONENT EXPECTS '+top[0].toUpperCase()):counterWindowOpen?'COUNTER OPEN':enemyBlocking?'GUARD IS SET':'READ: NEUTRAL';
+  const chip=$('fightReadChip');if(chip){chip.textContent=read;chip.classList.toggle('hot',counterWindowOpen)}
+  let coach='COACH: ';
+  if(state.eScore>state.pScore+2)coach+='DON’T CHASE — MAKE THEM COMMIT';
+  else if(fightStats.whiffs>=3)coach+='YOU’RE FIRING TOO FAR OUT';
+  else if((fightStats.blocks||0)>=2)coach+='BLOCK IS WORKING — LOOK FOR THE COUNTER';
+  else if(band==='SWEET SPOT')coach+='GOOD RANGE — MIX YOUR ATTACK';
+  else if(band==='CLINCHED'||band==='CLOSE')coach+='CREATE SPACE BEFORE YOU FIRE';
+  else coach+='ESTABLISH RANGE, THEN ATTACK';
+  tacticalMessage=coach;const t=$('fightTacticBanner');if(t)t.textContent=coach;
+}
+setInterval(updateV73FightRead,180);
+
+// A brief tap/initial guard gives a true timing window. Holding guard still works, but is less rewarding.
+$('fightBlockBtn').addEventListener('pointerdown',()=>{
+  perfectGuardUntil=performance.now()+230;
+  $('fightBlockBtn').classList.add('perfectReady');
+  setTimeout(()=>$('fightBlockBtn').classList.remove('perfectReady'),240);
+},{capture:true});
+
+const v72EnemyScore=enemyScore;
+enemyScore=function(pts,label){
+  if(!state.fightActive)return;
+  if(performance.now()<=perfectGuardUntil && !playerEvading){
+    perfectGuardUntil=0;guardHeld=false;setFightGuard(true);
+    fightStats.blocks=(fightStats.blocks||0)+1;fightCounterWindows++;updateDefenseHud();
+    counterWindowOpen=true;$('counterWindow').classList.add('show');
+    setFightFocus(12);addMeter('p',10);fightCallout('PERFECT BLOCK • COUNTER!');
+    $('fightMessage').textContent='PERFECT BLOCK — COUNTER WINDOW';
+    setTimeout(()=>{if(counterWindowOpen){counterWindowOpen=false;$('counterWindow').classList.remove('show')}},700);
+    return;
+  }
+  const before=state.eScore;v72EnemyScore(pts,label);
+  if(state.eScore>before)setFightFocus(-10);
+};
+
+const v72ModernAttack=modernAttack;
+modernAttack=function(type,label,points,animClass,startup=110,recovery=320){
+  const d=fightDistance();
+  const ideal=(type==='punch'&&d>=14&&d<=23)||(type==='kick'&&d>=19&&d<=31)||(type==='side'&&d>=20&&d<=34)||(type==='defside'&&counterWindowOpen)||(type==='twist'&&d>=18&&d<=31);
+  const beforeLanded=fightStats.landed,beforeWhiffs=fightStats.whiffs;
+  const focusSpeed=fightFocus>=80?.90:fightFocus<=20?1.08:1;
+  const ok=v72ModernAttack(type,label,points,animClass,Math.round(startup*focusSpeed),Math.round(recovery*focusSpeed));
+  if(!ok)return false;
+  setTimeout(()=>{
+    if(fightStats.landed>beforeLanded){setFightFocus(ideal?8:4);lastPlayerScoreTime=performance.now();if(ideal)fightCallout('CLEAN RANGE');}
+    else if(fightStats.whiffs>beforeWhiffs)setFightFocus(-8);
+  },Math.max(240,startup+80));
+  return true;
+};
+
+const v72ModernFightMove=modernFightMove;
+modernFightMove=function(x){
+  const before=fightDistance();v72ModernFightMove(x);lastPlayerMoveTime=performance.now();
+  const after=fightDistance();if(after>=19&&after<=32&&Math.abs(after-before)>.15)setFightFocus(.08);
+};
+
+const v72DoAngleStep=doAngleStep;
+doAngleStep=function(){const was=state.fightActive;v72DoAngleStep();if(was){setFightFocus(4);fightCallout('ANGLE CREATED')}};
+
+const v72WhiffEnemy=whiffEnemy;
+whiffEnemy=function(){v72WhiffEnemy();setFightFocus(5);if(performance.now()-lastPlayerMoveTime<650)fightCallout('MADE HIM MISS')};
+
+// More intentional opponent tactics based on style, score, and player habits.
+const v72EnemyAiThink=enemyAiThink;
+enemyAiThink=function(){
+  if(!state.fightActive||!$('fight').classList.contains('active')||aiActionLocked)return;
+  const d=fightDistance(),behind=state.eScore<state.pScore,ahead=state.eScore>state.pScore;
+  const repeated=playerTechniqueHistory.slice(-4);const predictable=repeated.length>=3&&new Set(repeated).size<=2;
+  if(aiStyle==='pressure'&&behind&&d>18&&Math.random()<.32){
+    $('enemyIntent').textContent='PRESSURE ENTRY';$('enemyFight').classList.add('fightAdvance');moveFighter($('enemyFight'),-3.8*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);setTimeout(()=>$('enemyFight').classList.remove('fightAdvance'),180);return;
+  }
+  if(aiStyle==='counter'&&predictable&&Math.random()<.30){
+    enemyBlocking=true;$('enemyIntent').textContent='BAITING YOUR REPEAT';anim($('enemyFight'),'blocking',520);setTimeout(()=>enemyBlocking=false,540);return;
+  }
+  if((aiStyle==='master'||aiStyle==='power')&&ahead&&d<25&&Math.random()<.22){
+    $('enemyIntent').textContent='DRAWING YOU FORWARD';moveFighter($('enemyFight'),3.0*fightDifficultyProfiles[fightDifficulty].aiMove,38,88);return;
+  }
+  v72EnemyAiThink();
+};
+
+const v72ShowFightSummary=showFightSummary;
+showFightSummary=function(winner){
+  v72ShowFightSummary(winner);
+  const attempts=fightStats.attempts||0,acc=attempts?fightStats.landed/attempts:0;
+  let grade=70;
+  grade+=Math.round(acc*20);grade+=Math.min(8,(fightStats.counters||0)*3);grade+=Math.min(6,(fightStats.blocks||0)*2);grade-=Math.min(15,(fightStats.whiffs||0)*3);if(state.pScore>state.eScore)grade+=5;
+  grade=Math.max(50,Math.min(100,grade));
+  const letter=grade>=94?'A+':grade>=89?'A':grade>=84?'B+':grade>=79?'B':grade>=72?'C+':grade>=65?'C':'D';
+  let chip=$('fightGradeChip');if(!chip){chip=document.createElement('div');chip.id='fightGradeChip';$('fightSummary').insertBefore(chip,$('fightSummaryActions'))}
+  chip.textContent='COACHING GRADE '+letter+' • '+grade+' / 100 • '+tacticalMessage.replace('COACH: ','');
+};
+
+const v72StartFight=startFight;
+startFight=function(name,target){fightFocus=50;perfectGuardUntil=0;ensureV73FightHud();setFightFocus(0);return v72StartFight(name,target)};
+
+try{ensureV73FightHud();setFightFocus(0);}catch(_){ }
 </script>
 </body>
 </html>
