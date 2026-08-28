@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>PBK: Path to Black Belt v5.5</title>
+<title>PBK: Path to Black Belt v5.9</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#fff;font-family:Inter,Arial,Helvetica,sans-serif}
@@ -1981,6 +1981,758 @@ body.time-night .building .window{
   .rearPlayer{transform-origin:bottom center}
 }
 
+
+/* v5.6 human character upgrade */
+:root{
+  --skin1:#d59a72;
+  --skin2:#bb7e57;
+  --skin3:#9a6246;
+  --skin4:#e0ad86;
+  --hair1:#211914;
+  --hair2:#3b2a22;
+  --hair3:#181818;
+  --hair4:#6a4b35;
+}
+.human,.fighterReal,.simFighter,.rearPlayer{
+  filter:drop-shadow(0 8px 4px rgba(0,0,0,.26));
+}
+
+/* More realistic compact NPC body proportions */
+.human{
+  width:48px!important;height:86px!important;
+}
+.human .head{
+  left:12px!important;top:0!important;width:24px!important;height:27px!important;
+  border-radius:45% 45% 48% 48%!important;
+  background:linear-gradient(90deg,var(--npcSkin,#b97851),color-mix(in srgb,var(--npcSkin,#b97851) 76%,#fff 24%))!important;
+}
+.human .hair{
+  left:10px!important;top:-3px!important;width:28px!important;height:13px!important;
+  border-radius:48% 48% 26% 26%!important;
+  background:var(--npcHair,#241c17)!important;
+}
+.human .torso{
+  left:7px!important;top:27px!important;width:34px!important;height:36px!important;
+  border-radius:10px 10px 8px 8px!important;
+}
+.human .torso::after{
+  content:'';position:absolute;left:50%;top:0;width:2px;height:30px;background:rgba(255,255,255,.08)
+}
+.human .arm{
+  top:30px!important;width:9px!important;height:34px!important;border-radius:6px!important;
+}
+.human .arm.l{left:1px!important}.human .arm.r{right:1px!important}
+.human .leg{
+  top:60px!important;width:10px!important;height:26px!important;border-radius:6px!important;
+}
+.human .leg.l{left:12px!important}.human .leg.r{right:12px!important}
+.human .leg::after{
+  content:'';position:absolute;bottom:-4px;width:14px;height:6px;border-radius:6px;background:#16191d
+}
+.human .leg.l::after{left:-3px}.human .leg.r::after{right:-3px}
+
+/* Neck and ears */
+.human .head::before{
+  content:'';position:absolute;left:8px;right:8px;bottom:-5px;height:7px;border-radius:3px;
+  background:var(--npcSkin,#b97851);z-index:-1
+}
+.faceAvatar .head::after{
+  content:'';position:absolute;left:-3px;right:-3px;top:10px;height:8px;
+  border-left:3px solid var(--npcSkin,#b97851);border-right:3px solid var(--npcSkin,#b97851);border-radius:40%;
+  opacity:.9
+}
+
+/* More natural face landmarks */
+.faceAvatar .faceEyes{top:11px!important;left:6px!important;right:6px!important}
+.faceAvatar .faceEyes::before,.faceAvatar .faceEyes::after{
+  width:5px!important;height:3px!important;background:#151311!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.25)
+}
+.faceAvatar .faceBrows{top:7px!important;left:5px!important;right:5px!important}
+.faceAvatar .faceBrows::before,.faceAvatar .faceBrows::after{width:8px!important}
+.faceAvatar .faceNose{
+  top:14px!important;height:8px!important;width:2px!important;
+  background:rgba(84,50,36,.35)!important;
+  box-shadow:2px 5px 0 -1px rgba(84,50,36,.25)
+}
+.faceAvatar .faceMouth{top:22px!important;width:10px!important;height:2px!important}
+.faceAvatar .face2 .faceMouth{width:11px!important}
+.faceAvatar.face2 .head{border-radius:42% 45% 50% 47%!important}
+.faceAvatar.face3 .head{border-radius:48% 42% 45% 50%!important}
+.faceAvatar.face4 .head{border-radius:44% 48% 52% 45%!important}
+.faceAvatar.face5 .head{border-radius:50% 45% 44% 49%!important}
+.faceAvatar.face6 .head{border-radius:42% 42% 50% 50%!important}
+
+/* Individualized hair profiles */
+.face1 .hair{clip-path:polygon(0 20%,15% 0,85% 0,100% 24%,90% 78%,70% 62%,50% 82%,30% 60%,8% 76%)}
+.face2 .hair{height:11px!important;border-radius:55% 55% 20% 20%!important}
+.face3 .hair{clip-path:polygon(0 55%,10% 10%,30% 0,52% 12%,72% 0,100% 25%,92% 72%,72% 58%,50% 78%,28% 56%,8% 74%)}
+.face4 .hair{height:15px!important;border-radius:50% 50% 35% 35%!important}
+.face5 .hair{height:9px!important;top:0!important;border-radius:30% 30% 15% 15%!important}
+.face6 .hair{clip-path:polygon(0 25%,12% 0,34% 15%,50% 0,68% 15%,88% 0,100% 28%,90% 80%,12% 80%)}
+
+/* named character palettes */
+#dNpc1 .human{--npcSkin:#d39b74;--npcHair:#261c17}
+#dNpc2 .human{--npcSkin:#c38b65;--npcHair:#151515}
+#dNpc3 .human{--npcSkin:#b97952;--npcHair:#2a2019}
+#dNpc4 .human{--npcSkin:#d8a17a;--npcHair:#47352a}
+
+/* Rear avatar made more human */
+.rearPlayer{
+  width:92px!important;height:184px!important;
+}
+.rearHead{
+  left:28px!important;width:36px!important;height:40px!important;
+  border-radius:45% 45% 50% 50%!important;
+  background:linear-gradient(90deg,#b97952,#d9a47d)!important;
+}
+.rearHead::before{
+  content:'';position:absolute;left:12px;right:12px;bottom:-6px;height:9px;border-radius:4px;background:#bd805c;z-index:-1
+}
+.rearHair{
+  left:25px!important;width:42px!important;height:17px!important;background:#211914!important;
+}
+.rearTorso{
+  left:16px!important;top:38px!important;width:60px!important;height:78px!important;
+  border-radius:14px 14px 9px 9px!important
+}
+.rearTorso::before{
+  content:'';position:absolute;left:50%;top:2px;width:3px;height:68px;background:rgba(255,255,255,.09)
+}
+.rearBelt{left:13px!important;top:105px!important;width:66px!important}
+.rearArm{top:45px!important;width:15px!important;height:70px!important}
+.rearLeg{top:116px!important;width:18px!important;height:68px!important}
+.rearArm.l{left:3px!important}.rearArm.r{right:3px!important}
+.rearLeg.l{left:22px!important}.rearLeg.r{right:22px!important}
+.rearLeg::after{
+  content:'';position:absolute;bottom:-6px;width:23px;height:8px;border-radius:8px;background:#111418
+}
+.rearLeg.l::after{left:-5px}.rearLeg.r::after{right:-5px}
+
+/* Fight/training characters with more human proportions */
+.fighterReal,.simFighter{
+  width:124px!important;height:226px!important;
+}
+.fighterReal .fhead,.simFighter .fhead{
+  left:42px!important;width:40px!important;height:46px!important;border-radius:45% 45% 50% 50%!important;
+  background:linear-gradient(90deg,#b97952,#e0ad86)!important
+}
+.fighterReal .fhair,.simFighter .fhair{
+  left:39px!important;width:46px!important;height:18px!important;background:#211914!important
+}
+.fighterReal .fhead::before,.simFighter .fhead::before{
+  content:'';position:absolute;left:13px;right:13px;bottom:-7px;height:10px;background:#c78c68;border-radius:4px;z-index:-1
+}
+.fighterReal .ftorso,.simFighter .ftorso{
+  left:27px!important;top:47px!important;width:70px!important;height:83px!important;
+  border-radius:15px 15px 9px 9px!important
+}
+.fighterReal .farm,.simFighter .farm{
+  top:55px!important;width:17px!important;height:78px!important
+}
+.fighterReal .farm.l,.simFighter .farm.l{left:9px!important}
+.fighterReal .farm.r,.simFighter .farm.r{right:9px!important}
+.fighterReal .fleg,.simFighter .fleg{
+  top:126px!important;width:21px!important;height:95px!important
+}
+.fighterReal .fleg.l,.simFighter .fleg.l{left:30px!important}
+.fighterReal .fleg.r,.simFighter .fleg.r{right:30px!important}
+.fighterReal .fbelt,.simFighter .fbelt{
+  left:22px!important;top:116px!important;width:80px!important;height:11px!important
+}
+.fighterReal .fleg::after,.simFighter .fleg::after{
+  content:'';position:absolute;bottom:-5px;width:28px;height:9px;border-radius:8px;background:#121518
+}
+.fighterReal .fleg.l::after,.simFighter .fleg.l::after{left:-7px}
+.fighterReal .fleg.r::after,.simFighter .fleg.r::after{right:-7px}
+
+/* Face layer for fighters */
+.fighterReal .fhead::after,.simFighter .fhead::after{
+  content:'';position:absolute;left:9px;top:14px;width:22px;height:14px;
+  background:
+    radial-gradient(circle at 15% 15%,#171513 0 2px,transparent 3px),
+    radial-gradient(circle at 85% 15%,#171513 0 2px,transparent 3px),
+    linear-gradient(90deg,transparent 45%,rgba(91,55,39,.3) 45% 53%,transparent 53%),
+    radial-gradient(ellipse at 50% 90%,#7b433b 0 4px,transparent 5px);
+  opacity:.95
+}
+
+/* Different silhouettes for named/master characters */
+.masterBody .ftorso{width:74px!important;left:25px!important}
+.masterBody .farm{width:18px!important}
+.masterBody .fhead{width:42px!important;left:41px!important}
+.studentBody .ftorso{width:64px!important;left:30px!important}
+.studentBody .fleg{width:19px!important}
+.compactBody{transform-origin:bottom center}
+.compactBody .fhead{width:37px!important;left:43px!important}
+.tallBody .fleg{height:102px!important}
+.tallBody{height:234px!important}
+.stockyBody .ftorso{width:78px!important;left:23px!important}
+.stockyBody .farm{width:19px!important}
+
+/* Better hover/lighting on faces */
+.faceAvatar .head,.fighterReal .fhead,.simFighter .fhead,.rearHead{
+  box-shadow:inset -4px 0 6px rgba(0,0,0,.08),inset 3px 0 5px rgba(255,255,255,.08)
+}
+
+/* make office/interior NPCs less icon-like */
+#officeInstructor,#interiorNpc3D{
+  font-size:11px!important;
+  padding-top:4px!important;
+}
+#officeInstructor::before,#interiorNpc3D::before{
+  width:46px!important;height:56px!important;left:32px!important;
+  border-radius:45% 45% 50% 50%!important;
+  background:linear-gradient(90deg,#b97952,#dda982)!important
+}
+#officeInstructor::after,#interiorNpc3D::after{
+  width:66px!important;height:88px!important;left:22px!important;top:87px!important;
+  border-radius:14px 14px 10px 10px!important
+}
+
+/* small portrait cards */
+.characterPortrait{
+  width:78px;height:98px;margin:6px auto;border-radius:12px;position:relative;
+  background:linear-gradient(#3e4a54,#1b2228);border:1px solid #68737c;overflow:hidden
+}
+.characterPortrait .pHead{
+  position:absolute;left:24px;top:13px;width:30px;height:35px;border-radius:45% 45% 50% 50%;
+  background:linear-gradient(90deg,var(--pSkin,#ba7c57),color-mix(in srgb,var(--pSkin,#ba7c57) 75%,white 25%))
+}
+.characterPortrait .pHair{
+  position:absolute;left:21px;top:9px;width:36px;height:14px;border-radius:50% 50% 25% 25%;background:var(--pHair,#211914)
+}
+.characterPortrait .pTorso{
+  position:absolute;left:14px;top:47px;width:50px;height:48px;border-radius:12px 12px 6px 6px;background:linear-gradient(90deg,#090c0e,#2b3238,#090c0e)
+}
+.characterPortrait .pHead::after{
+  content:'';position:absolute;left:7px;top:12px;width:16px;height:12px;
+  background:
+    radial-gradient(circle at 15% 15%,#171513 0 2px,transparent 3px),
+    radial-gradient(circle at 85% 15%,#171513 0 2px,transparent 3px),
+    radial-gradient(ellipse at 50% 92%,#77433a 0 3px,transparent 4px)
+}
+
+
+/* v5.7 world + combat rebuild */
+
+/* Context clothing */
+.streetClothes .torso{
+  background:linear-gradient(90deg,#27394b,#4d6a82 50%,#243444)!important;
+  border-color:#17222c!important;
+}
+.streetClothes .arm{background:linear-gradient(#4b687f,#263846)!important}
+.streetClothes .leg{background:linear-gradient(#2d3034,#171a1d)!important}
+.streetClothes .leg::after{background:#e7e7e7!important}
+.casualAvatar .rearTorso{
+  background:linear-gradient(90deg,#263a4b,#55748b 50%,#253846)!important;
+  border-color:#18242d!important;
+}
+.casualAvatar .rearArm{background:linear-gradient(#4c6a82,#293c4b)!important}
+.casualAvatar .rearLeg{background:linear-gradient(#31353a,#181b1e)!important}
+.casualAvatar .rearBelt{display:none!important}
+.casualAvatar .rearLeg::after{background:#e8e8e8!important}
+.giAvatar .rearTorso,.giAvatar .rearArm,.giAvatar .rearLeg{
+  background:linear-gradient(90deg,#07090b,#2a3036 50%,#07090b)!important
+}
+.giAvatar .rearBelt{display:block!important}
+#trainingPlayer .ftorso,#trainingPlayer .farm,#trainingPlayer .fleg,
+#trainingCoach .ftorso,#trainingCoach .farm,#trainingCoach .fleg,
+#formsPlayer .ftorso,#formsPlayer .farm,#formsPlayer .fleg,
+#playerFight .ftorso,#playerFight .farm,#playerFight .fleg,
+#enemyFight .ftorso,#enemyFight .farm,#enemyFight .fleg{
+  background:linear-gradient(90deg,#06080a,#252b31 50%,#06080a)!important
+}
+
+/* REGION MAP – free-pan, satellite-map-like density */
+#regionViewport{
+  cursor:grab;
+  touch-action:none;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(255,255,255,.12),transparent 18%),
+    linear-gradient(#91b9d5 0 13%,#9ebdce 13% 17%,#6b8c61 17% 100%)!important;
+}
+#regionViewport.dragging{cursor:grabbing}
+#regionWorld{
+  background:
+    radial-gradient(circle at 12% 20%,#3c6846 0 65px,transparent 67px),
+    radial-gradient(circle at 25% 67%,#315e3b 0 90px,transparent 93px),
+    radial-gradient(circle at 63% 14%,#466f48 0 100px,transparent 103px),
+    radial-gradient(circle at 78% 72%,#385f3d 0 120px,transparent 123px),
+    repeating-linear-gradient(35deg,rgba(255,255,255,.018) 0 2px,transparent 2px 38px),
+    linear-gradient(#7ea271,#63865c)!important;
+  will-change:transform;
+}
+#regionWorld::before{
+  content:'';
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    repeating-linear-gradient(17deg,transparent 0 120px,rgba(41,74,44,.08) 120px 122px),
+    repeating-linear-gradient(101deg,transparent 0 155px,rgba(255,255,255,.03) 155px 157px);
+  mix-blend-mode:multiply;
+}
+.regionSubdivision{
+  position:absolute;z-index:7;width:310px;height:230px;
+  border-radius:38px;
+  background:
+    linear-gradient(70deg,transparent 47%,#8f9290 48% 53%,transparent 54%),
+    linear-gradient(-22deg,transparent 44%,#8f9290 45% 50%,transparent 51%),
+    repeating-linear-gradient(90deg,rgba(220,210,190,.9) 0 32px,rgba(96,129,82,.92) 32px 58px);
+  border:8px solid #8b8e89;
+  box-shadow:0 15px 30px rgba(0,0,0,.18);
+  opacity:.82;
+}
+#regionSubdivision1{left:920px;top:310px;transform:rotate(6deg)}
+#regionSubdivision2{left:1120px;top:1160px;transform:rotate(-7deg)}
+#regionSubdivision3{left:2050px;top:410px;transform:rotate(4deg)}
+.regionPond{
+  position:absolute;z-index:6;width:210px;height:125px;border-radius:48% 52% 55% 45%;
+  background:radial-gradient(ellipse at 40% 35%,#6fa9bd,#3f768f 60%,#315f72);
+  border:9px solid rgba(54,91,58,.55);box-shadow:inset 0 0 25px rgba(0,0,0,.15)
+}
+#regionPond1{left:1220px;top:620px}
+#regionPond2{left:2190px;top:1320px}
+.regionCommercial{
+  position:absolute;z-index:8;width:250px;height:160px;border-radius:18px;
+  background:
+    repeating-linear-gradient(90deg,#6e7377 0 18px,#d7d7d3 18px 20px),
+    linear-gradient(#696e71,#555b5f);
+  border:10px solid #858a8d;box-shadow:0 12px 25px rgba(0,0,0,.2)
+}
+#regionCommercial1{left:1040px;top:800px}
+#regionCommercial2{left:1920px;top:980px}
+.mapViewBadge{
+  position:absolute;left:50%;top:82px;transform:translateX(-50%);
+  z-index:180;padding:8px 12px;border-radius:999px;
+  background:rgba(6,10,14,.9);border:1px solid rgba(255,255,255,.16);
+  font-size:10px;font-weight:1000;letter-spacing:.5px
+}
+#mapModeControls{
+  position:absolute;right:12px;bottom:12px;z-index:181;
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;width:300px
+}
+#mapModeControls button{font-size:9px;padding:8px 9px}
+#mapModeControls .active{outline:2px solid #e5c767}
+#regionPlayer .human.streetClothes .torso::before{
+  content:'PBK';position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  color:#dfe8ed;font-size:6px;font-weight:1000;opacity:.8
+}
+
+/* TOWN MORPH / STREET VIEW */
+#townStreetView{
+  position:absolute;inset:0;z-index:190;display:none;
+  opacity:0;transform:scale(1.05);
+  transition:opacity .35s ease,transform .45s ease;
+  background:#111;overflow:hidden;
+}
+#townStreetView.show{display:block;opacity:1;transform:scale(1)}
+#townStreetViewport{
+  position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;
+  background:linear-gradient(#7eb0d2 0 30%,#c9dbe5 30% 31%,#6d875c 31% 100%)
+}
+#townStreetViewport.dragging{cursor:grabbing}
+#townStreetScene{
+  position:absolute;left:0;top:0;width:2200px;height:1050px;
+  transform-origin:0 0;will-change:transform;
+  background:
+    radial-gradient(circle at 42% 10%,rgba(255,255,255,.5),transparent 8%),
+    linear-gradient(#81aed0 0 27%,#a9c2d2 27% 31%,#69845c 31% 100%)
+}
+#townStreetScene::before{
+  content:'';
+  position:absolute;left:0;right:0;top:270px;height:120px;
+  background:
+    linear-gradient(155deg,transparent 0 13%,#526d52 14% 29%,transparent 30%),
+    linear-gradient(205deg,transparent 0 14%,#456344 15% 30%,transparent 31%);
+  opacity:.65
+}
+.streetRoad{
+  position:absolute;left:260px;right:260px;top:450px;height:530px;
+  clip-path:polygon(37% 0,63% 0,100% 100%,0 100%);
+  background:
+    linear-gradient(90deg,transparent 49.3%,#e8cf69 49.3% 50.7%,transparent 50.7%),
+    repeating-linear-gradient(90deg,transparent 0 48%,rgba(255,255,255,.35) 48% 48.5%,transparent 48.5% 100%),
+    linear-gradient(#4f5559,#373d41);
+  box-shadow:inset 0 10px 20px rgba(255,255,255,.035),0 -4px 0 #848a85;
+  z-index:8
+}
+.streetRoad::after{
+  content:'';position:absolute;left:0;right:0;top:18%;height:5px;
+  background:repeating-linear-gradient(90deg,transparent 0 110px,rgba(255,255,255,.58) 110px 155px)
+}
+.streetSidewalk{
+  position:absolute;top:430px;height:550px;width:480px;z-index:7;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 80px,rgba(0,0,0,.06) 80px 82px),
+    linear-gradient(#b9bbb7,#9da19d)
+}
+.streetSidewalk.left{left:0;clip-path:polygon(0 0,100% 0,65% 100%,0 100%)}
+.streetSidewalk.right{right:0;clip-path:polygon(0 0,100% 0,100% 100%,35% 100%)}
+.streetCrosswalk{
+  position:absolute;left:750px;top:675px;width:700px;height:74px;z-index:11;
+  transform:perspective(600px) rotateX(50deg);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.83) 0 45px,transparent 45px 90px)
+}
+.streetTree{
+  position:absolute;z-index:12;width:75px;height:130px
+}
+.streetTree::before{
+  content:'';position:absolute;left:31px;bottom:0;width:15px;height:56px;background:#5c4633;border-radius:5px
+}
+.streetTree::after{
+  content:'';position:absolute;left:0;top:0;width:76px;height:82px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#65965d,#35633d 70%);
+  box-shadow:0 15px 20px rgba(0,0,0,.22)
+}
+.streetLamp{
+  position:absolute;z-index:12;width:9px;height:150px;background:#333a3f
+}
+.streetLamp::before{content:'';position:absolute;left:-20px;top:-4px;width:49px;height:16px;border-radius:50%;background:#e8d89e;box-shadow:0 0 18px rgba(232,216,158,.32)}
+.streetBuilding{
+  position:absolute;z-index:13;width:250px;height:240px;
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.12),transparent 35%),
+    linear-gradient(#7b8790,#3a444c);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 25px 32px rgba(0,0,0,.28);
+  border-radius:8px 8px 2px 2px
+}
+.streetBuilding::before{
+  content:'';position:absolute;left:-12px;right:-12px;top:-30px;height:38px;
+  background:linear-gradient(#515b63,#30383f);
+  clip-path:polygon(8% 100%,20% 0,80% 0,92% 100%)
+}
+.streetBuilding::after{
+  content:'';position:absolute;left:22px;right:22px;top:70px;height:80px;
+  background:
+    linear-gradient(90deg,#93b5c7 0 27%,transparent 28% 36%,#93b5c7 37% 64%,transparent 65% 73%,#93b5c7 74%);
+  box-shadow:0 72px 0 -25px rgba(33,26,20,.9)
+}
+.streetBuilding .streetSign{
+  position:absolute;left:50%;top:18px;transform:translateX(-50%);
+  min-width:150px;padding:7px 8px;border-radius:7px;background:#11171c;border:1px solid #68747e;
+  color:#eee;font-size:10px;font-weight:1000;text-align:center;white-space:nowrap;z-index:5
+}
+.streetBuilding.pbk{
+  background:linear-gradient(160deg,rgba(255,255,255,.09),transparent 35%),linear-gradient(#303a43,#11171c)
+}
+.streetBuilding.pbk .streetSign{border-color:#a78b44;color:#f0d579}
+.streetBuilding.near{
+  outline:4px solid #e5c767;box-shadow:0 0 35px rgba(229,199,103,.42),0 25px 32px rgba(0,0,0,.28)
+}
+#streetB1{left:120px;top:360px}
+#streetB2{left:430px;top:300px}
+#streetB3{right:430px;top:300px}
+#streetB4{right:120px;top:360px}
+#streetB5{left:960px;top:265px}
+#townStreetPlayer{
+  position:absolute;left:1090px;top:760px;z-index:22;width:92px;height:184px;
+  transition:left .06s linear,top .06s linear;filter:drop-shadow(0 14px 8px rgba(0,0,0,.35))
+}
+#townStreetPlayer .rearTorso{background:linear-gradient(90deg,#263a4b,#55748b 50%,#253846)!important}
+#townStreetPlayer .rearArm{background:linear-gradient(#4c6a82,#293c4b)!important}
+#townStreetPlayer .rearLeg{background:linear-gradient(#31353a,#181b1e)!important}
+#townStreetPlayer .rearBelt{display:none}
+#townStreetPlayer .rearLeg::after{background:#e8e8e8!important}
+#townStreetHud{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:230;
+  width:min(900px,94vw);display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;
+  padding:8px;border-radius:14px;background:rgba(7,11,15,.88);border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(9px)
+}
+#townStreetHud strong{font-size:17px}
+#townStreetPrompt{
+  position:absolute;left:50%;bottom:160px;transform:translateX(-50%);z-index:230;
+  padding:9px 13px;border-radius:999px;background:rgba(7,11,15,.88);border:1px solid rgba(255,255,255,.15);
+  font-size:10px;font-weight:1000
+}
+#townStreetControls{
+  position:absolute;left:12px;bottom:12px;z-index:230;display:flex;gap:10px;align-items:flex-end
+}
+.gameJoystick{
+  position:relative;width:136px;height:136px;border-radius:50%;
+  background:radial-gradient(circle,#2c3945 0 34%,#17212a 35% 100%);
+  border:2px solid #62717e;box-shadow:0 12px 24px rgba(0,0,0,.38),inset 0 0 18px rgba(255,255,255,.03);
+  touch-action:none
+}
+.gameJoystick .joyKnob{
+  position:absolute;left:50%;top:50%;width:56px;height:56px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:linear-gradient(#6b7c89,#34434f);border:2px solid #94a3af;
+  box-shadow:0 7px 14px rgba(0,0,0,.34)
+}
+#townStreetActions{display:grid;grid-template-columns:repeat(2,110px);gap:6px}
+#townStreetActions button{font-size:9px;padding:9px}
+#townCameraBadge{
+  position:absolute;right:12px;bottom:12px;z-index:230;padding:8px 10px;border-radius:10px;
+  background:rgba(7,11,15,.88);border:1px solid rgba(255,255,255,.13);font-size:9px;font-weight:900
+}
+
+/* Improved world joystick separation */
+#worldControlDock{left:12px!important;bottom:12px!important}
+#worldStick::after{content:'CHARACTER';position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font-size:7px;font-weight:1000;letter-spacing:.7px}
+#mapModeControls::before{content:'DRAG MAP TO LOOK AROUND';width:100%;text-align:right;font-size:8px;font-weight:900;opacity:.8}
+
+/* FIGHT – more realistic stage and motion */
+#arena{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,255,255,.08),transparent 33%),
+    linear-gradient(#121820,#090d11)!important
+}
+#fightStage{
+  overflow:hidden;
+  background:
+    linear-gradient(#242d35 0 34%,#11171c 34% 37%,#1b3f56 37% 100%)!important
+}
+#fightStage::before{
+  content:'';position:absolute;left:-10%;right:-10%;bottom:-26%;height:62%;z-index:3;
+  transform:perspective(700px) rotateX(55deg);transform-origin:bottom center;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 110px,rgba(255,255,255,.055) 110px 113px),
+    repeating-linear-gradient(0deg,transparent 0 90px,rgba(0,0,0,.05) 90px 93px),
+    linear-gradient(#315e7a,#23465d);
+  border-top:10px solid #e7e7e4;box-shadow:inset 0 25px 45px rgba(0,0,0,.17)
+}
+#fightStage .fightRef{
+  position:absolute;left:50%;top:37%;width:58px;height:120px;transform:translateX(-50%) scale(.75);
+  z-index:5;opacity:.86;filter:drop-shadow(0 8px 4px rgba(0,0,0,.25))
+}
+.fightRef::before{content:'';position:absolute;left:17px;top:0;width:24px;height:29px;border-radius:48%;background:#c58b67}
+.fightRef::after{content:'';position:absolute;left:9px;top:28px;width:40px;height:60px;border-radius:10px;background:linear-gradient(90deg,#dedede,#858585,#dedede);box-shadow:0 54px 0 -13px #222}
+.fightJudge{
+  position:absolute;top:43%;width:100px;height:54px;background:#252c32;border:1px solid #5d6870;border-radius:6px;z-index:5;
+  box-shadow:0 8px 12px rgba(0,0,0,.25)
+}
+.fightJudge.j1{left:7%}.fightJudge.j2{right:7%}
+.fightJudge::before{content:'JUDGE';position:absolute;left:50%;top:12px;transform:translateX(-50%);font-size:8px;font-weight:1000}
+#fightCrowdGlow{
+  position:absolute;left:0;right:0;top:30%;height:15%;z-index:4;
+  background:repeating-linear-gradient(90deg,#13181d 0 17px,#252d33 17px 31px);opacity:.88
+}
+#fightLightCone{
+  position:absolute;left:25%;right:25%;top:0;height:65%;z-index:4;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,241,202,.07) 45%,rgba(255,241,202,.11) 55%,transparent 80%);
+  pointer-events:none
+}
+.fighterReal{
+  bottom:13%!important;
+  animation:fighterIdle .72s ease-in-out infinite alternate;
+}
+@keyframes fighterIdle{
+  from{translate:0 0}
+  to{translate:0 -3px}
+}
+.fighterReal.guardHigh .farm.l{transform:rotate(-62deg)!important}
+.fighterReal.guardHigh .farm.r{transform:rotate(48deg)!important}
+.fighterReal.attackStartup{animation:none!important;filter:brightness(1.05)}
+.fighterReal.attackRecovery{animation:none!important;opacity:.92}
+.fighterReal.recoil{animation:recoil .25s ease-out}
+@keyframes recoil{40%{translate:-10px -2px;rotate:-3deg}}
+#enemyFight.recoil{animation-name:recoilEnemy}
+@keyframes recoilEnemy{40%{translate:10px -2px;rotate:3deg}}
+
+.sideKicking .fleg.r{animation:sideKickReal .5s ease-out}
+.roundKicking .fleg.r{animation:roundKickReal .54s ease-out}
+.realPunch .farm.r{animation:punchReal .36s ease-out}
+@keyframes punchReal{
+  0%{transform:rotate(-18deg)}
+  28%{transform:rotate(-42deg)}
+  58%{transform:rotate(-98deg) translateY(-8px)}
+  100%{transform:rotate(-18deg)}
+}
+@keyframes sideKickReal{
+  0%{transform:rotate(-4deg)}
+  25%{transform:rotate(-48deg) translateX(4px)}
+  58%{transform:rotate(-102deg) translateX(15px)}
+  100%{transform:rotate(-4deg)}
+}
+@keyframes roundKickReal{
+  0%{transform:rotate(-4deg)}
+  30%{transform:rotate(-35deg) translateX(3px)}
+  62%{transform:rotate(-112deg) translateX(8px)}
+  100%{transform:rotate(-4deg)}
+}
+#fightMovementDock{
+  position:absolute;left:12px;bottom:12px;z-index:100;
+  display:flex;gap:8px;align-items:flex-end
+}
+#fightJoy{width:126px;height:126px}
+#fightActionCluster{
+  display:grid;grid-template-columns:repeat(3,105px);gap:6px
+}
+#fightActionCluster button{font-size:9px;padding:9px 6px}
+#fightControls{display:none!important}
+#fightFootworkStatus{
+  position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:95;
+  padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.12);
+  font-size:9px;font-weight:1000
+}
+
+/* Interior joystick */
+.indoorJoystick{width:112px;height:112px;flex:0 0 auto}
+#dojo3DControls [data-dojo3dmove],#office3DControls [data-officemove],#interior3DControls [data-interiormove]{display:none}
+#dojo3DControls,#office3DControls,#interior3DControls{align-items:center}
+#dojo3DControls::before,#office3DControls::before,#interior3DControls::before{content:'JOYSTICK MOVEMENT';font-size:8px;font-weight:1000;opacity:.8}
+
+/* training joystick movement */
+#trainingControlDock [data-trainmove]{display:none}
+#trainingJoy{width:108px;height:108px}
+#trainingControlDock{align-items:center}
+
+/* Mobile landscape groundwork */
+@media (orientation:landscape) and (max-height:600px){
+  #townStreetHud{top:5px;padding:5px}
+  #townStreetControls{bottom:5px}
+  .gameJoystick{width:108px;height:108px}
+  .gameJoystick .joyKnob{width:44px;height:44px}
+  #townStreetActions{grid-template-columns:repeat(2,90px)}
+  #fightJoy{width:100px;height:100px}
+  #fightActionCluster{grid-template-columns:repeat(3,86px)}
+  #fightActionCluster button{padding:7px 5px;font-size:8px}
+}
+
+
+/* v5.8 living towns + sparring polish */
+#townStreetScene .streetNpc{
+  position:absolute;z-index:19;width:58px;height:105px;
+  filter:drop-shadow(0 9px 5px rgba(0,0,0,.28));
+  transition:left 1.2s ease,top 1.2s ease;
+}
+.streetNpc .head{
+  position:absolute;left:18px;top:0;width:23px;height:27px;border-radius:46%;
+  background:linear-gradient(90deg,#ba7b56,#dda47c);border:1px solid #734832
+}
+.streetNpc .hair{position:absolute;left:16px;top:-3px;width:27px;height:12px;border-radius:50% 50% 25% 25%;background:#241b17}
+.streetNpc .torso{position:absolute;left:10px;top:28px;width:39px;height:38px;border-radius:10px;background:linear-gradient(90deg,#334b60,#66809a,#31485c)}
+.streetNpc .arm{position:absolute;top:32px;width:9px;height:35px;border-radius:7px;background:#4b687f}
+.streetNpc .arm.l{left:2px}.streetNpc .arm.r{right:2px}
+.streetNpc .leg{position:absolute;top:64px;width:10px;height:36px;border-radius:6px;background:#25292d}
+.streetNpc .leg.l{left:15px}.streetNpc .leg.r{right:15px}
+.streetNpc .leg::after{content:'';position:absolute;bottom:-4px;width:14px;height:6px;border-radius:6px;background:#eee}
+.streetNpc .leg.l::after{left:-3px}.streetNpc .leg.r::after{right:-3px}
+#streetNpc1{left:620px;top:640px}
+#streetNpc2{left:1450px;top:600px}
+#streetNpc3{left:990px;top:560px}
+.streetNpc.walkingStreet .arm.l{animation:streetArm .4s infinite alternate}
+.streetNpc.walkingStreet .arm.r{animation:streetArmR .4s infinite alternate}
+.streetNpc.walkingStreet .leg.l{animation:streetLeg .4s infinite alternate}
+.streetNpc.walkingStreet .leg.r{animation:streetLegR .4s infinite alternate}
+@keyframes streetArm{to{transform:rotate(15deg)}}@keyframes streetArmR{to{transform:rotate(-15deg)}}
+@keyframes streetLeg{to{transform:rotate(-7deg)}}@keyframes streetLegR{to{transform:rotate(7deg)}}
+
+.streetCar{
+  position:absolute;z-index:15;width:100px;height:45px;border-radius:18px 22px 9px 9px;
+  background:linear-gradient(90deg,#263746,#59718a 52%,#233440);
+  box-shadow:0 12px 17px rgba(0,0,0,.3);
+}
+.streetCar::before{
+  content:'';position:absolute;left:20px;top:-16px;width:58px;height:23px;border-radius:15px 15px 3px 3px;
+  background:linear-gradient(90deg,#8db2c6,#3d5b6b 50%,#8db2c6)
+}
+.streetCar::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:-7px;height:10px;
+  background:radial-gradient(circle at 10% 50%,#111 0 7px,transparent 8px),radial-gradient(circle at 90% 50%,#111 0 7px,transparent 8px)
+}
+#streetCar1{left:530px;top:790px;animation:streetDrive1 9s linear infinite}
+#streetCar2{left:1530px;top:710px;transform:scaleX(-1);animation:streetDrive2 11s linear infinite}
+@keyframes streetDrive1{0%{translate:-400px 0}100%{translate:1500px -120px}}
+@keyframes streetDrive2{0%{translate:450px 0}100%{translate:-1500px 130px}}
+
+.streetDoorGlow{
+  position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  width:76px;height:14px;border-radius:50%;background:rgba(229,199,103,.0);
+  box-shadow:0 0 0 rgba(229,199,103,0);transition:.15s
+}
+.streetBuilding.near .streetDoorGlow{
+  background:rgba(229,199,103,.28);box-shadow:0 0 18px rgba(229,199,103,.6)
+}
+.streetBuilding.near .streetSign::after{
+  content:' • ENTER';color:#e9d27c
+}
+#streetInfoPanel{
+  position:absolute;right:12px;top:70px;z-index:230;width:240px;
+  padding:9px 11px;border-radius:12px;background:rgba(7,11,15,.88);border:1px solid rgba(255,255,255,.14);
+  font-size:9px;line-height:1.45
+}
+#streetInfoPanel strong{font-size:11px}
+#streetClock{font-weight:1000}
+#townStreetScene.evening{
+  filter:saturate(.92) brightness(.84)
+}
+#townStreetScene.night{
+  filter:saturate(.78) brightness(.58) contrast(1.08)
+}
+#townStreetScene.night .streetLamp::before{
+  box-shadow:0 0 40px rgba(255,222,142,.8);background:#ffe29b
+}
+#townStreetScene.night .streetBuilding::after{filter:brightness(1.4)}
+
+#fightStage .ringBoundary{
+  position:absolute;left:15%;right:15%;bottom:13%;height:10px;background:rgba(255,255,255,.62);z-index:9;
+  box-shadow:0 0 0 2px rgba(0,0,0,.1)
+}
+#fightStage .centerMark{
+  position:absolute;left:50%;bottom:12%;width:80px;height:80px;border-radius:50%;
+  transform:translateX(-50%);border:5px solid rgba(255,255,255,.12);z-index:8
+}
+#fightStage .distanceShadow{
+  position:absolute;left:50%;bottom:18%;width:420px;height:35px;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(0,0,0,.22),transparent 70%);z-index:6
+}
+.fighterReal.collisionEdge{filter:drop-shadow(0 0 10px rgba(255,210,110,.3))}
+#fightBlockMeter{
+  position:absolute;left:50%;bottom:55px;transform:translateX(-50%);z-index:96;
+  width:240px;height:7px;border-radius:999px;background:#1c2329;overflow:hidden;border:1px solid #48535d
+}
+#fightBlockFill{height:100%;width:100%;background:linear-gradient(90deg,#b34a3a,#e3c55d,#5e9c68);transition:width .2s linear}
+#fightBlockText{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);z-index:96;font-size:8px;font-weight:900}
+#fightStage .hitMarker{
+  position:absolute;left:50%;top:55%;width:18px;height:18px;border-radius:50%;z-index:80;opacity:0;
+  background:#f3d368;box-shadow:0 0 22px rgba(243,211,104,.85)
+}
+#fightStage .hitMarker.show{animation:hitMark .24s ease-out}
+@keyframes hitMark{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
+
+
+/* v5.9 touch-first interaction fix */
+.touchOnlyInteract{
+  display:none;
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:500;
+  min-width:132px;
+  min-height:54px;
+  padding:12px 18px;
+  border-radius:999px;
+  background:linear-gradient(#d6b653,#8c7228);
+  color:#111;
+  border:2px solid rgba(255,255,255,.75);
+  box-shadow:0 10px 28px rgba(0,0,0,.38),0 0 20px rgba(220,190,90,.28);
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.5px;
+  touch-action:manipulation;
+}
+.touchDevice .touchOnlyInteract{display:block}
+.touchDevice .interactionIcon{display:none!important}
+.touchDevice #townStreetPrompt,
+.touchDevice #dojoPrompt3D,
+.touchDevice #officePrompt3D,
+.touchDevice #interiorPrompt3D{
+  padding-bottom:10px;
+}
+@media (orientation:landscape) and (max-height:600px){
+  .touchOnlyInteract{
+    right:10px;
+    bottom:10px;
+    min-height:46px;
+    min-width:112px;
+    font-size:10px;
+    padding:9px 13px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2025,19 +2777,45 @@ body.time-night .building .window{
         <div class="mapBuilding home" id="rayHome" data-direct-building="house"><div class="mbSign">HOMES</div></div><div class="mapBuilding small home" id="rayApt" data-direct-building="apartment"><div class="mbSign">APARTMENTS</div></div><div class="mapBuilding small shop" id="rayRec" data-direct-building="rec"><div class="mbSign">REC CENTER</div></div><div class="streetLightMini l1"></div><div class="streetLightMini l2"></div><div class="streetLightMini l3"></div><div class="streetLightMini l4"></div>
       </div>
 
-      <div class="regionGas" id="regionGas1"></div><div class="regionGas" id="regionGas2"></div>
-      <div class="crosswalk" id="cross1"></div><div class="crosswalk" id="cross2"></div><div class="crosswalk" id="cross3"></div><div class="crosswalk" id="cross4"></div><div class="roadDecorTree t1"></div><div class="roadDecorTree t2"></div><div class="roadDecorTree t3"></div><div class="roadDecorTree t4"></div><div class="roadDecorTree t5"></div><div class="roadDecorTree t6"></div><div class="trafficLight" id="light1"></div><div class="trafficLight" id="light2"></div><div class="trafficLight" id="light3"></div><div id="gasPrompt">PRESS ENTER TO REFUEL</div><div class="regionTrafficCar" id="rtCar1"></div><div class="regionTrafficCar" id="rtCar2"></div><div class="regionTrafficCar" id="rtCar3"></div>
+      <div class="regionSubdivision" id="regionSubdivision1"></div><div class="regionSubdivision" id="regionSubdivision2"></div><div class="regionSubdivision" id="regionSubdivision3"></div>
+<div class="regionPond" id="regionPond1"></div><div class="regionPond" id="regionPond2"></div><div class="regionCommercial" id="regionCommercial1"></div><div class="regionCommercial" id="regionCommercial2"></div><div class="regionGas" id="regionGas1"></div><div class="regionGas" id="regionGas2"></div>
+      <div class="crosswalk" id="cross1"></div><div class="crosswalk" id="cross2"></div><div class="crosswalk" id="cross3"></div><div class="crosswalk" id="cross4"></div><div class="roadDecorTree t1"></div><div class="roadDecorTree t2"></div><div class="roadDecorTree t3"></div><div class="roadDecorTree t4"></div><div class="roadDecorTree t5"></div><div class="roadDecorTree t6"></div><div class="trafficLight" id="light1"></div><div class="trafficLight" id="light2"></div><div class="trafficLight" id="light3"></div><div id="gasPrompt">REFUEL VEHICLE</div><div class="regionTrafficCar" id="rtCar1"></div><div class="regionTrafficCar" id="rtCar2"></div><div class="regionTrafficCar" id="rtCar3"></div>
       <div class="regionHouse" style="left:710px;top:560px"></div><div class="regionHouse" style="left:900px;top:650px"></div><div class="regionHouse" style="left:1180px;top:360px"></div><div class="regionHouse" style="left:1320px;top:1030px"></div><div class="regionHouse" style="left:2040px;top:970px"></div><div class="regionHouse" style="left:2180px;top:1180px"></div>
       <div class="regionTree" style="left:650px;top:300px"></div><div class="regionTree" style="left:720px;top:350px"></div><div class="regionTree" style="left:870px;top:1230px"></div><div class="regionTree" style="left:1380px;top:690px"></div><div class="regionTree" style="left:1450px;top:770px"></div><div class="regionTree" style="left:2140px;top:530px"></div><div class="regionTree" style="left:2280px;top:680px"></div>
 
       <div class="speedLimitSign" id="speedFox">SPEED<span>25</span></div><div class="speedLimitSign" id="speedNorton">SPEED<span>25</span></div><div class="speedLimitSign" id="speedEaston">SPEED<span>25</span></div><div class="speedLimitSign" id="speedRay">SPEED<span>25</span></div><div class="roadsideSign" id="signFox">FOXBOROUGH</div><div class="roadsideSign" id="signNorton">NORTON</div><div class="roadsideSign" id="signEaston">EASTON</div><div class="roadsideSign" id="signRay">RAYNHAM</div>
-      <div class="regionPedestrian" id="regionPed1"><div class="human walking"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
-      <div class="regionPedestrian" id="regionPed2"><div class="human walking"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
-      <div id="regionPlayer"><div id="regionVehicle"></div><div class="human walking"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
+      <div class="regionPedestrian" id="regionPed1"><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
+      <div class="regionPedestrian" id="regionPed2"><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
+      <div id="regionPlayer"><div id="regionVehicle"></div><div class="human walking streetClothes"><div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div></div>
     </div>
   </div>
 
-  <div id="miniMap"><div id="miniMapCanvas">
+  
+<div id="townStreetView">
+  <div id="townStreetViewport">
+    <div id="townStreetScene">
+      <div class="streetRoad"></div><div class="streetSidewalk left"></div><div class="streetSidewalk right"></div><div class="streetCrosswalk"></div>
+      <div class="streetTree" style="left:55px;top:360px"></div><div class="streetTree" style="left:380px;top:390px"></div><div class="streetTree" style="right:380px;top:390px"></div><div class="streetTree" style="right:55px;top:360px"></div>
+      <div class="streetLamp" style="left:520px;top:410px"></div><div class="streetLamp" style="right:520px;top:410px"></div>
+      <div class="streetBuilding pbk" id="streetB1" data-town-building="dojo"><div class="streetSign" id="streetB1Sign">PBK</div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB2" data-town-building="food"><div class="streetSign" id="streetB2Sign">FOOD</div></div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB3" data-town-building="shop"><div class="streetSign" id="streetB3Sign">SHOP</div></div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB4" data-town-building="life"><div class="streetSign" id="streetB4Sign">APARTMENTS</div></div><div class="streetDoorGlow"></div></div>
+      <div class="streetBuilding" id="streetB5" data-town-building="civic"><div class="streetSign" id="streetB5Sign">TOWN CENTER</div><div class="streetDoorGlow"></div></div>
+      <div class="streetNpc walkingStreet" id="streetNpc1"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetNpc walkingStreet" id="streetNpc2"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetNpc walkingStreet" id="streetNpc3"><div class="hair"></div><div class="head"></div><div class="torso"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div>
+<div class="streetCar" id="streetCar1"></div><div class="streetCar" id="streetCar2"></div><div id="townStreetPlayer" class="rearPlayer casualAvatar"><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div>
+    </div>
+  </div>
+  <div id="townStreetHud"><strong id="townStreetTitle">NORTON, MA</strong><span id="townStreetRoads">Route 123 • Route 140</span><button id="townExitRegion">REGIONAL MAP</button></div>
+  <div id="townStreetPrompt">Drag the street view to look around. Use the joystick to move your character.</div>
+  <div id="townStreetControls"><div class="gameJoystick" id="townJoy"><div class="joyKnob"></div></div><div id="townStreetActions"><button id="townInteractBtn">INTERACT</button><button id="townCenterCamBtn">CENTER CAMERA</button><button id="townWalkRunBtn">RUN</button><button id="townHomeBtn">HOME</button></div></div>
+  <div id="streetInfoPanel"><strong id="streetTownInfo">NORTON STREET VIEW</strong><br><span id="streetClock">DAY 1 • 9:00 AM</span><br><span id="streetActivity">Local traffic and pedestrians are active.</span></div><div id="townCameraBadge">FREE STREET LOOK • DRAG WITH MOUSE/FINGER</div>
+</div>
+<div class="mapViewBadge" id="mapViewBadge">FREE LOOK • DRAG MAP WITH MOUSE OR FINGER</div>
+    <div id="mapModeControls"><button id="freeLookBtn" class="active">FREE LOOK</button><button id="followPlayerBtn">FOLLOW PLAYER</button><button id="centerPlayerBtn">CENTER PLAYER</button></div>
+    <div id="miniMap"><div id="miniMapCanvas">
       <div class="miniRoad v" id="mm140"></div><div class="miniRoad h" id="mm123"></div><div class="miniRoad v" id="mm138"></div><div class="miniRoad v" id="mm1"></div><div class="miniRoad h" id="mm44"></div>
       <div class="miniTown" id="mmFox"></div><div class="miniTown" id="mmNorton"></div><div class="miniTown" id="mmEaston"></div><div class="miniTown" id="mmRay"></div><div id="miniPlayer"></div>
     </div></div>
@@ -2119,9 +2897,9 @@ body.time-night .building .window{
   <div class="hud panel" style="width:min(1050px,96vw)"><strong id="interiorHudTitle">BUILDING</strong><button id="interiorBackTop">BACK TO TOWN</button></div>
   <div id="interiorRoom"><div id="interior3DLayer"><div class="ceilingLight c1"></div><div class="ceilingLight c2"></div><div class="ceilingLight c3"></div><div class="interiorPlant"></div><div class="counterGlow"></div>
 <div class="frontDoorSet"><div class="frontDoor left"></div><div class="frontDoor right"></div></div><div class="entryMat">WELCOME</div>
-<div class="perspObj" id="interiorCounter3D"><div class="interactionIcon">E</div>SERVICE COUNTER</div><div class="perspObj" id="interiorFeature3D"><div class="interactionIcon">E</div>FEATURE AREA</div><div class="perspObj" id="interiorNpc3D"><div class="interactionIcon">E</div></div><div class="perspObj" id="interiorExitDoor3D"><div class="interactionIcon">E</div>EXIT</div>
-<div class="rearPlayer" id="interiorRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div><div id="interiorPrompt3D">Walk forward and explore.</div>
-<div id="interior3DControls"><button data-interiormove="left">◀</button><button data-interiormove="forward">▲ FORWARD</button><button data-interiormove="back">▼ BACK</button><button data-interiormove="right">▶</button><button id="interiorRun">WALK / RUN</button><button id="interior3DInteract">INTERACT</button></div>
+<div class="perspObj" id="interiorCounter3D"><div class="interactionIcon">!</div>SERVICE COUNTER</div><div class="perspObj" id="interiorFeature3D"><div class="interactionIcon">!</div>FEATURE AREA</div><div class="perspObj" id="interiorNpc3D"><div class="interactionIcon">!</div></div><div class="perspObj" id="interiorExitDoor3D"><div class="interactionIcon">!</div>EXIT</div>
+<div class="rearPlayer casualAvatar" id="interiorRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div><div id="interiorPrompt3D">Walk forward and explore.</div>
+<div id="interior3DControls"><div class="gameJoystick indoorJoystick" id="interiorJoy"><div class="joyKnob"></div></div><button data-interiormove="left">◀</button><button data-interiormove="forward">▲ FORWARD</button><button data-interiormove="back">▼ BACK</button><button data-interiormove="right">▶</button><button id="interiorRun">WALK / RUN</button><button id="interior3DInteract">INTERACT</button></div>
 </div>
     <div class="roomTitle" id="interiorTitle">BUILDING</div>
     <div class="shopShelf"></div><div class="roomObj" id="io1">LOCAL AREA</div><div class="roomObj" id="io2">PEOPLE</div><div class="roomObj" id="io3">INTERACTION / QUEST</div>
@@ -2136,15 +2914,15 @@ body.time-night .building .window{
     <div class="ceilingLight c1"></div><div class="ceilingLight c2"></div><div class="ceilingLight c3"></div>
     <div class="mirrorWall"></div><div class="wallBanner b1"></div><div class="wallBanner b2"></div><div class="shoeRack"></div><div class="waterStation"></div>
   <div class="frontDoorSet"><div class="frontDoor left"></div><div class="frontDoor right"></div></div><div class="entryMat">PBK • WELCOME</div>
-  <div class="perspObj" id="doFrontDesk"><div class="interactionIcon">E</div>FRONT DESK</div><div class="perspObj" id="doOfficeDoor"><div class="interactionIcon">E</div></div>
-  <div class="perspObj" id="doTrophyCase"><div class="interactionIcon">E</div>TROPHY CASE</div>
-  <div class="perspObj" id="doBeltRack"><div class="interactionIcon">E</div>BELT RACK<div class="beltMini white"></div><div class="beltMini yellow"></div><div class="beltMini green"></div><div class="beltMini blue"></div><div class="beltMini black"></div></div>
-  <div class="perspObj" id="doMatEntry"><div class="interactionIcon">E</div>MAIN TRAINING MAT</div><div class="perspObj" id="doTaskBoard"><div class="interactionIcon">E</div>TASK BOARD</div>
+  <div class="perspObj" id="doFrontDesk"><div class="interactionIcon">!</div>FRONT DESK</div><div class="perspObj" id="doOfficeDoor"><div class="interactionIcon">!</div></div>
+  <div class="perspObj" id="doTrophyCase"><div class="interactionIcon">!</div>TROPHY CASE</div>
+  <div class="perspObj" id="doBeltRack"><div class="interactionIcon">!</div>BELT RACK<div class="beltMini white"></div><div class="beltMini yellow"></div><div class="beltMini green"></div><div class="beltMini blue"></div><div class="beltMini black"></div></div>
+  <div class="perspObj" id="doMatEntry"><div class="interactionIcon">!</div>MAIN TRAINING MAT</div><div class="perspObj" id="doTaskBoard"><div class="interactionIcon">!</div>TASK BOARD</div>
   <div class="cleanSpot" id="clean1"></div><div class="cleanSpot" id="clean2"></div><div class="cleanSpot" id="clean3"></div><div class="cleanSpot" id="clean4"></div><div class="cleanSpot" id="clean5"></div>
   <div id="cleaningBadge">DOJO CLEANING: <span id="cleaningCount">0</span> / 5</div>
-  <div class="rearPlayer" id="dojoRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div>
+  <div class="rearPlayer giAvatar" id="dojoRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div>
   <div id="dojoPrompt3D">You entered through the front doors. Walk deeper into the dojo.</div>
-  <div id="dojo3DControls"><button data-dojo3dmove="left">◀</button><button data-dojo3dmove="forward">▲ FORWARD</button><button data-dojo3dmove="back">▼ BACK</button><button data-dojo3dmove="right">▶</button><button id="dojo3DRun">WALK / RUN</button><button id="dojo3DInteract">INTERACT</button></div>
+  <div id="dojo3DControls"><div class="gameJoystick indoorJoystick" id="dojoJoy"><div class="joyKnob"></div></div><button data-dojo3dmove="left">◀</button><button data-dojo3dmove="forward">▲ FORWARD</button><button data-dojo3dmove="back">▼ BACK</button><button data-dojo3dmove="right">▶</button><button id="dojo3DRun">WALK / RUN</button><button id="dojo3DInteract">INTERACT</button></div>
 </div>
     <div class="floorGlow"></div><div class="dojoClock"></div><div class="heavyBag"></div><div class="rack"></div><div class="instructorPlatform"></div><div id="leadInstructorPlaque">LEAD INSTRUCTOR</div><div id="dojoMat"></div>
     <div class="dojoSpot" id="dojoDesk" data-dojo="desk">FRONT DESK</div><div class="dojoSpot" id="dojoOffice" data-dojo="office">INSTRUCTOR OFFICE</div>
@@ -2172,16 +2950,16 @@ body.time-night .building .window{
     <div id="classPanelGrid"></div>
   </div>
   <div id="dojoSchedule"><div class="classCard">FUNDAMENTALS<br>10:00 AM</div><div class="classCard">FORMS<br>12:00 PM</div><div class="classCard">SPARRING<br>3:00 PM</div><div class="classCard">COMP TEAM<br>6:00 PM</div></div>
-  <div id="dojoMovementHud"><div class="miniDpad"><button class="up" data-dojomove="up">▲</button><button class="left" data-dojomove="left">◀</button><button class="right" data-dojomove="right">▶</button><button class="down" data-dojomove="down">▼</button></div><button id="dojoInteractBtn">INTERACT NEARBY</button><span class="small">WASD / arrows also move inside the dojo.</span></div><div id="dojoPrompt">Move near a station or tap one.</div>
+  <div id="dojoMovementHud"><div class="miniDpad"><button class="up" data-dojomove="up">▲</button><button class="left" data-dojomove="left">◀</button><button class="right" data-dojomove="right">▶</button><button class="down" data-dojomove="down">▼</button></div><button id="dojoInteractBtn">INTERACT NEARBY</button><span class="small">Use the joystick to move. Keyboard controls also work on computers.</span></div><div id="dojoPrompt">Move near a station or tap one.</div>
 </section>
 
 <section id="office" class="screen">
 <div class="hud panel" style="width:min(1050px,96vw)"><strong id="officeTitle">INSTRUCTOR OFFICE</strong><button id="officeBack">BACK TO DOJO</button></div>
 <div id="officeRoom"><div class="ceilingLight c1"></div><div class="ceilingLight c2"></div><div class="ceilingLight c3"></div><div class="officePlant"></div><div class="bookcase"></div><div class="deskGlow"></div>
   <div class="frontDoorSet"><div class="frontDoor left"></div><div class="frontDoor right"></div></div>
-  <div class="perspObj" id="officeDesk"><div class="interactionIcon">E</div>INSTRUCTOR DESK</div><div class="perspObj" id="officeCertificates"><div class="interactionIcon">E</div>CERTIFICATES</div><div class="perspObj" id="officeRankWall"><div class="interactionIcon">E</div>RANK WALL</div><div class="perspObj" id="officeBossDoor"><div class="interactionIcon">E</div>ADVANCED CHALLENGES</div><div class="perspObj" id="officeInstructor"><div class="interactionIcon">E</div></div>
-  <div class="rearPlayer" id="officeRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div><div id="officePrompt3D">Walk up to the instructor to talk.</div>
-  <div id="office3DControls"><button data-officemove="left">◀</button><button data-officemove="forward">▲ FORWARD</button><button data-officemove="back">▼ BACK</button><button data-officemove="right">▶</button><button id="officeRun">WALK / RUN</button><button id="officeInteract">INTERACT</button></div>
+  <div class="perspObj" id="officeDesk"><div class="interactionIcon">!</div>INSTRUCTOR DESK</div><div class="perspObj" id="officeCertificates"><div class="interactionIcon">!</div>CERTIFICATES</div><div class="perspObj" id="officeRankWall"><div class="interactionIcon">!</div>RANK WALL</div><div class="perspObj" id="officeBossDoor"><div class="interactionIcon">!</div>ADVANCED CHALLENGES</div><div class="perspObj" id="officeInstructor"><div class="interactionIcon">!</div></div>
+  <div class="rearPlayer giAvatar" id="officeRearPlayer"><div class="footstepDust"></div><div class="rearHair"></div><div class="rearHead"></div><div class="rearTorso"></div><div class="rearBelt"></div><div class="rearArm l"></div><div class="rearArm r"></div><div class="rearLeg l"></div><div class="rearLeg r"></div></div><div id="officePrompt3D">Walk up to the instructor to talk.</div>
+  <div id="office3DControls"><div class="gameJoystick indoorJoystick" id="officeJoy"><div class="joyKnob"></div></div><button data-officemove="left">◀</button><button data-officemove="forward">▲ FORWARD</button><button data-officemove="back">▼ BACK</button><button data-officemove="right">▶</button><button id="officeRun">WALK / RUN</button><button id="officeInteract">INTERACT</button></div>
 </div></section><section id="training" class="screen">
   <div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK TRAINING FLOOR</strong><span class="small">Move on the mat • work mitts • hit the bag</span><button class="roomBack">BACK TO DOJO</button></div>
   <div id="trainingRoom">
@@ -2194,7 +2972,7 @@ body.time-night .building .window{
       <div id="heavyBagSim"></div>
       <div id="trainingPrompt">Move into range, then hit the coach's mitts.</div>
     </div>
-    <div id="trainingControlDock">
+    <div id="trainingControlDock"><div class="gameJoystick" id="trainingJoy"><div class="joyKnob"></div></div>
       <button data-trainmove="left">◀ MOVE</button><button data-trainmove="up">▲ FORWARD</button><button data-trainmove="down">▼ BACK</button><button data-trainmove="right">MOVE ▶</button>
       <button data-trainattack="punch">PUNCH</button><button data-trainattack="side">SIDE KICK</button><button data-trainattack="round">ROUND KICK</button><button data-trainattack="combo">1–2 KICK COMBO</button><button data-trainattack="twist">B-TWIST</button>
     </div>
@@ -2226,11 +3004,15 @@ body.time-night .building .window{
 <section id="bosses" class="screen"><div class="hud panel" style="width:min(1050px,96vw)"><strong>PBK BOSS PATH</strong><button id="bossBackTop">BACK TO DOJO</button></div><div id="bossRoom"><div id="bossTitle">BLACK BELT ROAD</div><div id="bossGrid"></div><button id="bossExit">EXIT</button></div></section>
 <section id="fight" class="screen">
   <div id="fightHud"><div class="scorePanel"><strong>BRADLEY</strong><div class="score" id="pScore">0</div><div class="meterWrap"><div class="meterFill" id="playerMeterFill"></div></div></div><div id="fightCenter"><div id="fightTimer">60</div><div id="fightTarget">FIRST TO 5</div></div><div class="scorePanel" style="text-align:right"><strong id="enemyName">OPPONENT</strong><div class="score" id="eScore">0</div><div class="meterWrap"><div class="meterFill" id="enemyMeterFill"></div></div></div></div>
-  <div id="arena"><div id="fightStage"><div id="stageBackWall"></div><div id="stageLights"></div><div id="stageSideLeft"></div><div id="stageSideRight"></div><div id="arenaMatLogo">PBK</div><div id="stageNameplate">PBK ARENA</div><div id="rangeGuide">RANGE: LONG</div><div id="impactParticles"></div><div id="whiffText">WHIFF</div><div id="fightClockBar"><div id="fightClockFill"></div></div><div id="enemyIntent">WATCHING</div><div id="fightCombo">COMBO 0</div><div id="counterWindow">COUNTER WINDOW — SIDE KICK NOW!</div><div id="roundResult"></div><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
+  <div id="arena"><div id="fightStage"><div id="fightCrowdGlow"></div><div class="distanceShadow"></div><div class="ringBoundary"></div><div class="centerMark"></div><div class="hitMarker" id="hitMarker"></div><div id="fightLightCone"></div><div class="fightRef"></div><div class="fightJudge j1"></div><div class="fightJudge j2"></div><div id="stageBackWall"></div><div id="stageLights"></div><div id="stageSideLeft"></div><div id="stageSideRight"></div><div id="arenaMatLogo">PBK</div><div id="stageNameplate">PBK ARENA</div><div id="rangeGuide">RANGE: LONG</div><div id="impactParticles"></div><div id="whiffText">WHIFF</div><div id="fightClockBar"><div id="fightClockFill"></div></div><div id="enemyIntent">WATCHING</div><div id="fightCombo">COMBO 0</div><div id="counterWindow">COUNTER WINDOW — SIDE KICK NOW!</div><div id="roundResult"></div><div id="crowd"></div><div id="arenaFloor"></div><div id="fightBanner">PBK POINT FIGHTING</div><div id="impactFlash"></div><div id="fightMessage">FIGHT!</div>
     <div class="fighterReal" id="playerFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
     <div class="fighterReal" id="enemyFight"><div class="fshadow"></div><div class="fhair"></div><div class="fhead"></div><div class="ftorso"></div><div class="fbelt"></div><div class="farm l"></div><div class="farm r"></div><div class="fleg l"></div><div class="fleg r"></div></div>
   </div><div id="fightVignette"></div><div id="roundIntro"></div><div id="bossTag"></div><div id="instructorFightTag">BLACK BELT INSTRUCTOR TRAINING</div><div id="pointResetOverlay"><div id="pointResetCard">POINT • RESET</div></div><div id="specialCallout"></div></div>
-  <div id="fightControls"><button data-fight="left">◀ MOVE</button><button data-fight="right">MOVE ▶</button><button data-fight="block">BLOCK</button><button class="evade" data-fight="backstep">BACKSTEP</button><button class="evade" data-fight="dash">DASH IN</button><button class="attackBtn" data-fight="punch">PUNCH +1</button><button class="attackBtn" data-fight="kick">KICK +2</button><button class="attackBtn" data-fight="side">SIDE KICK +2</button><button class="attackBtn" data-fight="defside">DEFENSIVE SIDE KICK +2</button><button class="attackBtn" data-fight="twist">B-TWIST +2</button><button class="special attackBtn" id="specialBtn" data-fight="special">POWER B-TWIST</button><button id="fightExit">EXIT FIGHT</button></div>
+  <div id="fightMovementDock"><div class="gameJoystick" id="fightJoy"><div class="joyKnob"></div></div><div id="fightActionCluster">
+<button id="fightBlockBtn">BLOCK</button><button id="fightPunchBtn">PUNCH +1</button><button id="fightRoundBtn">ROUND KICK +2</button>
+<button id="fightSideBtn">SIDE KICK +2</button><button id="fightDefSideBtn">DEF. SIDE +2</button><button id="fightBTwistBtn">B-TWIST +2</button>
+<button id="fightDashBtn">DASH</button><button id="fightBackBtn">BACKSTEP</button><button id="fightSpecialModern">POWER B-TWIST</button>
+</div></div><div id="fightBlockText">GUARD 100%</div><div id="fightBlockMeter"><div id="fightBlockFill"></div></div><div id="fightFootworkStatus">FOOTWORK • GUARD UP • RANGE MANAGEMENT</div><div id="fightControls"><button data-fight="left">◀ MOVE</button><button data-fight="right">MOVE ▶</button><button data-fight="block">BLOCK</button><button class="evade" data-fight="backstep">BACKSTEP</button><button class="evade" data-fight="dash">DASH IN</button><button class="attackBtn" data-fight="punch">PUNCH +1</button><button class="attackBtn" data-fight="kick">KICK +2</button><button class="attackBtn" data-fight="side">SIDE KICK +2</button><button class="attackBtn" data-fight="defside">DEFENSIVE SIDE KICK +2</button><button class="attackBtn" data-fight="twist">B-TWIST +2</button><button class="special attackBtn" id="specialBtn" data-fight="special">POWER B-TWIST</button><button id="fightExit">EXIT FIGHT</button></div>
 </section>
 
 <div id="questDetailBox">
@@ -2238,7 +3020,7 @@ body.time-night .building .window{
   <div id="questDetailText">...</div>
   <div id="questDetailActions"></div>
 </div>
-<div id="collectionOverlay"><div id="collectionPanel"><h2 id="collectionTitle">COLLECTION</h2><div id="collectionDescription"></div><div id="collectionGrid"></div><button id="collectionClose">CLOSE</button></div></div><div id="dialogueBox">
+<button id="globalTouchInteract" class="touchOnlyInteract">INTERACT</button><div id="collectionOverlay"><div id="collectionPanel"><h2 id="collectionTitle">COLLECTION</h2><div id="collectionDescription"></div><div id="collectionGrid"></div><button id="collectionClose">CLOSE</button></div></div><div id="dialogueBox">
   <div id="dialogueName">NPC</div>
   <div id="dialogueText">...</div>
   <div id="dialogueActions"></div>
@@ -2280,6 +3062,50 @@ const characterRanks={
 };
 const characterFaceClass={'Master Camara':'face3','Master Stef':'face5','Master Sikula':'face6','Mr. George':'face2','Mrs. George':'face4','Master Rappold':'face6','Grandmaster Chung':'face5'};
 function rankOf(name){return characterRanks[name]||''}
+
+const characterVisualProfiles={
+  'Bradley':{skin:'#cf956d',hair:'#2b211b',face:'face1',body:'compactBody'},
+  'Master Camara':{skin:'#b97952',hair:'#2a2019',face:'face3',body:'masterBody'},
+  'Master Stef':{skin:'#d2a07e',hair:'#3b2a22',face:'face5',body:'masterBody'},
+  'Master Sikula':{skin:'#c18b68',hair:'#181818',face:'face6',body:'masterBody'},
+  'Mr. George':{skin:'#bc805b',hair:'#261c17',face:'face2',body:'studentBody'},
+  'Mrs. George':{skin:'#d9a27c',hair:'#4b362b',face:'face4',body:'studentBody'},
+  'Master Rappold':{skin:'#c38a63',hair:'#202020',face:'face6',body:'tallBody'},
+  'Grandmaster Chung':{skin:'#b77a57',hair:'#171717',face:'face5',body:'stockyBody'},
+  'Ryan':{skin:'#cf9870',hair:'#241b17',face:'face2',body:'tallBody'},
+  'Alex George':{skin:'#c78b67',hair:'#30231d',face:'face3',body:'studentBody'},
+  'Dad':{skin:'#c58a66',hair:'#33251f',face:'face1',body:'stockyBody'}
+};
+function visualProfile(name){
+  if(characterVisualProfiles[name])return characterVisualProfiles[name];
+  const n=[...name].reduce((a,c)=>a+c.charCodeAt(0),0);
+  const skins=['#d39b74','#c68a64','#b97952','#d7a17b','#a96c4d','#e0ad86'];
+  const hairs=['#211914','#181818','#3b2a22','#5b4130','#2a2019','#111'];
+  return {skin:skins[n%skins.length],hair:hairs[(n>>1)%hairs.length],face:'face'+(1+n%6),body:n%3===0?'compactBody':n%3===1?'studentBody':'tallBody'};
+}
+function applyVisualProfileToHuman(el,name){
+  if(!el)return;
+  const human=el.classList.contains('human')?el:el.querySelector('.human');
+  if(!human)return;
+  const p=visualProfile(name);
+  human.style.setProperty('--npcSkin',p.skin);
+  human.style.setProperty('--npcHair',p.hair);
+  ['face1','face2','face3','face4','face5','face6'].forEach(c=>human.classList.remove(c));
+  human.classList.add('faceAvatar',p.face);
+}
+function applyVisualProfileToFighter(el,name){
+  if(!el)return;
+  const p=visualProfile(name);
+  ['masterBody','studentBody','compactBody','tallBody','stockyBody'].forEach(c=>el.classList.remove(c));
+  el.classList.add(p.body);
+  const head=el.querySelector('.fhead'),hair=el.querySelector('.fhair');
+  if(head)head.style.background=`linear-gradient(90deg,${p.skin},color-mix(in srgb,${p.skin} 76%,#fff 24%))`;
+  if(hair)hair.style.background=p.hair;
+}
+function portraitHtml(name){
+  const p=visualProfile(name);
+  return `<div class="characterPortrait" style="--pSkin:${p.skin};--pHair:${p.hair}"><div class="pHair"></div><div class="pHead"></div><div class="pTorso"></div></div>`;
+}
 const leadInstructors={
   NORTON:['Master Camara'],
   EASTON:['Mr. George','Mrs. George'],
@@ -2487,6 +3313,206 @@ $('homeEnter').addEventListener('click',e=>{e.preventDefault();startMusic();setT
 
 
 
+
+
+/* v5.9 touch-first interaction layer */
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+document.documentElement.classList.toggle('touchDevice', isTouchDevice);
+
+function interactionVerb(){
+  return isTouchDevice ? 'Tap INTERACT' : 'Press E / Enter or click INTERACT';
+}
+
+function touchContext(){
+  if($('fight').classList.contains('active') || $('training').classList.contains('active') || $('forms').classList.contains('active')){
+    return {show:false,label:'INTERACT'};
+  }
+
+  if($('townStreetView') && $('townStreetView').classList.contains('show')){
+    const n = nearestStreetBuilding();
+    return {show:true,label:n ? 'ENTER' : 'INTERACT'};
+  }
+
+  if($('dojo').classList.contains('active')) return {show:true,label:'INTERACT'};
+  if($('office').classList.contains('active')) return {show:true,label:'INTERACT'};
+  if($('interior').classList.contains('active')) return {show:true,label:'INTERACT'};
+
+  if($('world').classList.contains('active')){
+    const g = nearGasStation();
+    const d = currentDistrict();
+    return {show:true,label:g ? 'REFUEL' : d ? 'ENTER TOWN' : 'INTERACT'};
+  }
+
+  return {show:false,label:'INTERACT'};
+}
+
+function updateGlobalTouchInteract(){
+  const b = $('globalTouchInteract');
+  if(!b) return;
+  if(!isTouchDevice){ b.style.display='none'; return; }
+
+  const ctx = touchContext();
+  b.textContent = ctx.label;
+  b.style.display = ctx.show ? 'block' : 'none';
+}
+
+$('globalTouchInteract').onclick = ()=>{
+  if($('townStreetView') && $('townStreetView').classList.contains('show')){
+    $('townInteractBtn').click();
+    return;
+  }
+  if($('dojo').classList.contains('active')){
+    $('dojo3DInteract').click();
+    return;
+  }
+  if($('office').classList.contains('active')){
+    $('officeInteract').click();
+    return;
+  }
+  if($('interior').classList.contains('active')){
+    $('interior3DInteract').click();
+    return;
+  }
+  if($('world').classList.contains('active')){
+    worldEnterNearby();
+  }
+};
+
+setInterval(updateGlobalTouchInteract,120);
+/* v5.7 free-look map and town street world */
+let regionFreeLook=true,freeCamX=0,freeCamY=0,regionDrag=null;
+function clampRegionCam(){
+  const vw=window.innerWidth,vh=window.innerHeight;
+  freeCamX=Math.max(0,Math.min(REGION_W-vw,freeCamX));
+  freeCamY=Math.max(0,Math.min(REGION_H-vh,freeCamY));
+}
+function setRegionFreeLook(on){
+  regionFreeLook=on;
+  $('freeLookBtn').classList.toggle('active',on);
+  $('followPlayerBtn').classList.toggle('active',!on);
+  $('mapViewBadge').textContent=on?'FREE LOOK • DRAG MAP WITH MOUSE OR FINGER':'FOLLOW PLAYER • JOYSTICK MOVES CHARACTER';
+  if(!on){cameraX=Math.max(0,regionPX-window.innerWidth/2);cameraY=Math.max(0,regionPY-window.innerHeight/2)}
+}
+$('freeLookBtn').onclick=()=>setRegionFreeLook(true);
+$('followPlayerBtn').onclick=()=>setRegionFreeLook(false);
+$('centerPlayerBtn').onclick=()=>{
+  freeCamX=Math.max(0,regionPX-window.innerWidth/2);freeCamY=Math.max(0,regionPY-window.innerHeight/2);
+  cameraX=freeCamX;cameraY=freeCamY;
+};
+$('regionViewport').addEventListener('pointerdown',e=>{
+  if($('townStreetView').classList.contains('show'))return;
+  regionDrag={id:e.pointerId,x:e.clientX,y:e.clientY,cx:freeCamX,cy:freeCamY};
+  $('regionViewport').setPointerCapture?.(e.pointerId);$('regionViewport').classList.add('dragging');setRegionFreeLook(true);
+});
+$('regionViewport').addEventListener('pointermove',e=>{
+  if(!regionDrag||regionDrag.id!==e.pointerId)return;
+  freeCamX=regionDrag.cx-(e.clientX-regionDrag.x);freeCamY=regionDrag.cy-(e.clientY-regionDrag.y);clampRegionCam();
+});
+function endRegionDrag(e){if(regionDrag&&(!e||e.pointerId===regionDrag.id)){regionDrag=null;$('regionViewport').classList.remove('dragging')}}
+$('regionViewport').addEventListener('pointerup',endRegionDrag);$('regionViewport').addEventListener('pointercancel',endRegionDrag);
+
+const townStreetConfigs={
+  NORTON:{roads:'Route 123 • Route 140 • West Main Street',food:['DINER','diner'],shop:['MARTIAL ARTS SHOP','gear'],life:['APARTMENTS','apartment'],civic:['TOWN CENTER','market']},
+  EASTON:{roads:'Route 138 • Route 123 • Depot Street',food:['CAFE','cafe'],shop:['GEAR SHOP','gear'],life:['AUTO LOT','auto'],civic:['FITNESS GYM','gym']},
+  FOXBOROUGH:{roads:'Route 1 • Route 140 • Downtown Main Street',food:['DINER','diner'],shop:['MARKET','market'],life:['APARTMENTS','apartment'],civic:['DOWNTOWN','house']},
+  RAYNHAM:{roads:'Route 138 • Route 44 • Broadway',food:['GRILL','diner'],shop:['REC CENTER','rec'],life:['APARTMENTS','apartment'],civic:['TOWN CENTER','house']}
+};
+
+function updateStreetDaypart(){
+  if(!$('townStreetScene'))return;
+  $('townStreetScene').classList.remove('evening','night');
+  const mins=save.minutes||540,h=Math.floor(mins/60)%24;
+  if(h>=18&&h<21)$('townStreetScene').classList.add('evening');
+  else if(h>=21||h<6)$('townStreetScene').classList.add('night');
+  const hh=Math.floor(mins/60)%24,mm=Math.floor(mins%60),ampm=hh>=12?'PM':'AM',h12=(hh%12)||12;
+  $('streetClock').textContent=`DAY ${save.day} • ${h12}:${String(mm).padStart(2,'0')} ${ampm}`;
+}
+function randomStreetActivity(){
+  if(!$('townStreetView').classList.contains('show'))return;
+  const npcs=[
+    ['streetNpc1',540+Math.random()*280,575+Math.random()*110],
+    ['streetNpc2',1280+Math.random()*310,560+Math.random()*120],
+    ['streetNpc3',880+Math.random()*300,520+Math.random()*110],
+  ];
+  npcs.forEach(([id,x,y])=>{const e=$(id);e.style.left=x+'px';e.style.top=y+'px'});
+  const msgs=['Pedestrians are moving between local businesses.','Traffic is passing through the main corridor.','A family is walking toward downtown.','People are coming and going from PBK and nearby shops.'];
+  $('streetActivity').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+}
+setInterval(randomStreetActivity,4200);
+let activeStreetTown=null,streetPX=1090,streetPY=760,streetCamX=0,streetCamY=0,streetDrag=null,streetRun=false;
+function enterTownWorld(name){
+  const cfg=townStreetConfigs[name];if(!cfg)return;
+  activeStreetTown=name;state.town=name;save.visited[name]=true;saveGame();
+  $('townStreetTitle').textContent=name+', MA';$('townStreetRoads').textContent=cfg.roads;$('streetTownInfo').textContent=name+' STREET WORLD';updateStreetDaypart();randomStreetActivity();
+  $('streetB1Sign').textContent='PBK '+name;
+  $('streetB2Sign').textContent=cfg.food[0];$('streetB3Sign').textContent=cfg.shop[0];$('streetB4Sign').textContent=cfg.life[0];$('streetB5Sign').textContent=cfg.civic[0];
+  $('streetB2').dataset.enterType=cfg.food[1];$('streetB3').dataset.enterType=cfg.shop[1];$('streetB4').dataset.enterType=cfg.life[1];$('streetB5').dataset.enterType=cfg.civic[1];$('streetB1').dataset.enterType='dojo';
+  streetPX=1090;streetPY=760;streetCamX=0;streetCamY=0;renderStreetScene();
+  $('townStreetView').classList.add('show');
+  setTimeout(()=>$('townStreetView').style.display='block',0);
+}
+function exitTownWorld(){$('townStreetView').classList.remove('show');setTimeout(()=>{$('townStreetView').style.display='none'},360)}
+$('townExitRegion').onclick=exitTownWorld;
+$('townHomeBtn').onclick=()=>{exitTownWorld();show('home')};
+document.querySelectorAll('.townDistrict').forEach(el=>el.addEventListener('click',e=>{if(e.target.closest('.mapBuilding'))return;enterTownWorld(el.dataset.district)}));
+document.querySelectorAll('[data-fasttown]').forEach(b=>b.addEventListener('click',()=>enterTownWorld(b.dataset.fasttown)));
+
+const streetBuildingPos={
+  streetB1:{x:245,y:510},streetB2:{x:555,y:450},streetB3:{x:1645,y:450},streetB4:{x:1955,y:510},streetB5:{x:1085,y:415}
+};
+function nearestStreetBuilding(){
+  let best=null,d=999;
+  Object.entries(streetBuildingPos).forEach(([id,p])=>{const nd=Math.hypot(streetPX-p.x,streetPY-p.y);if(nd<d){best={id,...p};d=nd}});
+  return d<=235?best:null;
+}
+function renderStreetScene(){
+  $('townStreetScene').style.transform=`translate(${-streetCamX}px,${-streetCamY}px)`;
+  $('townStreetPlayer').style.left=streetPX+'px';$('townStreetPlayer').style.top=streetPY+'px';
+  document.querySelectorAll('.streetBuilding').forEach(e=>e.classList.remove('near'));
+  const n=nearestStreetBuilding();if(n)$(n.id).classList.add('near');
+  $('townStreetPrompt').textContent=n?`${interactionVerb()}: ${$(n.id).querySelector('.streetSign').textContent}`:'Drag the street view to look around. Use the joystick to move your character. '+interactionVerb()+' near a building.';
+}
+function moveStreetPlayer(dx,dy){
+  const s=streetRun?8:4.4;
+  streetPX=Math.max(240,Math.min(1960,streetPX+dx*s));
+  streetPY=Math.max(470,Math.min(870,streetPY+dy*s));
+  renderStreetScene();
+}
+$('townWalkRunBtn').onclick=()=>{streetRun=!streetRun;$('townWalkRunBtn').textContent=streetRun?'WALK':'RUN'};
+$('townCenterCamBtn').onclick=()=>{streetCamX=Math.max(0,Math.min(2200-window.innerWidth,streetPX-window.innerWidth/2));streetCamY=Math.max(0,Math.min(1050-window.innerHeight,streetPY-window.innerHeight/2));renderStreetScene()};
+$('townStreetViewport').addEventListener('pointerdown',e=>{streetDrag={id:e.pointerId,x:e.clientX,y:e.clientY,cx:streetCamX,cy:streetCamY};$('townStreetViewport').setPointerCapture?.(e.pointerId);$('townStreetViewport').classList.add('dragging')});
+$('townStreetViewport').addEventListener('pointermove',e=>{
+  if(!streetDrag||streetDrag.id!==e.pointerId)return;
+  streetCamX=Math.max(0,Math.min(2200-window.innerWidth,streetDrag.cx-(e.clientX-streetDrag.x)));
+  streetCamY=Math.max(0,Math.min(1050-window.innerHeight,streetDrag.cy-(e.clientY-streetDrag.y)));renderStreetScene();
+});
+function endStreetDrag(e){if(streetDrag&&(!e||e.pointerId===streetDrag.id)){streetDrag=null;$('townStreetViewport').classList.remove('dragging')}}
+$('townStreetViewport').addEventListener('pointerup',endStreetDrag);$('townStreetViewport').addEventListener('pointercancel',endStreetDrag);
+$('townInteractBtn').onclick=()=>{
+  const n=nearestStreetBuilding();if(!n){$('townStreetPrompt').textContent='Move closer to a building entrance.';return}
+  const el=$(n.id),type=el.dataset.enterType;
+  exitTownWorld();
+  if(type==='dojo')openDojo();else if(type==='apartment'||type==='auto')openLifeInterior(type);else enterBuilding(type);
+};
+document.querySelectorAll('[data-town-building]').forEach(el=>el.onclick=e=>{e.stopPropagation();const type=el.dataset.enterType||el.dataset.townBuilding;if(el.id==='streetB1')openDojo();else if(type==='apartment'||type==='auto')openLifeInterior(type);else enterBuilding(type)});
+
+function attachJoystick(id,callback){
+  const joy=$(id);if(!joy)return;
+  const knob=joy.querySelector('.joyKnob');let active=null;
+  const update=e=>{
+    const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,max=r.width*.31;
+    let dx=e.clientX-cx,dy=e.clientY-cy,len=Math.hypot(dx,dy)||1;if(len>max){dx=dx/len*max;dy=dy/len*max}
+    knob.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))`;callback(dx/max,dy/max);
+  };
+  joy.addEventListener('pointerdown',e=>{active=e.pointerId;joy.setPointerCapture?.(e.pointerId);update(e)});
+  joy.addEventListener('pointermove',e=>{if(active===e.pointerId)update(e)});
+  const end=e=>{if(active===null||e.pointerId!==active)return;active=null;knob.style.transform='translate(-50%,-50%)';callback(0,0)};
+  joy.addEventListener('pointerup',end);joy.addEventListener('pointercancel',end);
+}
+let streetJoyX=0,streetJoyY=0;
+attachJoystick('townJoy',(x,y)=>{streetJoyX=x;streetJoyY=y});
+setInterval(()=>{if($('townStreetView').classList.contains('show')&&(Math.abs(streetJoyX)>.07||Math.abs(streetJoyY)>.07))moveStreetPlayer(streetJoyX,streetJoyY)},30);
+
 let roadAssist=true;
 let worldInputX=0,worldInputY=0;
 let worldMoveFrame=null;
@@ -2665,40 +3691,23 @@ function renderRegionCamera(){
   const vw=window.innerWidth,vh=window.innerHeight;
   const targetX=Math.max(0,Math.min(REGION_W-vw,regionPX-vw/2));
   const targetY=Math.max(0,Math.min(REGION_H-vh,regionPY-vh/2));
-  cameraX+=(targetX-cameraX)*.34;
-  cameraY+=(targetY-cameraY)*.34;
+  if(regionFreeLook){
+    clampRegionCam();cameraX+=(freeCamX-cameraX)*.22;cameraY+=(freeCamY-cameraY)*.22;
+  }else{
+    cameraX+=(targetX-cameraX)*.34;cameraY+=(targetY-cameraY)*.34;
+    freeCamX=cameraX;freeCamY=cameraY;
+  }
   $('regionWorld').style.transform=`translate(${-cameraX}px,${-cameraY}px)`;
   $('regionPlayer').style.left=regionPX+'px';$('regionPlayer').style.top=regionPY+'px';
-  $('regionPlayer').classList.toggle('drive',state.travel==='drive');
-  $('regionPlayer').classList.toggle('run',state.travel==='run');
-
-  document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));
-  const legacyMode=$(state.travel+'Btn');if(legacyMode)legacyMode.classList.add('active');
-
-  updateVehicleHud();updateGps();districtRoadStatus();
-  const district=currentDistrict(),building=nearestDirectBuilding();
+  $('regionPlayer').classList.toggle('drive',state.travel==='drive');$('regionPlayer').classList.toggle('run',state.travel==='run');
+  document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));const legacyMode=$(state.travel+'Btn');if(legacyMode)legacyMode.classList.add('active');
+  updateVehicleHud();updateGps();districtRoadStatus();const district=currentDistrict(),building=nearestDirectBuilding();
   $('regionTownLabel').textContent=district?district+', MA':'Between towns';
-
-  document.querySelectorAll('.mapBuilding').forEach(x=>x.classList.remove('nearby'));
-  if(building&&$(building.id))$(building.id).classList.add('nearby');
-
-  $('worldInteractHint').classList.toggle('show',!!building||!!nearGasStation());
-  $('worldInteractHint').textContent=nearGasStation()?'REFUEL VEHICLE':building?`ENTER ${building.type.toUpperCase()}`:'ENTER LOCATION';
-
-  if(building){
-    $('nearbyTownText').textContent=`Near ${building.type.toUpperCase()} in ${building.town}`;
-    $('worldPrompt').textContent='Press INTERACT when you are ready to enter.';
-  }else if(district){
-    $('nearbyTownText').textContent=`Traveling through ${district}, Massachusetts`;
-    $('worldPrompt').textContent='Stay in the continuous world and explore nearby streets and businesses.';
-  }else{
-    $('nearbyTownText').textContent='Traveling between PBK towns';
-    $('worldPrompt').textContent='Follow the connected regional roads or use GPS.';
-  }
-
-  if($('world').classList.contains('active')){
-    requestAnimationFrame(()=>renderRegionCamera());
-  }
+  document.querySelectorAll('.mapBuilding').forEach(x=>x.classList.remove('nearby'));if(building&&$(building.id))$(building.id).classList.add('nearby');
+  $('worldInteractHint').classList.toggle('show',!!building||!!nearGasStation());$('worldInteractHint').textContent=district?`ENTER ${district}`:nearGasStation()?'REFUEL VEHICLE':building?`ENTER ${building.type.toUpperCase()}`:'ENTER LOCATION';
+  if(district){$('nearbyTownText').textContent=`Near ${district}, Massachusetts`;$('worldPrompt').textContent=interactionVerb()+' to enter the full town street world.'}
+  else{$('nearbyTownText').textContent='Regional map view';$('worldPrompt').textContent='Drag the map freely. The joystick moves your character independently.'}
+  if($('world').classList.contains('active'))requestAnimationFrame(()=>renderRegionCamera());
 }
 function moveWorld(dx,dy){
   const s=travelSpeed();
@@ -2723,19 +3732,10 @@ function fastTravelTown(name){
 }
 function worldEnterNearby(){
   const gas=nearGasStation();if(gas){refuel();return}
+  const d=currentDistrict();if(d){enterTownWorld(d);return}
   const b=nearestDirectBuilding();
-  if(b){
-    state.town=b.town;
-    if(b.type==='dojo'){openDojo();return}
-    if(b.type==='apartment'||b.type==='auto'){openLifeInterior(b.type);return}
-    enterBuilding(b.type);return
-  }
-  const d=currentDistrict();
-  if(d){
-    $('worldPrompt').textContent=`You are already inside ${d}. Move closer to a building to enter it.`;
-  }else{
-    $('worldPrompt').textContent='No interactable location nearby.';
-  }
+  if(b){enterTownWorld(b.town);return}
+  $('worldPrompt').textContent='Move closer to a town or choose a town from the map.';
 }
 document.querySelectorAll('[data-worldmove]').forEach(b=>b.addEventListener('pointerdown',()=>{const d=b.dataset.worldmove;moveWorld(d==='left'?-1:d==='right'?1:0,d==='up'?-1:d==='down'?1:0)}));
 $('walkBtn').onclick=()=>{state.travel='walk';renderRegionCamera()};
@@ -2886,7 +3886,7 @@ function enterBuilding(type){if(!isBusinessOpen(type)){openDialogue('CLOSED','Th
  gym:['FITNESS GYM','WEIGHTS','CARDIO','Strength and conditioning for martial arts.','TRAINER'],
  house:['LOCAL HOME','LIVING ROOM','FAMILY PHOTOS','Talk with residents and discover local side quests.','RESIDENT']
 };const m=map[type];$('interiorHudTitle').textContent=m[0];$('interiorTitle').textContent=m[0];$('io1').textContent=m[1];$('io2').textContent=m[2];$('io3').textContent=m[3];$('interiorNpcName').textContent=m[4];renderInteriorActions(type);show('interior');setupInterior3D(type)}
-$('interiorExit').onclick=$('interiorBackTop').onclick=()=>{show('world');renderRegionCamera()};$('lifeExit').onclick=$('lifeBackTop').onclick=()=>show('town');
+$('interiorExit').onclick=$('interiorBackTop').onclick=()=>{show('world');renderRegionCamera();if(activeStreetTown)enterTownWorld(activeStreetTown)};$('lifeExit').onclick=$('lifeBackTop').onclick=()=>show('town');
 $('interiorTalk').onclick=()=>{$('io3').textContent='NPC: Come back after your next PBK class. There is always something happening in '+state.town+'.'};
 
 function openDojo(){
@@ -2894,12 +3894,12 @@ function openDojo(){
   const d=towns[state.town];$('dojoTitle').textContent='PBK '+state.town;
   ['dNpc1','dNpc2','dNpc3','dNpc4'].forEach((id,i)=>{
     const el=$(id),name=d.dojo[i];
-    if(name){el.style.display='';$(id+'Name').textContent=name;el.classList.toggle('leadInstructor',isLeadInstructor(name));const rb=$(id+'Rank');if(rb)rb.textContent=rankOf(name)}
+    if(name){el.style.display='';$(id+'Name').textContent=name;el.classList.toggle('leadInstructor',isLeadInstructor(name));const rb=$(id+'Rank');if(rb)rb.textContent=rankOf(name);applyVisualProfileToHuman(el,name)}
     else{el.style.display='none';el.classList.remove('leadInstructor')}
   });
   resetDojoCleaningVisuals();renderDojo3D();updateDojoMeta();updateInstructorChallengeBadge();show('dojo');renderClassPanel()
 }
-$('dojoBack').onclick=()=>{show('world');renderRegionCamera()};
+$('dojoBack').onclick=()=>{show('world');renderRegionCamera();if(activeStreetTown)enterTownWorld(activeStreetTown)};
 const dojoPos={desk:[12,20],office:[88,20],training:[12,50],forms:[88,50],spar:[33,86],tournament:[67,86],belts:[50,18],trophies:[50,86]};
 function renderDojo(){$('dojoplayer').style.left=state.dx+'%';$('dojoplayer').style.top=state.dy+'%';document.querySelectorAll('.dojoSpot').forEach(x=>x.classList.remove('near'));const s=nearestDojoSpot();if(s){s.el.classList.add('near');$('dojoPrompt').textContent='INTERACT: '+s.el.textContent}else $('dojoPrompt').textContent='Move near a station or tap one.'}
 function nearestDojoSpot(){let best=null,d=999;document.querySelectorAll('.dojoSpot').forEach(el=>{const p=dojoPos[el.dataset.dojo],nd=Math.hypot(state.dx-p[0],state.dy-p[1]);if(nd<d){best={el,type:el.dataset.dojo};d=nd}});return d<=13?best:null}
@@ -2925,7 +3925,7 @@ let dojo3DX=50,dojo3DDepth=8,cleaningActive=false,cleanedSpots=new Set();
 const dojo3DObjects={desk:{x:17,d:66,el:'doFrontDesk'},office:{x:83,d:70,el:'doOfficeDoor'},trophies:{x:83,d:40,el:'doTrophyCase'},belts:{x:16,d:40,el:'doBeltRack'},mat:{x:50,d:48,el:'doMatEntry'},tasks:{x:50,d:72,el:'doTaskBoard'}};
 function renderRear(id,x,d){const el=$(id);if(!el)return;el.style.left=x+'%';el.style.bottom=(4+d*.58)+'%';el.style.transform=`translateX(-50%) scale(${.72+d*.006})`;el.classList.add('walkingRear');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('walkingRear'),150)}
 function nearObj(objects,x,d,max=13){let best=null,dist=999;Object.entries(objects).forEach(([type,o])=>{const nd=Math.hypot((x-o.x)*.75,d-o.d);if(nd<dist){best={type,...o};dist=nd}});return dist<=max?best:null}
-function renderDojo3D(){renderRear('dojoRearPlayer',dojo3DX,dojo3DDepth);document.querySelectorAll('#dojo3DLayer .perspObj').forEach(e=>e.classList.remove('near'));const obj=nearObj(dojo3DObjects,dojo3DX,dojo3DDepth);if(obj)$(obj.el).classList.add('near');const npc=nearestDojoNpc3D();if(npc)$('dojoPrompt3D').textContent='INTERACT: '+towns[state.town].dojo[npc.index];else if(cleaningActive&&nearestDirtySpot())$('dojoPrompt3D').textContent='INTERACT: CLEAN THIS SPOT';else if(obj)$('dojoPrompt3D').textContent='INTERACT: '+obj.type.toUpperCase();else $('dojoPrompt3D').textContent='Walk around the dojo and approach a person, room, or display.'}
+function renderDojo3D(){renderRear('dojoRearPlayer',dojo3DX,dojo3DDepth);document.querySelectorAll('#dojo3DLayer .perspObj').forEach(e=>e.classList.remove('near'));const obj=nearObj(dojo3DObjects,dojo3DX,dojo3DDepth);if(obj)$(obj.el).classList.add('near');const npc=nearestDojoNpc3D();if(npc)$('dojoPrompt3D').textContent=interactionVerb()+': '+towns[state.town].dojo[npc.index];else if(cleaningActive&&nearestDirtySpot())$('dojoPrompt3D').textContent=interactionVerb()+': CLEAN THIS SPOT';else if(obj)$('dojoPrompt3D').textContent=interactionVerb()+': '+obj.type.toUpperCase();else $('dojoPrompt3D').textContent='Walk around the dojo and approach a person, room, or display.'}
 function nearestDojoNpc3D(){const names=towns[state.town].dojo,pos=[{x:30,d:58,index:0},{x:70,d:58,index:1},{x:50,d:76,index:2},{x:62,d:76,index:3}];let best=null,dist=999;pos.forEach(p=>{if(!names[p.index])return;const nd=Math.hypot((dojo3DX-p.x)*.75,dojo3DDepth-p.d);if(nd<dist){best=p;dist=nd}});return dist<=12?best:null}
 function moveDojo3D(dx,dd){dojo3DX=Math.max(8,Math.min(92,dojo3DX+dx*3.6));dojo3DDepth=Math.max(5,Math.min(84,dojo3DDepth+dd*3.6));renderDojo3D()}
 document.querySelectorAll('[data-dojo3dmove]').forEach(b=>b.onclick=()=>{const d=b.dataset.dojo3dmove;moveDojo3D(d==='left'?-1:d==='right'?1:0,d==='forward'?1:d==='back'?-1:0)});
@@ -2946,16 +3946,16 @@ function cleanSpot(s){cleanedSpots.add(s.id);$(s.id).classList.add('cleaned');$(
 let officeX=50,officeD=8;
 const officeObjects={desk:{x:50,d:56,el:'officeDesk'},certs:{x:18,d:72,el:'officeCertificates'},rank:{x:82,d:72,el:'officeRankWall'},boss:{x:82,d:38,el:'officeBossDoor'},instructor:{x:50,d:72,el:'officeInstructor'}};
 function leadInstructorForTown(){return (leadInstructors[state.town]||[])[0]||'PBK Instructor'}
-function openInstructorOffice(){officeX=50;officeD=8;const name=leadInstructorForTown();$('officeTitle').textContent=`${name.toUpperCase()} • INSTRUCTOR OFFICE`;$('officeRankWall').textContent=rankOf(name)||'LEAD INSTRUCTOR';$('officeInstructor').textContent=`${name}\n${rankOf(name)}`;$('officeInstructor').title=name;show('office');renderOffice3D()}
-function renderOffice3D(){renderRear('officeRearPlayer',officeX,officeD);document.querySelectorAll('#officeRoom .perspObj').forEach(e=>e.classList.remove('near'));const o=nearObj(officeObjects,officeX,officeD,12);if(o)$(o.el).classList.add('near');$('officePrompt3D').textContent=o?'INTERACT: '+o.type.toUpperCase():'Walk around the instructor office.'}
+function openInstructorOffice(){officeX=50;officeD=8;const name=leadInstructorForTown();$('officeTitle').textContent=`${name.toUpperCase()} • INSTRUCTOR OFFICE`;$('officeRankWall').textContent=rankOf(name)||'LEAD INSTRUCTOR';$('officeInstructor').innerHTML=`${portraitHtml(name)}<strong>${name}</strong><br>${rankOf(name)}`;$('officeInstructor').title=name;show('office');renderOffice3D()}
+function renderOffice3D(){renderRear('officeRearPlayer',officeX,officeD);document.querySelectorAll('#officeRoom .perspObj').forEach(e=>e.classList.remove('near'));const o=nearObj(officeObjects,officeX,officeD,12);if(o)$(o.el).classList.add('near');$('officePrompt3D').textContent=o?interactionVerb()+': '+o.type.toUpperCase():'Walk around the instructor office.'}
 document.querySelectorAll('[data-officemove]').forEach(b=>b.onclick=()=>{const d=b.dataset.officemove;officeX=Math.max(8,Math.min(92,officeX+(d==='left'?-4:d==='right'?4:0)));officeD=Math.max(5,Math.min(84,officeD+(d==='forward'?4:d==='back'?-4:0)));renderOffice3D()});
 $('officeInteract').onclick=()=>{const o=nearObj(officeObjects,officeX,officeD,12);if(!o)return;const name=leadInstructorForTown();if(o.type==='instructor'){const i=towns[state.town].dojo.indexOf(name);dojoNpcTalk(i>=0?i:2)}else if(o.type==='certs')openDialogue('CERTIFICATES',`${name} • ${rankOf(name)} • PBK lead instructor.`);else if(o.type==='rank')openDialogue('RANK WALL',`${name}: ${rankOf(name)}`);else if(o.type==='boss')openBossRoom();else openDialogue('INSTRUCTOR DESK','Class notes, tournament schedules, and student progress records.')};
 $('officeBack').onclick=()=>{show('dojo');renderDojo3D()};
 
 let interiorX=50,interiorD=8;
 const interiorObjects={counter:{x:50,d:64,el:'interiorCounter3D'},feature:{x:20,d:48,el:'interiorFeature3D'},npc:{x:80,d:55,el:'interiorNpc3D'},exit:{x:50,d:12,el:'interiorExitDoor3D'}};
-function setupInterior3D(type){interiorX=50;interiorD=8;const names={diner:'SERVER',cafe:'CAFE WORKER',gear:'SHOP OWNER',market:'CLERK',rec:'REC COACH',gym:'TRAINER',house:'RESIDENT'};const features={diner:'BOOTH SEATING',cafe:'CAFE TABLES',gear:'GEAR DISPLAY',market:'FOOD AISLE',rec:'GYM FLOOR',gym:'WEIGHT AREA',house:'LIVING ROOM'};$('interiorNpc3D').textContent=names[type]||'LOCAL';$('interiorNpc3D').title=names[type]||'LOCAL';$('interiorFeature3D').textContent=features[type]||'INTERIOR AREA';renderInterior3D()}
-function renderInterior3D(){renderRear('interiorRearPlayer',interiorX,interiorD);document.querySelectorAll('#interior3DLayer .perspObj').forEach(e=>e.classList.remove('near'));const o=nearObj(interiorObjects,interiorX,interiorD,12);if(o)$(o.el).classList.add('near');$('interiorPrompt3D').textContent=o?'INTERACT: '+o.type.toUpperCase():'Walk around the building and approach people or features.'}
+function setupInterior3D(type){interiorX=50;interiorD=8;const names={diner:'SERVER',cafe:'CAFE WORKER',gear:'SHOP OWNER',market:'CLERK',rec:'REC COACH',gym:'TRAINER',house:'RESIDENT'};const features={diner:'BOOTH SEATING',cafe:'CAFE TABLES',gear:'GEAR DISPLAY',market:'FOOD AISLE',rec:'GYM FLOOR',gym:'WEIGHT AREA',house:'LIVING ROOM'};const npcName=names[type]||'LOCAL';$('interiorNpc3D').innerHTML=`${portraitHtml(npcName)}<strong>${npcName}</strong>`;$('interiorNpc3D').title=npcName;$('interiorFeature3D').textContent=features[type]||'INTERIOR AREA';renderInterior3D()}
+function renderInterior3D(){renderRear('interiorRearPlayer',interiorX,interiorD);document.querySelectorAll('#interior3DLayer .perspObj').forEach(e=>e.classList.remove('near'));const o=nearObj(interiorObjects,interiorX,interiorD,12);if(o)$(o.el).classList.add('near');$('interiorPrompt3D').textContent=o?interactionVerb()+': '+o.type.toUpperCase():'Walk around the building and approach people or features.'}
 document.querySelectorAll('[data-interiormove]').forEach(b=>b.onclick=()=>{const d=b.dataset.interiormove;interiorX=Math.max(8,Math.min(92,interiorX+(d==='left'?-4:d==='right'?4:0)));interiorD=Math.max(5,Math.min(84,interiorD+(d==='forward'?4:d==='back'?-4:0)));renderInterior3D()});
 $('interior3DInteract').onclick=()=>{const o=nearObj(interiorObjects,interiorX,interiorD,12);if(!o)return;if(o.type==='exit'){show('world');renderRegionCamera();return}if(o.type==='npc'){openDialogue($('interiorNpc3D').textContent||'LOCAL','Good to see you. People around town hear a lot about PBK classes and tournaments.');return}if(o.type==='counter'){renderInteriorActions(state.building);const first=$('interiorActionBar').querySelector('button');if(first)first.click();else openDialogue('COUNTER','Nothing needed right now.');return}if(o.type==='feature')openDialogue('EXPLORE',$('interiorFeature3D').textContent+' — look around and interact with the location.')};
 
@@ -3067,6 +4067,19 @@ document.addEventListener('keyup',e=>{
 $('dojo3DRun').onclick=()=>setIndoorRun(!indoorRunMode);
 $('officeRun').onclick=()=>setIndoorRun(!indoorRunMode);
 $('interiorRun').onclick=()=>setIndoorRun(!indoorRunMode);
+
+/* joystick movement inside buildings/training */
+let dojoJoyX=0,dojoJoyY=0,officeJoyX=0,officeJoyY=0,interiorJoyX=0,interiorJoyY=0,trainingJoyX=0,trainingJoyY=0;
+attachJoystick('dojoJoy',(x,y)=>{dojoJoyX=x;dojoJoyY=y});
+attachJoystick('officeJoy',(x,y)=>{officeJoyX=x;officeJoyY=y});
+attachJoystick('interiorJoy',(x,y)=>{interiorJoyX=x;interiorJoyY=y});
+attachJoystick('trainingJoy',(x,y)=>{trainingJoyX=x;trainingJoyY=y});
+setInterval(()=>{
+  if($('dojo').classList.contains('active')&&(Math.abs(dojoJoyX)>.08||Math.abs(dojoJoyY)>.08))moveDojo3D(dojoJoyX*1.4,-dojoJoyY*1.4);
+  if($('office').classList.contains('active')&&(Math.abs(officeJoyX)>.08||Math.abs(officeJoyY)>.08)){officeX=Math.max(8,Math.min(92,officeX+officeJoyX*2.2));officeD=Math.max(5,Math.min(84,officeD-officeJoyY*2.2));renderOffice3D()}
+  if($('interior').classList.contains('active')&&(Math.abs(interiorJoyX)>.08||Math.abs(interiorJoyY)>.08)){interiorX=Math.max(8,Math.min(92,interiorX+interiorJoyX*2.2));interiorD=Math.max(5,Math.min(84,interiorD-interiorJoyY*2.2));renderInterior3D()}
+  if($('training').classList.contains('active')&&(Math.abs(trainingJoyX)>.08||Math.abs(trainingJoyY)>.08))moveTraining(trainingJoyX,-trainingJoyY);
+},35);
 document.querySelectorAll('.roomBack').forEach(b=>b.onclick=()=>{
   state.formsChallengeInstructor='';
   if($('formsChallengeBanner'))$('formsChallengeBanner').classList.remove('show');
@@ -3173,7 +4186,7 @@ function trainingStrike(type){
   updateTrainingHud();
 }
 document.querySelectorAll('[data-trainattack]').forEach(b=>b.onclick=()=>trainingStrike(b.dataset.trainattack));
-setTrainingMode('mitts');renderTrainingPlayer();
+applyVisualProfileToFighter($('trainingPlayer'),'Bradley');applyVisualProfileToFighter($('trainingCoach'),leadInstructorForTown());setTrainingMode('mitts');renderTrainingPlayer();
 
 /* v5.3 live forms simulation */
 let formLiveX=48,formLiveY=58,formFacing=0,formStyle='traditional',formLiveMoves=[],formStance='ready';
@@ -3234,19 +4247,88 @@ $('formsScoreBtn').onclick=()=>{
   save.trainingScore+=total>=23?2:1;saveGame();
   if(state.formsChallengeInstructor)completeInstructorForms(state.formsChallengeInstructor,total);
 };
-renderFormsPlayer();
+applyVisualProfileToFighter($('formsPlayer'),'Bradley');renderFormsPlayer();
 function openTournament(){$('tournamentTitle').textContent=state.town+' PBK TOURNAMENT';show('tournament')}
 $('tournamentExit').onclick=$('tournamentBackTop').onclick=()=>show('dojo');
 $('startTournamentBtn').onclick=()=>{state.fightContext='tournament';startFight(state.town+' Tournament Opponent',7)};
 function tournamentReward(){save.tournamentWins++;save.cash+=100;save.rep+=2;advanceTime(90);saveGame()}
 const bossPath=[['dad','Dad',10],['ryan','Ryan',20],['alex','Alex George',21],['stef','Master Stef',21],['camara','Master Camara',21],['rappold','Master Rappold',21],['chung','Grandmaster Chung',21]];
 function bossUnlocked(i){if(i===0)return true;return save.bosses[bossPath[i-1][0]]&&(bossPath[i][0]!=='stef'||state.town==='RAYNHAM')}
-function renderBosses(){if(!$('bossGrid'))return;$('bossGrid').innerHTML='';bossPath.forEach((b,i)=>{let unlocked=bossUnlocked(i),done=save.bosses[b[0]],c=document.createElement('div');c.className='bossCard '+(!unlocked?'locked':'');c.innerHTML=`<strong>${b[1]}</strong><div>${rankOf(b[1])||''}</div><div>${done?'DEFEATED':unlocked?'AVAILABLE':'LOCKED'}</div>`;let btn=document.createElement('button');btn.textContent=done?'REMATCH':unlocked?'FIGHT':'LOCKED';btn.disabled=!unlocked;btn.onclick=()=>{state.fightContext='boss';state.activeBoss=b[0];startFight(b[1],b[2])};c.appendChild(btn);$('bossGrid').appendChild(c)})}
+function renderBosses(){if(!$('bossGrid'))return;$('bossGrid').innerHTML='';bossPath.forEach((b,i)=>{let unlocked=bossUnlocked(i),done=save.bosses[b[0]],c=document.createElement('div');c.className='bossCard '+(!unlocked?'locked':'');c.innerHTML=`${portraitHtml(b[1])}<strong>${b[1]}</strong><div>${rankOf(b[1])||''}</div><div>${done?'DEFEATED':unlocked?'AVAILABLE':'LOCKED'}</div>`;let btn=document.createElement('button');btn.textContent=done?'REMATCH':unlocked?'FIGHT':'LOCKED';btn.disabled=!unlocked;btn.onclick=()=>{state.fightContext='boss';state.activeBoss=b[0];startFight(b[1],b[2])};c.appendChild(btn);$('bossGrid').appendChild(c)})}
 function openBossRoom(){renderBosses();show('bosses')}
 $('bossExit').onclick=$('bossBackTop').onclick=()=>show('dojo');
-function startFight(name,target){if(state.fightContext!=='instructorSpar')$('instructorFightTag').classList.remove('show');state.pScore=0;state.eScore=0;state.fightTarget=target;state.fightActive=true;$('enemyName').textContent=name;$('fightTarget').textContent='FIRST TO '+target;$('pScore').textContent='0';$('eScore').textContent='0';$('fightMessage').textContent='FIGHT!';show('fight')}
+function startFight(name,target){if(state.fightContext!=='instructorSpar')$('instructorFightTag').classList.remove('show');applyVisualProfileToFighter($('playerFight'),'Bradley');applyVisualProfileToFighter($('enemyFight'),name);state.pScore=0;state.eScore=0;state.fightTarget=target;state.fightActive=true;$('enemyName').textContent=name;$('fightTarget').textContent='FIRST TO '+target;$('pScore').textContent='0';$('eScore').textContent='0';$('fightMessage').textContent='FIGHT!';show('fight')}
 function anim(el,cls,ms=400){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),ms)}
 function scorePoint(side,pts,label){if(!state.fightActive)return;if(side==='p')state.pScore+=pts;else state.eScore+=pts;$('pScore').textContent=state.pScore;$('eScore').textContent=state.eScore;$('fightMessage').textContent=label+' • '+pts+' POINT'+(pts>1?'S':'');state.fightActive=false;setTimeout(()=>{if(state.pScore>=state.fightTarget||state.eScore>=state.fightTarget){$('fightMessage').textContent=state.pScore>state.eScore?'BRADLEY WINS!':'OPPONENT WINS';return}$('fightMessage').textContent='REFEREE RESET • FIGHT!';state.fightActive=true;},700)}
+
+/* v5.7 realistic sparring controls */
+
+let guardStamina=100,guardHeld=false;
+function updateGuardMeter(){
+  guardStamina=Math.max(0,Math.min(100,guardStamina));
+  $('fightBlockFill').style.width=guardStamina+'%';
+  $('fightBlockText').textContent='GUARD '+Math.round(guardStamina)+'%';
+}
+setInterval(()=>{
+  if(!$('fight').classList.contains('active'))return;
+  guardStamina=Math.min(100,guardStamina+(guardHeld?-.8:.45));
+  if(guardHeld&&guardStamina<=0){guardHeld=false;setFightGuard(false);$('fightMessage').textContent='GUARD BROKEN — MOVE!'}
+  updateGuardMeter();
+},100);
+function flashHitMarker(){
+  const e=$('hitMarker');e.classList.remove('show');void e.offsetWidth;e.classList.add('show')
+}
+function enforceFighterSeparation(){
+  const p=$('playerFight'),e=$('enemyFight'),px=fighterX(p),ex=fighterX(e);
+  if(ex-px<12){
+    const mid=(px+ex)/2;
+    p.style.left=Math.max(6,mid-6)+'%';
+    e.style.left=Math.min(88,mid+6)+'%';
+    p.classList.add('collisionEdge');e.classList.add('collisionEdge');
+    setTimeout(()=>{p.classList.remove('collisionEdge');e.classList.remove('collisionEdge')},180);
+  }
+}
+const baseMoveFighter=moveFighter;
+moveFighter=function(el,delta,min,max){
+  baseMoveFighter(el,delta,min,max);enforceFighterSeparation();updateRangeGuide();
+};
+let modernAttackLock=false,fightJoyX=0,fightJoyY=0,fightJoyTimer=null;
+function setFightGuard(on){$('playerFight').classList.toggle('guardHigh',on);if(on)addMeter('p',.4)}
+function modernAttack(type,label,points,animClass,startup=110,recovery=320){
+  if(modernAttackLock||!state.fightActive)return false;
+  modernAttackLock=true;
+  const p=$('playerFight');p.classList.add('attackStartup');setFightGuard(false);
+  $('fightFootworkStatus').textContent='STARTUP • COMMIT TO THE TECHNIQUE';
+  setTimeout(()=>{
+    p.classList.remove('attackStartup');p.classList.add(animClass);
+    const liveRange=isAttackInRange(type);
+    if(liveRange){
+      const e=$('enemyFight');e.classList.add('recoil');setTimeout(()=>e.classList.remove('recoil'),260);
+      scorePoint('p',points,label);flashHitMarker();strongImpact(points);cameraPunch(points===2?130:90);
+    }else{whiff();addMeter('p',2)}
+    setTimeout(()=>p.classList.remove(animClass),220);
+    p.classList.add('attackRecovery');$('fightFootworkStatus').textContent='RECOVERY • RESET YOUR GUARD';
+    setTimeout(()=>{p.classList.remove('attackRecovery');modernAttackLock=false;setFightGuard(true);$('fightFootworkStatus').textContent='FOOTWORK • GUARD UP • RANGE MANAGEMENT'},recovery);
+  },startup);
+  return true;
+}
+function modernFightMove(x){
+  if(modernAttackLock||!state.fightActive)return;
+  if(Math.abs(x)<.08)return;
+  moveFighter($('playerFight'),x*1.25,6,70);addMeter('p',.06);
+}
+attachJoystick('fightJoy',(x,y)=>{fightJoyX=x;fightJoyY=y});
+fightJoyTimer=setInterval(()=>{if($('fight').classList.contains('active'))modernFightMove(fightJoyX)},28);
+$('fightBlockBtn').onpointerdown=()=>{if(guardStamina>0){guardHeld=true;setFightGuard(true)}};$('fightBlockBtn').onpointerup=()=>{guardHeld=false;setFightGuard(false)};$('fightBlockBtn').onpointerleave=()=>{guardHeld=false;setFightGuard(false)};
+$('fightPunchBtn').onclick=()=>modernAttack('punch','PUNCH',1,'realPunch',80,230);
+$('fightRoundBtn').onclick=()=>modernAttack('kick','ROUND KICK',2,'roundKicking',145,360);
+$('fightSideBtn').onclick=()=>modernAttack('side','SIDE KICK',2,'sideKicking',120,340);
+$('fightDefSideBtn').onclick=()=>{
+  if(counterWindowOpen){counterWindowOpen=false;$('counterWindow').classList.remove('show');modernAttack('defside','DEFENSIVE SIDE KICK COUNTER',2,'sideKicking',65,300)}
+  else $('fightMessage').textContent='WAIT FOR THE COUNTER WINDOW';
+};
+$('fightBTwistBtn').onclick=()=>modernAttack('twist','B-TWIST KICK',2,'twisting',210,480);
+$('fightDashBtn').onclick=doDash;$('fightBackBtn').onclick=doBackstep;$('fightSpecialModern').onclick=doSpecial;
 document.querySelectorAll('[data-fight]').forEach(b=>b.onclick=()=>{
   const a=b.dataset.fight,p=$('playerFight');
   if(a==='left')moveFighter(p,-4,6,70);
@@ -3497,13 +4579,8 @@ function strongImpact(points=1){
   const stage=$('fightStage');stage.classList.remove('shake');void stage.offsetWidth;stage.classList.add('shake');
   setTimeout(()=>stage.classList.remove('shake'),180);
 }
-function playerAttack(type,animClass,label,points){
-  const p=$('playerFight');
-  p.classList.remove('attackLunge');void p.offsetWidth;p.classList.add('attackLunge');
-  anim(p,animClass,type==='twist'?600:420);
-  if(!isAttackInRange(type)){whiff();addMeter('p',2);return false}
-  scorePoint('p',points,label);strongImpact(points);return true;
-}
+function playerAttack(type,animClass,label,points){return modernAttack(type,label,points,type==='punch'?'realPunch':type==='side'||type==='defside'?'sideKicking':type==='kick'?'roundKicking':'twisting',type==='punch'?80:type==='twist'?210:120,type==='punch'?230:type==='twist'?480:340)}
+
 let playerMeter=0,enemyMeter=0,playerEvading=false;
 let aiStyle='balanced';
 const aiProfiles={
@@ -3599,7 +4676,7 @@ function clearFightLoops(){
   fightTimerId=enemyAiId=null;
 }
 const oldStartFight=startFight;
-startFight=function(name,target){setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);
+startFight=function(name,target){modernAttackLock=false;guardStamina=100;guardHeld=false;updateGuardMeter();setFightGuard(true);setStageTheme();$('playerFight').style.left='18%';$('enemyFight').style.left='72%';updateRangeGuide();playerMeter=0;enemyMeter=0;playerEvading=false;updateMeters();setAiStyle(name);
   clearFightLoops();
   oldStartFight(name,target);
   fightSeconds=60;
@@ -3658,11 +4735,11 @@ function enemyAiThink(){
   if(useKick){
     $('enemyIntent').textContent='KICKING';lastEnemyAttack='kick';openCounterWindow();anim(enemy,'kicking');enemy.classList.add('attackLunge');addMeter('e',8);
     setTimeout(()=>enemy.classList.remove('attackLunge'),250);
-    setTimeout(()=>{if(attackD<=33)enemyScore(2,'OPPONENT KICK');else whiffEnemy()},220);return;
+    setTimeout(()=>{if(fightDistance()<=33)enemyScore(2,'OPPONENT KICK');else whiffEnemy()},220);return;
   }
   $('enemyIntent').textContent='PUNCHING';lastEnemyAttack='punch';openCounterWindow();anim(enemy,'punching');enemy.classList.add('attackLunge');addMeter('e',6);
   setTimeout(()=>enemy.classList.remove('attackLunge'),250);
-  setTimeout(()=>{if(attackD<=24)enemyScore(1,'OPPONENT PUNCH');else whiffEnemy()},180);
+  setTimeout(()=>{if(fightDistance()<=24)enemyScore(1,'OPPONENT PUNCH');else whiffEnemy()},180);
 }
 
 
