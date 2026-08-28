@@ -1883,13 +1883,94 @@ h1,h2,h3{margin:0}
   #townTravelDepot{width:170px}
 }
 
+
+/* v3.2 living town + side interiors + combat presentation */
+.townNpc{
+  position:absolute;width:34px;height:54px;z-index:18
+}
+.townNpc .nh{width:20px;height:20px;border-radius:50%;margin:auto;background:#c99f78;border:2px solid #111}
+.townNpc .nb{width:28px;height:30px;margin:auto;border-radius:7px;background:#222830;border:2px solid #0b0d10}
+.townNpc .nl{
+  position:absolute;left:50%;top:-17px;transform:translateX(-50%);
+  white-space:nowrap;font-size:10px;font-weight:1000;text-shadow:0 2px 3px #000
+}
+#townNpc1{left:28%;top:46%}
+#townNpc2{right:30%;top:48%}
+#townNpc3{left:50%;top:67%}
+.townBird{
+  position:absolute;width:18px;height:8px;border-top:2px solid rgba(255,255,255,.7);
+  border-radius:50%;z-index:2;animation:birdFly 11s linear infinite
+}
+#bird1{top:16%;left:-5%;animation-delay:0s}
+#bird2{top:21%;left:-8%;animation-delay:4s}
+@keyframes birdFly{
+  from{transform:translateX(0)}
+  to{transform:translateX(1200px)}
+}
+#townCloud1,#townCloud2{
+  position:absolute;width:110px;height:38px;border-radius:30px;background:rgba(255,255,255,.22);
+  filter:blur(1px);z-index:1;animation:cloudDrift 26s linear infinite
+}
+#townCloud1{left:-12%;top:9%}
+#townCloud2{left:-25%;top:14%;animation-delay:10s;transform:scale(.8)}
+@keyframes cloudDrift{
+  from{translate:0}
+  to{translate:1300px}
+}
+#sideinterior{padding:10px 0 22px}
+#interiorRoom{
+  width:min(900px,95vw);min-height:540px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:linear-gradient(#2d3339 0 32%,#6e5a46 32% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38)
+}
+#interiorTitle{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  padding:8px 14px;border-radius:999px;background:#10151a;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;z-index:10
+}
+.interiorObject{
+  position:absolute;padding:12px;border-radius:12px;background:#14191f;border:1px solid #59636e;
+  text-align:center;font-size:11px;font-weight:900
+}
+#interiorCounter{left:8%;top:24%;width:190px;height:82px}
+#interiorBench{right:8%;top:26%;width:190px;height:70px}
+#interiorBoard{left:50%;top:22%;transform:translateX(-50%);width:210px;height:70px}
+#interiorExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
+#interiorNpc{
+  position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:38px;height:58px
+}
+#interiorNpc .nh{width:22px;height:22px;border-radius:50%;margin:auto;background:#c99f78;border:2px solid #111}
+#interiorNpc .nb{width:30px;height:32px;margin:auto;border-radius:7px;background:#23282e;border:2px solid #0b0d10}
+#interiorNpcName{text-align:center;font-size:10px;font-weight:1000;margin-top:2px}
+#interiorPrompt{
+  position:absolute;left:50%;bottom:74px;transform:translateX(-50%);
+  padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000
+}
+#arenaEventBanner{
+  position:absolute;left:50%;top:72px;transform:translateX(-50%);
+  z-index:19;padding:7px 12px;border-radius:999px;background:rgba(0,0,0,.58);
+  border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:1000;letter-spacing:1px
+}
+#crowdFlash{
+  position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 75%,rgba(255,255,255,.08),transparent 55%)
+}
+#crowdFlash.on{animation:crowdReact .45s ease-out}
+@keyframes crowdReact{
+  0%{opacity:0}
+  40%{opacity:1}
+  100%{opacity:0}
+}
+
 </style>
 </head>
 <body>
 
 <div id="menu" class="screen active">
   <h1>PBK: PATH TO BLACK BELT</h1>
-  <div>Expanded Town RPG v3.1.1</div>
+  <div>Living Town RPG v3.2.2.2</div>
   <div class="menuBtns">
     <button id="worldBtn">ENTER PBK WORLD</button><button id="playBtn" style="display:none">PLAY</button>
     <button id="careerBtn" style="display:none">BELT LADDER</button>
@@ -1969,6 +2050,8 @@ h1,h2,h3{margin:0}
 
   <div id="townScene">
     <div id="townBackdropHill"></div>
+    <div id="townCloud1"></div><div id="townCloud2"></div>
+    <div class="townBird" id="bird1"></div><div class="townBird" id="bird2"></div>
     <div id="townDojo">
       <div class="roof"></div>
       <div id="townDojoSign">PBK SCHOOL</div>
@@ -2012,6 +2095,10 @@ h1,h2,h3{margin:0}
     <div class="townLamp" id="lamp1"></div>
     <div class="townLamp" id="lamp2"></div>
 
+    <div class="townNpc" id="townNpc1"><div class="nl" id="townNpc1Name">LOCAL STUDENT</div><div class="nh"></div><div class="nb"></div></div>
+    <div class="townNpc" id="townNpc2"><div class="nl" id="townNpc2Name">PARENT</div><div class="nh"></div><div class="nb"></div></div>
+    <div class="townNpc" id="townNpc3"><div class="nl" id="townNpc3Name">COMPETITOR</div><div class="nh"></div><div class="nb"></div></div>
+
     <div id="townPlayer">
       <div class="ph"></div><div class="pb"></div><div class="pl l"></div><div class="pl r"></div>
     </div>
@@ -2042,6 +2129,20 @@ h1,h2,h3{margin:0}
   <div id="townInfoCard">
     <div id="townInfoTitle">Town View</div>
     <div id="townInfoText">Move around the town, check the parking area, visit the local spots, and walk into the dojo for training and competition.</div>
+  </div>
+</div>
+
+
+<div id="sideinterior" class="screen centercol">
+  <button class="back" data-back="town">BACK TO TOWN</button>
+  <div id="interiorRoom">
+    <div id="interiorTitle">LOCAL SPOT</div>
+    <div class="interiorObject" id="interiorCounter">COUNTER</div>
+    <div class="interiorObject" id="interiorBench">SEATING</div>
+    <div class="interiorObject" id="interiorBoard">COMMUNITY BOARD</div>
+    <div id="interiorNpc"><div class="nh"></div><div class="nb"></div><div id="interiorNpcName">LOCAL</div></div>
+    <div id="interiorPrompt">INTERACT WITH LOCAL</div>
+    <button id="interiorExit">EXIT TO TOWN</button>
   </div>
 </div>
 
@@ -2545,7 +2646,7 @@ h1,h2,h3{margin:0}
     <div id="cinematicLights"><div class="lightCone left"></div><div class="lightCone right"></div></div>
     <div id="filmGrain"></div><div id="vignette"></div>
     <div id="roundCinematic"></div>
-    <div id="refereeStrip">CLEAN TECHNIQUE SCORES</div><div id="scoreBoard">
+    <div id="refereeStrip">CLEAN TECHNIQUE SCORES</div><div id="arenaEventBanner">PBK POINT FIGHTING EVENT</div><div id="crowdFlash"></div><div id="scoreBoard">
       <div class="scoreBox"><div class="scoreLabel">BRADLEY</div><div id="pScore" class="scoreNum">0</div></div>
       <div id="targetBox">FIRST TO <span id="targetScore">3</span></div>
       <div class="scoreBox"><div class="scoreLabel" id="scoreEnemyLabel">REX</div><div id="eScore" class="scoreNum">0</div></div>
@@ -2586,7 +2687,7 @@ h1,h2,h3{margin:0}
 </div>
 
 <script>
-const $=id=>document.getElementById(id),screens=['menu','world','town','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
+const $=id=>document.getElementById(id),screens=['menu','world','town','sideinterior','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
 const saveDefaults={
   tournamentWins:0,totalWins:0,formsDone:false,breakingDone:false,
@@ -2862,6 +2963,9 @@ function safe(e){if(e&&e.cancelable)e.preventDefault()}
 function bindTap(id,fn){
   const el=$(id);
   if(!el)return;
+  const key='data-pbk-tap-'+id.replace(/[^a-zA-Z0-9_-]/g,'');
+  if(el.getAttribute(key)==='1')return;
+  el.setAttribute(key,'1');
   el.addEventListener('pointerup',e=>{safe(e);fn(e)},{passive:false});
 };
 
@@ -3224,7 +3328,7 @@ function awardPoints(target,points){
 
   if(target==='e'){
     s.pScore+=points;
-    showPointPop('e',points);
+    showPointPop('e',points);crowdReact();
     setCombatText(points===1?'1 POINT!':'2 POINTS!',650);
     render();
     if(s.pScore>=s.pointTarget){
@@ -3234,7 +3338,7 @@ function awardPoints(target,points){
     refereePointReset('p',points);
   }else{
     s.eScore+=points;
-    showPointPop('p',points);
+    showPointPop('p',points);crowdReact();
     setCombatText(opponents[s.opponentIndex].name+' SCORES '+points,650);
     render();
     if(s.eScore>=s.pointTarget){
@@ -3358,6 +3462,42 @@ function updateDojoRoster(id){
 
 
 
+
+const townNpcNames={
+  NORTON:['NORTON STUDENT','DOJO PARENT','LOCAL COMPETITOR'],
+  EASTON:['EASTON STUDENT','TEAM PARENT','TOURNAMENT FIGHTER'],
+  FOXBOROUGH:['FOX STUDENT','DOJO PARENT','RANGE FIGHTER'],
+  RAYNHAM:['RAYNHAM STUDENT','TEAM PARENT','POWER FIGHTER']
+};
+
+function updateTownNpcs(){
+  const names=townNpcNames[currentTown]||townNpcNames.NORTON;
+  $('townNpc1Name').textContent=names[0];
+  $('townNpc2Name').textContent=names[1];
+  $('townNpc3Name').textContent=names[2];
+}
+
+function townNpcDialogue(slot){
+  if(currentTown==='EASTON'){
+    if(slot===0)return 'Easton fighters like to make the judges see the score clearly.';
+    if(slot===1)return 'Competition days get busy around here. The dojo fills up fast.';
+    return 'If you hesitate, someone else takes the center.';
+  }
+  if(currentTown==='RAYNHAM'){
+    if(slot===0)return 'Raynham training is tough, especially before Master Steph challenges.';
+    if(slot===1)return 'Parents are always waiting outside after the late classes.';
+    return 'Power only counts if you can control it.';
+  }
+  if(currentTown==='FOXBOROUGH'){
+    if(slot===0)return 'Foxborough fighters work a lot on movement and range.';
+    if(slot===1)return 'The kids are always practicing side kicks around here.';
+    return 'Make them miss, then score.';
+  }
+  if(slot===0)return 'Norton keeps things fundamental and clean.';
+  if(slot===1)return 'The dojo has a steady rhythm here.';
+  return 'Good stance. Good guard. Clean technique.';
+}
+
 const townDescriptions={
   NORTON:{
     title:'Norton Town',
@@ -3400,7 +3540,7 @@ function updateTownScene(){
   $('townRankText').textContent=rankDisplay();
   $('townDojoSign').textContent='PBK '+currentTown;
   $('townInfoTitle').textContent=data.title;
-  $('townInfoText').textContent=data.info+' You can walk to the dojo, check the parking area, visit the park/cafe, or use the travel depot to go town-to-town.';
+  $('townInfoText').textContent=data.info+' You can walk to the dojo, check the parking area, visit the park/cafe, or use the travel depot to go town-to-town.';updateTownNpcs();
 }
 
 function renderTownPlayer(){
@@ -3422,7 +3562,10 @@ function nearestTownTarget(){
     {type:'cafe',x:16,y:36,label:'VISIT CAFE'},
     {type:'park',x:84,y:38,label:'VISIT PARK'},
     {type:'depot',x:14,y:78,label:'TRAVEL DEPOT'},
-    {type:'parking',x:84,y:79,label:'DOJO PARKING'}
+    {type:'parking',x:84,y:79,label:'DOJO PARKING'},
+    {type:'npc1',x:28,y:46,label:'TALK TO LOCAL STUDENT'},
+    {type:'npc2',x:70,y:48,label:'TALK TO PARENT'},
+    {type:'npc3',x:50,y:67,label:'TALK TO COMPETITOR'}
   ];
   let best=null,bestD=999;
   targets.forEach(t=>{
@@ -3443,33 +3586,56 @@ function updateTownPrompt(){
   p.textContent='INTERACT: '+t.label;
 }
 
+
+let currentInterior='';
+
+function openSideInterior(type){
+  currentInterior=type;
+  if(type==='cafe'){
+    $('interiorTitle').textContent='LOCAL SHAKE / CAFE';
+    $('interiorCounter').textContent='ORDER COUNTER';
+    $('interiorBench').textContent='TEAM TABLE';
+    $('interiorBoard').textContent='TOURNAMENT FLYERS';
+    $('interiorNpcName').textContent='CAFE WORKER';
+  }else{
+    $('interiorTitle').textContent='TOWN PARK CLUBHOUSE';
+    $('interiorCounter').textContent='CHECK-IN DESK';
+    $('interiorBench').textContent='STRETCH AREA';
+    $('interiorBoard').textContent='COMMUNITY EVENTS';
+    $('interiorNpcName').textContent='LOCAL COACH';
+  }
+  show('sideinterior');
+}
+
+function interiorInteract(){
+  if(currentInterior==='cafe'){
+    openDialog('CAFE WORKER','PBK students stop in here after class. There are tournament flyers and local event notices on the wall.');
+  }else{
+    openDialog('LOCAL COACH','This is a good place to stretch, move around, and reset between training sessions.');
+  }
+}
+
 function townInteract(){
   const t=nearestTownTarget();
   if(!t){
-    openDialog('TOWN','Walk closer to a location to interact.');
+    openDialog('TOWN','Walk closer to a location or person to interact.');
     return;
   }
 
-  if(t.type==='dojo'){
-    openDojo(currentTown);
-    return;
-  }
-  if(t.type==='cafe'){
-    openDialog('LOCAL CAFE','A little place to grab a shake after class. The town feels more alive when locations like this are part of the world.');
-    return;
-  }
-  if(t.type==='park'){
-    openDialog('TOWN PARK','Open space for movement, stretching, and relaxing between dojo visits.');
-    return;
-  }
+  if(t.type==='dojo'){openDojo(currentTown);return;}
+  if(t.type==='cafe'){openSideInterior('cafe');return;}
+  if(t.type==='park'){openSideInterior('park');return;}
   if(t.type==='parking'){
-    openDialog('DOJO PARKING','This is the parking area outside the dojo. You can imagine arriving here before walking up to class.');
+    openDialog('DOJO PARKING','Cars pull in before class and tournaments. This is where the real-world dojo experience starts.');
     return;
   }
   if(t.type==='depot'){
     openDialog('TRAVEL DEPOT','Use the travel buttons at the bottom of town to move directly between PBK towns.');
     return;
   }
+  if(t.type==='npc1'){openDialog($('townNpc1Name').textContent,townNpcDialogue(0));return;}
+  if(t.type==='npc2'){openDialog($('townNpc2Name').textContent,townNpcDialogue(1));return;}
+  if(t.type==='npc3'){openDialog($('townNpc3Name').textContent,townNpcDialogue(2));return;}
 }
 
 function teleportToSchool(id){
@@ -4011,7 +4177,7 @@ function resetFightState(){s={
 function startRappoldBoss(){
   if(!save.camaraDefeated)return;
   resetFightState();s.bossMode=true;s.bossName='MASTER RAPPOLD';s.bossPhase=1;s.pointTarget=21;s.opponentIndex=7;
-  show('fight');applySelectedFighter();loadOpponent(7);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(7);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='MASTER RAPPOLD • PHASE 1';
   $('bossIntroName').textContent='MASTER RAPPOLD';$('bossIntroSub').textContent='LATE-GAME BOSS • FIRST TO 21';$('bossIntro').classList.add('show');render();
 }
@@ -4019,7 +4185,7 @@ function startRappoldBoss(){
 function startStephBoss(){
   if(!save.alexDefeated)return;
   resetFightState();s.bossMode=true;s.bossName='MASTER STEPH';s.bossPhase=1;s.pointTarget=21;s.opponentIndex=5;
-  show('fight');applySelectedFighter();loadOpponent(5);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(5);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='MASTER STEPH • PHASE 1';
   $('bossIntroName').textContent='MASTER STEPH';$('bossIntroSub').textContent='RAYNHAM MASTER • FIRST TO 21';$('bossIntro').classList.add('show');render();
 }
@@ -4027,7 +4193,7 @@ function startStephBoss(){
 function startCamaraBoss(){
   if(!save.stephDefeated)return;
   resetFightState();s.bossMode=true;s.bossName='MASTER CAMARA';s.bossPhase=1;s.pointTarget=21;s.opponentIndex=6;
-  show('fight');applySelectedFighter();loadOpponent(6);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(6);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='MASTER CAMARA • PHASE 1';
   $('bossIntroName').textContent='MASTER CAMARA';$('bossIntroSub').textContent='TECHNICAL BOSS • FIRST TO 21';$('bossIntro').classList.add('show');render();
 }
@@ -4035,7 +4201,7 @@ function startCamaraBoss(){
 
 function startDadBoss(){
   resetFightState();s.bossMode=true;s.bossName='DAD';s.bossPhase=1;s.pointTarget=10;s.opponentIndex=2;
-  show('fight');applySelectedFighter();loadOpponent(2);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(2);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='DAD • PHASE 1';
   $('bossIntroName').textContent='DAD';$('bossIntroSub').textContent='FIRST BOSS • FIRST TO 10';$('bossIntro').classList.add('show');render();
 }
@@ -4043,7 +4209,7 @@ function startDadBoss(){
 function startAlexBoss(){
   if(!save.ryanDefeated)return;
   resetFightState();s.bossMode=true;s.bossName='ALEX GEORGE';s.bossPhase=1;s.pointTarget=21;s.opponentIndex=4;
-  show('fight');applySelectedFighter();loadOpponent(4);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(4);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='ALEX GEORGE • PHASE 1';
   $('bossIntroName').textContent='ALEX GEORGE';$('bossIntroSub').textContent='THIRD BOSS • FIRST TO 21';$('bossIntro').classList.add('show');render();
 }
@@ -4051,7 +4217,7 @@ function startAlexBoss(){
 function startRyanBoss(){
   if(!save.dadDefeated)return;
   resetFightState();s.bossMode=true;s.bossName='RYAN';s.bossPhase=1;s.pointTarget=20;s.opponentIndex=3;
-  show('fight');applySelectedFighter();loadOpponent(3);
+  show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(3);
   $('bossPhase').classList.add('show');$('bossPhase').textContent='RYAN • PHASE 1';
   $('bossIntroName').textContent='RYAN';$('bossIntroSub').textContent='SECOND BOSS • FIRST TO 20';$('bossIntro').classList.add('show');render();
 }
@@ -4061,7 +4227,7 @@ function launchRyanBossFight(){
   setupRound();
 }
 
-function startTournament(){resetFightState();s.pointTarget=pointTargetForCareer();$('bossPhase').classList.remove('show');show('fight');applySelectedFighter();loadOpponent(0);setupRound()}
+function startTournament(){resetFightState();s.pointTarget=pointTargetForCareer();$('bossPhase').classList.remove('show');show('fight');updateArenaEventLabel();applySelectedFighter();loadOpponent(0);setupRound()}
 function loadOpponent(i){s.opponentIndex=i;const o=opponents[i];$('enemyName').textContent=o.name;$('enemyTag').textContent=o.name;$('scoreEnemyLabel').textContent=o.name;$('enemy').querySelector('.body').style.background=o.color;$('stageLabel').textContent=i===0?'SEMIFINAL':i===1?'CHAMPIONSHIP':'BOSS FIGHT'}
 function announce(text){
   const a=$('announcer');
@@ -4264,6 +4430,24 @@ function updateCamera(){
   if(a){
     a.style.left=midpoint+'%';
     a.style.top='52%';
+  }
+}
+
+
+function crowdReact(){
+  const c=$('crowdFlash');
+  if(!c)return;
+  c.classList.remove('on');void c.offsetWidth;c.classList.add('on');
+}
+
+function updateArenaEventLabel(){
+  if(!$('arenaEventBanner'))return;
+  if(s.bossMode){
+    $('arenaEventBanner').textContent=`PBK BOSS EVENT • ${s.bossName}`;
+  }else{
+    $('arenaEventBanner').textContent=currentSchool
+      ?`PBK ${currentSchool} • POINT FIGHTING`
+      :'PBK POINT FIGHTING EVENT';
   }
 }
 
@@ -4958,6 +5142,125 @@ function runtimeHealthCheck(){
   return missing.length===0;
 }
 runtimeHealthCheck();
+
+
+['interiorCounter','interiorBench','interiorBoard','interiorNpc'].forEach(id=>{
+  const el=$(id); if(el)el.addEventListener('pointerup',e=>{safe(e);interiorInteract()},{passive:false});
+});
+
+
+/* v3.2.2 navigation hotfix */
+function bindPBKNavigation(){
+  // Main RPG entry
+  bindTap('worldBtn',openWorld);
+
+  // Regional map -> towns
+  bindTap('teleportNortonBtn',()=>travelToTown('NORTON'));
+  bindTap('teleportEastonBtn',()=>travelToTown('EASTON'));
+  bindTap('teleportFoxboroughBtn',()=>travelToTown('FOXBOROUGH'));
+  bindTap('teleportRaynhamBtn',()=>travelToTown('RAYNHAM'));
+
+  // Town movement/actions
+  bindTap('townInteractBtn',townInteract);
+  bindTap('townMapBtn',()=>show('world'));
+  bindTap('townToNortonBtn',()=>travelToTown('NORTON'));
+  bindTap('townToEastonBtn',()=>travelToTown('EASTON'));
+  bindTap('townToFoxboroughBtn',()=>travelToTown('FOXBOROUGH'));
+  bindTap('townToRaynhamBtn',()=>travelToTown('RAYNHAM'));
+
+  // Parking lot
+  bindTap('parkingEnterBtn',parkingEnter);
+  bindTap('parkingMapBtn',()=>show('world'));
+
+  // Dojo
+  bindTap('dojoInteractBtn',dojoInteract);
+  bindTap('dojoMapBtn',()=>{closeDialog();show('world')});
+  bindTap('dojoExit',()=>{closeDialog();show('town')});
+  bindTap('schoolChallengeBtn',startSchoolChallenge);
+
+  // Side interiors
+  bindTap('interiorExit',()=>show('town'));
+  bindTap('interiorPrompt',interiorInteract);
+
+  // Dialog
+  bindTap('dialogCloseBtn',closeDialog);
+
+  // Legacy/direct mode links kept available internally
+  bindTap('playBtn',()=>show('modes'));
+  bindTap('careerBtn',()=>{updateCareer();show('career')});
+  bindTap('selectBtn',()=>{updateRoster();show('select')});
+  bindTap('bracketBtn',()=>show('bracket'));
+  bindTap('bossBtn',()=>show('bosses'));
+  bindTap('bossFightBtn',()=>{updateBossProgress();show('bossfightselect')});
+
+  // Mode launches
+  bindTap('sparBtn',startTournament);
+  bindTap('formsBtn',()=>{resetFormsMode();show('forms')});
+  bindTap('breakingBtn',()=>show('breaking'));
+
+  // Fighter roster
+  bindTap('chooseBradley',()=>selectPlayable('BRADLEY'));
+  bindTap('chooseNorton',()=>selectPlayable('NORTON'));
+  bindTap('chooseIanJo',()=>selectPlayable('IAN_JO'));
+  bindTap('chooseAlarmaJoe',()=>selectPlayable('ALARMA_JOE'));
+  bindTap('chooseAJ',()=>selectPlayable('AJ'));
+  bindTap('chooseJesseSanchez',()=>selectPlayable('JESSE_SANCHEZ'));
+  bindTap('chooseSamShanoi',()=>selectPlayable('SAM_SHANOI'));
+  bindTap('chooseMaxShanoi',()=>selectPlayable('MAX_SHANOI'));
+  bindTap('chooseDrewKazi',()=>selectPlayable('DREW_KAZI'));
+  bindTap('chooseFoxborough',()=>selectPlayable('FOXBOROUGH'));
+  bindTap('chooseRaynham',()=>selectPlayable('RAYNHAM'));
+
+  // Boss fights
+  bindTap('fightDadBtn',startDadBoss);
+  bindTap('fightRyanBtn',startRyanBoss);
+  bindTap('fightAlexBtn',startAlexBoss);
+  bindTap('fightStephBtn',startStephBoss);
+  bindTap('fightCamaraBtn',startCamaraBoss);
+  bindTap('fightRappoldBtn',startRappoldBoss);
+  bindTap('bossIntroFightBtn',launchRyanBossFight);
+
+  // Match / round navigation
+  bindTap('nextRound',()=>roundCurtainTransition(()=>{s.round++;setupRound()}));
+  bindTap('nextFight',()=>roundCurtainTransition(nextOpponent));
+  bindTap('returnMenu',()=>{
+    $('bossPhase')?.classList.remove('show');
+    $('bossIntro')?.classList.remove('show');
+    $('enemy')?.classList.remove('bossAura');
+    updateCareer();
+    updateBossProgress();
+    show('world');
+  });
+
+  // Back buttons — use pointerup directly so unnamed buttons work too.
+  document.querySelectorAll('.back').forEach(btn=>{
+    if(btn.dataset.pbkBound==='1')return;
+    btn.dataset.pbkBound='1';
+    btn.addEventListener('pointerup',e=>{
+      safe(e);
+      closeDialog();
+      const target=btn.dataset.back;
+      if(target)show(target);
+    },{passive:false});
+  });
+}
+
+function pbkStartupAudit(){
+  const critical=[
+    'worldBtn','teleportNortonBtn','teleportEastonBtn',
+    'teleportFoxboroughBtn','teleportRaynhamBtn',
+    'townInteractBtn','dojoInteractBtn'
+  ];
+  const missing=critical.filter(id=>!$(id));
+  if(missing.length){
+    console.error('PBK CRITICAL UI MISSING:',missing);
+    return false;
+  }
+  return true;
+}
+
+bindPBKNavigation();
+pbkStartupAudit();
 
 </script>
 </body>
