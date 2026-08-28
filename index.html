@@ -2059,6 +2059,495 @@ body:has(#world:target) #menu{display:none!important}
   }
 }
 
+
+/* v3.7 living PBK towns + lifelike characters + audio */
+:root{
+  --pbk-panel:rgba(10,14,18,.88);
+  --pbk-line:rgba(255,255,255,.12);
+}
+#world{background:linear-gradient(#202b38,#0d1117)}
+#travelMap{
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,255,255,.05),transparent 25%),
+    linear-gradient(135deg,#52744a 0%,#456640 35%,#345635 70%,#2a462d 100%);
+}
+.travelNode{
+  backdrop-filter:blur(3px);
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(180deg,rgba(24,29,35,.95),rgba(10,13,17,.92));
+}
+.travelNode strong{font-size:18px;letter-spacing:.8px}
+.travelNode span{opacity:.78}
+
+#townScene{
+  min-height:700px;
+  background:
+    linear-gradient(#79a0cf 0 22%,#7192be 22% 24%,#82996c 24% 100%);
+}
+#townRoadMain{
+  top:54%;height:140px;
+  background:
+    linear-gradient(rgba(255,255,255,.02),rgba(0,0,0,.05)),
+    #42474c;
+}
+#townRoadStripe{top:595px}
+#townSidewalkTop{top:352px;height:22px}
+#townSidewalkBottom{top:494px;height:22px}
+#townDojo{
+  top:116px;width:390px;height:200px;
+  background:linear-gradient(#3c444d,#171c22);
+  box-shadow:0 25px 45px rgba(0,0,0,.38);
+}
+#townDojoDoor{
+  width:74px;height:90px;
+  background:linear-gradient(90deg,#241910 0 48%,#493622 48% 52%,#241910 52%);
+}
+#townDojoDoor::after{
+  content:'ENTER';
+  position:absolute;
+  left:50%;bottom:8px;transform:translateX(-50%);
+  font-size:9px;letter-spacing:1.4px;color:#d8c6a7;
+}
+#townDojoDoor.near{
+  box-shadow:0 0 0 3px rgba(255,255,255,.8),0 0 26px rgba(255,230,160,.45);
+}
+#townDojoSign{
+  font-size:15px;min-width:230px;
+  background:linear-gradient(#111820,#06090d);
+}
+#townHouse1,#townHouse2,#townStore1,#townStore2{
+  position:absolute;z-index:5;border-radius:10px;border:2px solid rgba(255,255,255,.18);
+  box-shadow:0 14px 26px rgba(0,0,0,.28);
+}
+#townHouse1,#townHouse2{
+  width:165px;height:126px;background:linear-gradient(#a57b57,#725039);
+}
+#townHouse1{left:3%;top:188px}
+#townHouse2{right:3%;top:180px;background:linear-gradient(#8a9bab,#5c6d7c)}
+#townStore1,#townStore2{
+  width:175px;height:122px;background:linear-gradient(#596775,#303942);
+}
+#townStore1{left:5%;bottom:168px}
+#townStore2{right:5%;bottom:168px;background:linear-gradient(#6d5945,#3b2d20)}
+.townFacadeSign{
+  position:absolute;left:50%;top:14px;transform:translateX(-50%);
+  min-width:105px;padding:6px 8px;border-radius:7px;background:#10151a;border:1px solid #6a747f;
+  font-size:10px;font-weight:1000;text-align:center;
+}
+.townDoor{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:42px;height:54px;background:#2c2117;border:2px solid #836746;
+}
+.townWindow{
+  position:absolute;top:54px;width:42px;height:28px;background:#7da0bd;border:2px solid #a6b6c5;
+}
+.townWindow.l{left:15px}.townWindow.r{right:15px}
+#townChallengeSpot{
+  position:absolute;left:50%;bottom:155px;transform:translateX(-50%);
+  z-index:7;padding:10px 12px;border-radius:12px;
+  background:rgba(19,24,30,.92);border:1px solid rgba(255,255,255,.18);
+  font-size:10px;font-weight:1000;text-align:center;
+}
+#townChallengeSpot.near{outline:2px solid #fff;box-shadow:0 0 22px rgba(255,255,255,.13)}
+
+/* lifelike stylized RPG characters */
+.rpgHuman{
+  position:absolute;width:46px;height:82px;z-index:20;transform:translate(-50%,-50%);
+  filter:drop-shadow(0 7px 4px rgba(0,0,0,.25));
+}
+.rpgHuman .shadow{
+  position:absolute;left:50%;bottom:-3px;transform:translateX(-50%);
+  width:36px;height:10px;border-radius:50%;background:rgba(0,0,0,.28)
+}
+.rpgHuman .head{
+  position:absolute;left:13px;top:0;width:20px;height:23px;border-radius:45% 45% 50% 50%;
+  background:linear-gradient(90deg,#b77e55,#e0aa7e);border:1px solid #6d472f;z-index:4
+}
+.rpgHuman .hair{
+  position:absolute;left:12px;top:-2px;width:22px;height:10px;border-radius:50% 50% 25% 25%;
+  background:#241d18;z-index:5
+}
+.rpgHuman .neck{position:absolute;left:19px;top:20px;width:8px;height:7px;background:#c48e68;z-index:2}
+.rpgHuman .torso{
+  position:absolute;left:9px;top:25px;width:28px;height:33px;border-radius:9px 9px 6px 6px;
+  background:linear-gradient(90deg,#111317,#252a30 50%,#111317);border:1px solid #08090b;z-index:3
+}
+.rpgHuman .beltline{
+  position:absolute;left:8px;top:51px;width:30px;height:5px;background:#080808;z-index:4
+}
+.rpgHuman .arm{
+  position:absolute;top:28px;width:8px;height:31px;border-radius:6px;background:linear-gradient(#15181c,#090a0c);
+  transform-origin:top center;z-index:2
+}
+.rpgHuman .arm.l{left:4px;transform:rotate(8deg)}
+.rpgHuman .arm.r{right:4px;transform:rotate(-8deg)}
+.rpgHuman .leg{
+  position:absolute;top:55px;width:9px;height:27px;border-radius:6px 6px 4px 4px;background:linear-gradient(#15181c,#090a0c)
+}
+.rpgHuman .leg.l{left:12px;transform:rotate(2deg)}
+.rpgHuman .leg.r{right:12px;transform:rotate(-2deg)}
+.rpgHuman.walk .arm.l{animation:armWalkL .5s infinite alternate}
+.rpgHuman.walk .arm.r{animation:armWalkR .5s infinite alternate}
+.rpgHuman.walk .leg.l{animation:legWalkL .5s infinite alternate}
+.rpgHuman.walk .leg.r{animation:legWalkR .5s infinite alternate}
+@keyframes armWalkL{to{transform:rotate(-18deg)}}@keyframes armWalkR{to{transform:rotate(18deg)}}
+@keyframes legWalkL{to{transform:rotate(-10deg)}}@keyframes legWalkR{to{transform:rotate(10deg)}}
+.rpgHuman .nameTag{
+  position:absolute;left:50%;top:-18px;transform:translateX(-50%);
+  white-space:nowrap;font-size:9px;font-weight:1000;text-shadow:0 2px 3px #000
+}
+#townPlayer{display:none!important}
+.townNpc{display:none!important}
+
+#playerAvatar{left:50%;top:77%}
+#lifeNpc1{left:25%;top:46%}
+#lifeNpc2{left:68%;top:49%}
+#lifeNpc3{left:48%;top:66%}
+#lifeNpc4{left:80%;top:37%}
+
+#buildingInterior{
+  width:min(920px,95vw);min-height:560px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:linear-gradient(#2c333a 0 30%,#715b45 30% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38)
+}
+#buildingTitle{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  padding:8px 14px;border-radius:999px;background:#10151a;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;z-index:10
+}
+#buildingDecor1,#buildingDecor2,#buildingDecor3{
+  position:absolute;border-radius:10px;border:1px solid rgba(255,255,255,.13);background:#141a20
+}
+#buildingDecor1{left:8%;top:24%;width:190px;height:88px}
+#buildingDecor2{right:8%;top:24%;width:190px;height:88px}
+#buildingDecor3{left:50%;top:23%;transform:translateX(-50%);width:190px;height:72px}
+#buildingNpcAvatar{left:50%;top:57%}
+#buildingPrompt{
+  position:absolute;left:50%;bottom:72px;transform:translateX(-50%);
+  padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000
+}
+#buildingExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
+
+#homeMusicToggle{
+  position:absolute;right:18px;top:18px;z-index:9;
+  min-width:52px;min-height:44px;padding:8px 12px;
+  border-radius:999px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);
+  font-size:12px
+}
+#menu.splashHome #homeMusicToggle{display:block!important}
+
+
+/* v3.7 connected active region */
+#regionWorld{
+  width:min(1180px,97vw);
+  min-height:720px;
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid #59636e;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(255,255,255,.05),transparent 22%),
+    linear-gradient(145deg,#668258 0%,#496a48 40%,#365639 100%);
+  box-shadow:0 22px 55px rgba(0,0,0,.4);
+}
+#regionHud{
+  width:min(1180px,97vw);
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;
+  padding:10px 12px;border-radius:12px;background:#11161b;border:1px solid #4b5560;margin-bottom:10px
+}
+#regionModeButtons{display:flex;gap:6px;flex-wrap:wrap}
+#regionModeButtons button{font-size:12px;padding:9px 12px}
+#regionModeButtons button.active{outline:2px solid #fff;background:#4a5663}
+.regionRoad{
+  position:absolute;background:#4c5054;border-radius:999px;z-index:2;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.04)
+}
+#regionRoadA{left:10%;right:10%;top:49%;height:52px;transform:rotate(-3deg)}
+#regionRoadB{left:48%;top:10%;bottom:10%;width:54px;transform:rotate(8deg)}
+#regionRoadC{left:16%;right:18%;bottom:19%;height:42px;transform:rotate(9deg)}
+#regionRoadD{left:12%;right:20%;top:23%;height:36px;transform:rotate(6deg)}
+.regionTown{
+  position:absolute;width:190px;min-height:112px;padding:12px;border-radius:16px;
+  background:linear-gradient(180deg,#323b45,#151a1f);
+  border:1px solid rgba(255,255,255,.2);z-index:8;text-align:center;
+  box-shadow:0 12px 25px rgba(0,0,0,.32)
+}
+.regionTown strong{display:block;font-size:18px;letter-spacing:1px}
+.regionTown span{font-size:10px;opacity:.75}
+.regionTown .tinyDojo{
+  width:74px;height:38px;margin:9px auto 0;border-radius:6px;background:#1c2228;border:1px solid #7f8b96;
+  position:relative
+}
+.regionTown .tinyDojo::after{
+  content:'PBK';position:absolute;left:50%;top:10px;transform:translateX(-50%);font-size:9px;font-weight:1000
+}
+#regionNorton{left:5%;top:8%}
+#regionEaston{right:5%;top:12%}
+#regionFoxborough{left:7%;bottom:8%}
+#regionRaynham{right:7%;bottom:8%}
+.regionTown.near{outline:3px solid rgba(255,255,255,.85);box-shadow:0 0 28px rgba(255,255,255,.12)}
+#regionPlayer{
+  position:absolute;width:46px;height:82px;left:50%;top:49%;z-index:20;transform:translate(-50%,-50%);
+  transition:left .05s linear,top .05s linear
+}
+#regionPlayer.drive{width:86px;height:44px}
+#regionPlayer.drive .humanParts{display:none}
+#regionPlayerCar{
+  display:none;position:absolute;inset:0;border-radius:14px 14px 8px 8px;
+  background:linear-gradient(#3d65ab,#1c315b);border:2px solid #0b1424;
+  box-shadow:0 10px 16px rgba(0,0,0,.35)
+}
+#regionPlayerCar::before{
+  content:'';position:absolute;left:14px;right:14px;top:7px;height:14px;border-radius:8px;background:#91b1c8
+}
+#regionPlayerCar::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:-7px;height:12px;
+  background:radial-gradient(circle at 10% 50%,#111 0 6px,transparent 7px),
+             radial-gradient(circle at 90% 50%,#111 0 6px,transparent 7px)
+}
+#regionPlayer.drive #regionPlayerCar{display:block}
+#regionPrompt{
+  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+  z-index:30;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.74);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000;display:none
+}
+#regionPrompt.show{display:block}
+#regionControls{
+  width:min(1180px,97vw);margin-top:10px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center
+}
+#regionDpad{
+  width:210px;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:4px;justify-content:center
+}
+#regionDpad button{min-width:0;padding:0}
+#regionDpad .up{grid-column:2;grid-row:1}
+#regionDpad .left{grid-column:1;grid-row:2}
+#regionDpad .right{grid-column:3;grid-row:2}
+#regionDpad .down{grid-column:2;grid-row:3}
+#regionActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#regionActions button{min-width:140px}
+#regionFastTravel{
+  position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;z-index:11
+}
+#regionFastTravel button{font-size:10px;padding:7px 9px}
+.regionTree{
+  position:absolute;width:18px;height:45px;z-index:3
+}
+.regionTree::before{content:'';position:absolute;left:6px;bottom:0;width:6px;height:17px;background:#69482f}
+.regionTree::after{content:'';position:absolute;left:-4px;top:0;width:26px;height:26px;border-radius:50%;background:#315d33}
+#regionTree1{left:27%;top:16%}#regionTree2{left:38%;top:72%}#regionTree3{right:31%;top:24%}#regionTree4{right:27%;bottom:19%}
+
+
+/* v3.7 regional life RPG */
+#lifeHud{
+  width:min(1180px,97vw);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;
+  margin-top:10px
+}
+.lifeStat{
+  padding:9px 10px;border-radius:10px;background:#11161b;border:1px solid #48515c;
+  font-size:11px
+}
+.lifeStat strong{display:block;font-size:12px;margin-bottom:3px}
+
+#regionApartment,#regionCarLot,#regionGas,#regionMall{
+  position:absolute;z-index:6;border-radius:14px;border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 14px 28px rgba(0,0,0,.3);text-align:center
+}
+#regionApartment{
+  left:34%;top:12%;width:150px;height:125px;
+  background:linear-gradient(#8f7c70,#584b44);
+}
+#regionCarLot{
+  right:29%;top:68%;width:175px;height:110px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 42px,rgba(255,255,255,.14) 42px 45px,transparent 45px 88px),
+    linear-gradient(#666b70,#43474b);
+}
+#regionGas{
+  left:31%;bottom:11%;width:135px;height:82px;background:linear-gradient(#5e6770,#30373e)
+}
+#regionMall{
+  right:31%;top:34%;width:160px;height:105px;background:linear-gradient(#6b625e,#403936)
+}
+.regionLifeLabel{
+  position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  padding:5px 8px;border-radius:999px;background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.08);font-size:9px;font-weight:1000;white-space:nowrap
+}
+#regionApartment::before{
+  content:'';position:absolute;left:16px;right:16px;top:34px;bottom:12px;
+  background:
+    linear-gradient(90deg,transparent 0 20%,#9eb4c7 20% 36%,transparent 36% 63%,#9eb4c7 63% 79%,transparent 79%);
+  opacity:.7
+}
+#regionCarLot::after{
+  content:'🚗   🚙   🚗';position:absolute;left:50%;top:43px;transform:translateX(-50%);font-size:24px;white-space:nowrap
+}
+#regionGas::after{
+  content:'⛽';position:absolute;left:50%;top:34px;transform:translateX(-50%);font-size:28px
+}
+#regionMall::after{
+  content:'STORES';position:absolute;left:50%;top:46px;transform:translateX(-50%);font-size:13px;font-weight:1000
+}
+.regionLifeSpot.near{outline:3px solid rgba(255,255,255,.9);box-shadow:0 0 28px rgba(255,255,255,.13)}
+
+#apartmentLobby{
+  width:min(920px,95vw);min-height:570px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;background:linear-gradient(#343a40 0 30%,#75624d 30% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38)
+}
+#apartmentTitle,#carLotTitle{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  padding:8px 14px;border-radius:999px;background:#10151a;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;z-index:10
+}
+#apartmentDesk{
+  position:absolute;left:8%;top:24%;width:220px;height:85px;border-radius:12px;background:#181e24;border:1px solid #5b6670;
+  text-align:center;padding-top:26px;font-weight:900
+}
+#apartmentBoard{
+  position:absolute;right:8%;top:24%;width:250px;height:120px;border-radius:12px;background:#14191f;border:1px solid #5b6670;
+  padding:12px;font-size:11px
+}
+#apartmentRoomPreview{
+  position:absolute;left:50%;top:46%;transform:translateX(-50%);
+  width:320px;height:150px;border-radius:14px;background:linear-gradient(#6a7890,#3d4655);
+  border:2px solid #8c98a6;text-align:center;padding-top:58px;font-weight:1000
+}
+#apartmentActions{
+  position:absolute;left:50%;bottom:70px;transform:translateX(-50%);
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:88%
+}
+#apartmentActions button{min-width:140px}
+#apartmentExit{position:absolute;left:50%;bottom:16px;transform:translateX(-50%)}
+
+#carLotScene{
+  width:min(980px,95vw);min-height:570px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 90px,rgba(255,255,255,.12) 90px 94px,transparent 94px 184px),
+    linear-gradient(#676c71,#454a4e);
+}
+.carChoice{
+  position:absolute;width:180px;height:92px;border-radius:14px;background:#171c22;border:1px solid #606b75;
+  padding:12px;text-align:center;font-size:11px
+}
+#carChoice1{left:8%;top:28%}
+#carChoice2{left:50%;top:28%;transform:translateX(-50%)}
+#carChoice3{right:8%;top:28%}
+.carIcon{font-size:36px;margin-bottom:6px}
+.carChoice button{width:100%;margin-top:7px;font-size:12px;padding:9px}
+#carLotInfo{
+  position:absolute;left:50%;bottom:85px;transform:translateX(-50%);
+  width:min(720px,86%);padding:10px;border-radius:10px;background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.08);font-size:11px;text-align:center
+}
+#carLotExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
+
+#apartment,#carlot{padding:10px 0 22px}
+
+.townApartment,.townCarDealer{
+  position:absolute;z-index:5;border-radius:12px;border:2px solid rgba(255,255,255,.18);
+  box-shadow:0 12px 24px rgba(0,0,0,.3)
+}
+.townApartment{
+  left:31%;bottom:145px;width:155px;height:145px;background:linear-gradient(#86796e,#524841)
+}
+.townCarDealer{
+  right:29%;bottom:145px;width:175px;height:120px;
+  background:linear-gradient(#596672,#323a42)
+}
+.townApartment::after,.townCarDealer::after{
+  position:absolute;left:50%;top:14px;transform:translateX(-50%);
+  padding:5px 8px;border-radius:8px;background:#10151a;border:1px solid #66717d;font-size:9px;font-weight:1000;white-space:nowrap
+}
+.townApartment::after{content:'APARTMENTS'}
+.townCarDealer::after{content:'AUTO LOT'}
+
+
+/* v3.7 actual-route-inspired town layouts + in-town food */
+.townRoute{
+  position:absolute;z-index:2;background:#484d52;border-radius:999px;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.035);
+}
+.townRoute.major{height:64px}
+.townRoute.cross{width:58px}
+.routeLabel{
+  position:absolute;z-index:4;padding:4px 7px;border-radius:999px;
+  background:rgba(9,12,16,.72);border:1px solid rgba(255,255,255,.12);
+  font-size:9px;font-weight:1000;letter-spacing:.5px;white-space:nowrap
+}
+#townRouteA{left:-8%;right:-8%;top:48%;height:62px;transform:rotate(-3deg)}
+#townRouteB{left:48%;top:6%;bottom:6%;width:58px;transform:rotate(5deg)}
+#townRouteC{left:9%;right:14%;bottom:21%;height:44px;transform:rotate(7deg)}
+#townRouteD{left:13%;right:19%;top:25%;height:38px;transform:rotate(4deg)}
+#routeLabelA{left:8%;top:45%}
+#routeLabelB{left:52%;top:16%}
+#routeLabelC{right:11%;bottom:18%}
+#routeLabelD{left:19%;top:21%}
+
+.townFood{
+  position:absolute;z-index:8;width:150px;height:100px;border-radius:12px;
+  border:2px solid rgba(255,255,255,.16);box-shadow:0 13px 23px rgba(0,0,0,.29);
+  background:linear-gradient(#714b36,#3e291d);
+}
+.townFood .foodSign{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  min-width:115px;padding:6px 8px;border-radius:8px;background:#12161b;border:1px solid #8a6f56;
+  font-size:10px;font-weight:1000;text-align:center;white-space:nowrap
+}
+.townFood .foodDoor{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:40px;height:48px;background:#2c2117;border:2px solid #856746
+}
+.townFood .foodWindow{
+  position:absolute;top:52px;width:38px;height:24px;background:#9ab4c7;border:2px solid #bdccd7
+}
+.townFood .foodWindow.l{left:12px}.townFood .foodWindow.r{right:12px}
+#townFood1{left:20%;top:18%}
+#townFood2{right:18%;top:20%;background:linear-gradient(#5d4435,#32251d)}
+#townFood3{left:18%;bottom:18%;background:linear-gradient(#56616c,#303840)}
+.townFood.near{outline:3px solid #fff;box-shadow:0 0 26px rgba(255,255,255,.14)}
+
+#restaurant{padding:10px 0 22px}
+#restaurantInterior{
+  width:min(920px,95vw);min-height:560px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:linear-gradient(#34383d 0 30%,#6d5945 30% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38)
+}
+#restaurantTitle{
+  position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  padding:8px 14px;border-radius:999px;background:#10151a;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;z-index:10
+}
+#restaurantCounter{
+  position:absolute;left:7%;top:22%;width:240px;height:85px;border-radius:12px;
+  background:#171c22;border:1px solid #58636e;text-align:center;padding-top:30px;font-weight:1000
+}
+#restaurantTables{
+  position:absolute;right:7%;top:22%;width:270px;height:120px;border-radius:12px;
+  background:
+    radial-gradient(circle at 25% 50%,#6f533c 0 18px,transparent 19px),
+    radial-gradient(circle at 75% 50%,#6f533c 0 18px,transparent 19px),
+    #191f25;
+  border:1px solid #58636e
+}
+#restaurantMenu{
+  position:absolute;left:50%;top:44%;transform:translateX(-50%);
+  width:min(540px,82%);padding:14px;border-radius:12px;background:#11161b;border:1px solid #4d5661;
+  font-size:11px;line-height:1.7;text-align:center
+}
+#restaurantActions{
+  position:absolute;left:50%;bottom:76px;transform:translateX(-50%);
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;width:88%
+}
+#restaurantActions button{min-width:135px}
+#restaurantExit{position:absolute;left:50%;bottom:18px;transform:translateX(-50%)}
+
 </style>
 <script>
 window.pbkEnterWorld=function(e){
@@ -2082,65 +2571,394 @@ document.addEventListener('DOMContentLoaded',function(){
     b.addEventListener('touchend',window.pbkEnterWorld,{passive:false});
   }
 });
+
+/* v3.7 living world systems */
+let homeMusicCtx=null,homeMusicNodes=[],homeMusicOn=false,homeMusicTimer=null;
+
+function stopHomeMusic(){
+  if(homeMusicTimer){clearInterval(homeMusicTimer);homeMusicTimer=null}
+  homeMusicNodes.forEach(n=>{try{n.stop?.()}catch(e){} try{n.disconnect?.()}catch(e){}});
+  homeMusicNodes=[];
+  if(homeMusicCtx){try{homeMusicCtx.close()}catch(e){} homeMusicCtx=null}
+  homeMusicOn=false;
+  const b=$('homeMusicToggle');if(b)b.textContent='MUSIC ♫';
+}
+
+function playTone(ctx,freq,start,dur,type='sine',gain=.035){
+  const o=ctx.createOscillator(),g=ctx.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(0,start);
+  g.gain.linearRampToValueAtTime(gain,start+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,start+dur);
+  o.connect(g).connect(ctx.destination);o.start(start);o.stop(start+dur+.04);
+  homeMusicNodes.push(o,g);
+}
+function playDrum(ctx,start){
+  const o=ctx.createOscillator(),g=ctx.createGain();
+  o.type='sine';o.frequency.setValueAtTime(120,start);o.frequency.exponentialRampToValueAtTime(55,start+.18);
+  g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(.11,start+.01);g.gain.exponentialRampToValueAtTime(.0001,start+.28);
+  o.connect(g).connect(ctx.destination);o.start(start);o.stop(start+.3);homeMusicNodes.push(o,g);
+}
+function playBell(ctx,start){
+  [523.25,784.88,1046.5].forEach((f,i)=>playTone(ctx,f,start,.7,'sine',.022/(i+1)));
+}
+function scheduleDojoLoop(){
+  if(!homeMusicCtx)return;
+  const ctx=homeMusicCtx,now=ctx.currentTime+.05;
+  const scale=[293.66,329.63,392.00,440.00,523.25]; // pentatonic-ish
+  for(let bar=0;bar<4;bar++){
+    const b=now+bar*2.4;
+    playDrum(ctx,b);playDrum(ctx,b+1.2);
+    if(bar===0||bar===2)playBell(ctx,b+.02);
+    [0,.6,1.2,1.8].forEach((off,j)=>{
+      const f=scale[(bar+j*2)%scale.length];
+      playTone(ctx,f,b+off,.48,'triangle',.022);
+    });
+    playTone(ctx,146.83,b,2.15,'sine',.014);
+  }
+}
+function toggleHomeMusic(){
+  if(homeMusicOn){stopHomeMusic();return}
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  homeMusicCtx=new AC();
+  homeMusicOn=true;
+  const b=$('homeMusicToggle');if(b)b.textContent='MUSIC ON ♫';
+  scheduleDojoLoop();
+  homeMusicTimer=setInterval(scheduleDojoLoop,9600);
+}
+
+const lifeNpcState=[
+  {id:'lifeNpc1',x:25,y:46,dx:.12,dy:0,minX:20,maxX:42,minY:42,maxY:50},
+  {id:'lifeNpc2',x:68,y:49,dx:-.10,dy:.03,minX:52,maxX:78,minY:44,maxY:53},
+  {id:'lifeNpc3',x:48,y:66,dx:.08,dy:-.04,minX:38,maxX:60,minY:60,maxY:70},
+  {id:'lifeNpc4',x:80,y:37,dx:-.07,dy:.05,minX:68,maxX:88,minY:32,maxY:43}
+];
+function updateLifeNpcVisuals(){
+  lifeNpcState.forEach(n=>{
+    const el=$(n.id);if(!el)return;
+    el.style.left=n.x+'%';el.style.top=n.y+'%';
+  });
+}
+setInterval(()=>{
+  if(!$('town')?.classList.contains('active'))return;
+  lifeNpcState.forEach(n=>{
+    n.x+=n.dx;n.y+=n.dy;
+    if(n.x<=n.minX||n.x>=n.maxX)n.dx*=-1;
+    if(n.y<=n.minY||n.y>=n.maxY)n.dy*=-1;
+  });
+  updateLifeNpcVisuals();
+},70);
+
+let currentBuilding='';
+
+let currentRestaurant='';
+const townFoodTargets=[
+  {type:'food1',x:27,y:23,label:'ENTER RESTAURANT',el:'townFood1'},
+  {type:'food2',x:76,y:24,label:'ENTER RESTAURANT',el:'townFood2'},
+  {type:'food3',x:26,y:74,label:'ENTER CAFE',el:'townFood3'}
+];
+
+function nearestTownFood(){
+  let best=null,bestD=999;
+  townFoodTargets.forEach(t=>{
+    const d=Math.hypot(townX-t.x,townY-t.y);
+    if(d<bestD){best=t;bestD=d}
+  });
+  return bestD<=12?best:null;
+}
+
+function openRestaurant(slot){
+  const data=townDescriptions[currentTown]||townDescriptions.NORTON;
+  const idx=slot==='food1'?0:slot==='food2'?1:2;
+  currentRestaurant=data.foods[idx];
+  $('restaurantTitle').textContent=currentRestaurant;
+  $('restaurantMenuTitle').textContent=currentTown+' FOOD';
+  $('restaurantMenuText').textContent=idx===0
+    ?'Burger • Grilled Chicken • Fries • Soup • Drinks'
+    :idx===1
+      ?'Pizza • Chicken Fingers • Salad • Drinks'
+      :'Coffee • Hot Chocolate • Sandwiches • Muffins';
+  show('restaurant');
+}
+
+function eatAtRestaurant(cost,amount){
+  if((save.cash||0)<cost){
+    openDialog(currentRestaurant||'RESTAURANT','You need more cash.');
+    return;
+  }
+  save.cash-=cost;
+  save.energy=Math.min(100,(save.energy??100)+amount);
+  saveLifeState();
+  openDialog(currentRestaurant||'RESTAURANT',`You eat and recover ${amount} energy.`);
+}
+
+function restaurantTalk(){
+  openDialog(currentRestaurant||'RESTAURANT',
+    `Locals talk about PBK classes, tournaments, and what is happening around ${currentTown}.`);
+}
+
+const townBuildingTargets=[
+  {type:'dojo',x:50,y:31,label:'ENTER PBK DOJO'},
+  {type:'house1',x:11,y:34,label:'ENTER HOUSE'},
+  {type:'house2',x:89,y:34,label:'ENTER HOUSE'},
+  {type:'store1',x:12,y:73,label:'ENTER MARTIAL ARTS SHOP'},
+  {type:'store2',x:88,y:73,label:'ENTER LOCAL MARKET'},
+  {type:'challenge',x:50,y:75,label:'WORLD CHALLENGE'}
+];
+
+function nearestTownBuilding(){
+  let best=null,bestD=999;
+  townBuildingTargets.forEach(t=>{
+    const d=Math.hypot(townX-t.x,townY-t.y);
+    if(d<bestD){best=t;bestD=d}
+  });
+  return bestD<=13?best:null;
+}
+
+const oldNearestTownTarget=nearestTownTarget;
+nearestTownTarget=function(){
+  const building=nearestTownBuilding();
+  const food=nearestTownFood();
+  const normal=oldNearestTownTarget();
+  if(!building&&!food)return normal;
+  if(!normal&&!building)return food;
+  if(!normal&&!food)return building;
+  const bd=building?Math.hypot(townX-building.x,townY-building.y):999;
+  const fd=food?Math.hypot(townX-food.x,townY-food.y):999;
+  const normalMap={
+    dojo:[50,33],cafe:[16,36],park:[84,38],depot:[14,78],parking:[84,79],
+    npc1:[28,46],npc2:[70,48],npc3:[50,67]
+  };
+  const np=normalMap[normal.type];
+  const nd=np?Math.hypot(townX-np[0],townY-np[1]):999;
+  if(fd<=bd&&fd<=nd)return food;return bd<=nd?building:normal;
+};
+
+const oldUpdateTownPrompt=updateTownPrompt;
+updateTownPrompt=function(){
+  const t=nearestTownTarget(),p=$('townPrompt');
+  $('townDojoDoor')?.classList.remove('near');
+  $('townChallengeSpot')?.classList.remove('near');document.querySelectorAll('.townFood').forEach(el=>el.classList.remove('near'));
+  if(!t){p?.classList.remove('show');return}
+  p?.classList.add('show'); if(p)p.textContent='INTERACT: '+t.label;
+  if(t.type==='dojo')$('townDojoDoor')?.classList.add('near');
+  if(t.type==='challenge')$('townChallengeSpot')?.classList.add('near');if(t.el)$(t.el)?.classList.add('near');
+};
+
+function openBuilding(type){
+  currentBuilding=type;
+  const title=$('buildingTitle'),npc=$('buildingNpcName'),p=$('buildingPrompt');
+  if(type==='house1'||type==='house2'){
+    title.textContent='LOCAL HOME';
+    npc.textContent='RESIDENT';
+    $('buildingDecor1').textContent='LIVING ROOM';
+    $('buildingDecor2').textContent='FAMILY PHOTOS';
+    $('buildingDecor3').textContent='PBK SCHEDULE';
+    p.textContent='TALK TO RESIDENT';
+  }else if(type==='store1'){
+    title.textContent='MARTIAL ARTS SHOP';
+    npc.textContent='SHOP OWNER';
+    $('buildingDecor1').textContent='GLOVES / PADS';
+    $('buildingDecor2').textContent='UNIFORMS / BELTS';
+    $('buildingDecor3').textContent='GEAR WALL';
+    p.textContent='BROWSE GEAR';
+  }else{
+    title.textContent='LOCAL MARKET';
+    npc.textContent='STORE CLERK';
+    $('buildingDecor1').textContent='CHECKOUT';
+    $('buildingDecor2').textContent='DRINKS / SNACKS';
+    $('buildingDecor3').textContent='COMMUNITY BOARD';
+    p.textContent='TALK TO CLERK';
+  }
+  show('building');
+}
+function buildingInteract(){
+  if(currentBuilding==='store1'){
+    openDialog('SHOP OWNER','New belts, gloves, pads, and tournament gear arrive every week. Later this shop can become the place to unlock cosmetic equipment.');
+  }else if(currentBuilding==='store2'){
+    openDialog('STORE CLERK','People from the dojo stop here before and after class. Check the community board for local challenges.');
+  }else{
+    openDialog('RESIDENT','The PBK school is part of everyday life in town. Students are always walking to class or talking about the next tournament.');
+  }
+}
+
+const priorTownInteract=townInteract;
+townInteract=function(){
+  const t=nearestTownTarget();
+  if(!t){openDialog('TOWN','Walk closer to a person or building to interact.');return}
+  if(t.type==='dojo'){openDojo(currentTown);return}if(['food1','food2','food3'].includes(t.type)){openRestaurant(t.type);return}
+  if(['house1','house2','store1','store2'].includes(t.type)){openBuilding(t.type);return}
+  if(t.type==='challenge'){
+    openDialog(currentTown+' WORLD CHALLENGE',
+      currentTown==='NORTON'?'Fundamentals scavenger challenge: talk to locals, visit the gear shop, then enter the dojo.'
+      :currentTown==='EASTON'?'Competition challenge: find the local competitor, visit the dojo, and complete an Easton combination test.'
+      :currentTown==='FOXBOROUGH'?'Distance challenge: explore both ends of town, then report to the dojo.'
+      :'Power challenge: speak with the local competitor and prepare for the Raynham dojo.');
+    return;
+  }
+  priorTownInteract();
+};
+
+function updateTownLabels(){
+  if(!currentTown)return;
+  $('townTitle').textContent=currentTown+', MASSACHUSETTS';
+  $('townDojoSign').textContent='PBK '+currentTown;
+  $('townChallengeLabel').textContent=currentTown+' challenge';
+}
+const priorUpdateTownScene=updateTownScene;
+updateTownScene=function(){priorUpdateTownScene();updateTownLabels();updateLifeNpcVisuals();};
+
+bindTap('homeMusicToggle',toggleHomeMusic);
+bindTap('buildingExit',()=>show('town'));
+bindTap('buildingPrompt',buildingInteract);
+['buildingDecor1','buildingDecor2','buildingDecor3','buildingNpcAvatar'].forEach(id=>{
+  const el=$(id);if(el)el.addEventListener('pointerup',e=>{safe(e);buildingInteract()},{passive:false});
+});
+
+const priorEnterWorld=window.pbkEnterWorld;
+window.pbkEnterWorld=function(e){
+  if(homeMusicOn)stopHomeMusic();
+  return priorEnterWorld?priorEnterWorld(e):false;
+};
+
 </script>
 </head>
 <body>
 
 <div id="menu" class="screen active splashHome">
   <div class="splashShade"></div>
-  <div class="splashButtonWrap">
+  <button id="homeMusicToggle" type="button">MUSIC ♫</button><div class="splashButtonWrap">
     <a id="worldBtn" role="button" aria-label="Enter PBK World" href="#world" onclick="return pbkEnterWorld(event)"></a>
   </div>
 </div>
 
+
 <div id="world" class="screen centercol">
   <button class="back" data-back="menu">BACK</button>
-  <div id="worldHud">
+
+  <div id="regionHud">
     <strong id="worldFighterName">BRADLEY</strong>
     <span id="worldBeltText">White Belt</span>
-    <span>PBK Regional Travel Map</span>
-  </div>
-
-  <div id="travelMap">
-    <div id="travelLegend">SELECT A PBK TOWN TO START YOUR TRAVEL</div>
-    <div class="mapRoad r1"></div><div class="mapRoad r2"></div><div class="mapRoad r3"></div>
-
-    <div class="travelNode" id="nodeNorton">
-      <strong>PBK NORTON</strong>
-      <span>Travel to Norton Town</span>
-      <button id="teleportNortonBtn">TELEPORT</button>
-    </div>
-
-    <div class="travelNode" id="nodeEaston">
-      <strong>PBK EASTON</strong>
-      <span>Travel to Easton Town</span>
-      <button id="teleportEastonBtn">TELEPORT</button>
-    </div>
-
-    <div class="travelNode" id="nodeFoxborough">
-      <strong>PBK FOXBOROUGH</strong>
-      <span>Travel to Foxborough Town</span>
-      <button id="teleportFoxboroughBtn">TELEPORT</button>
-    </div>
-
-    <div class="travelNode" id="nodeRaynham">
-      <strong>PBK RAYNHAM</strong>
-      <span>Travel to Raynham Town</span>
-      <button id="teleportRaynhamBtn">TELEPORT</button>
+    <span>PBK CONNECTED REGION</span>
+    <div id="regionModeButtons">
+      <button id="walkModeBtn" class="active">WALK</button>
+      <button id="runModeBtn">RUN</button>
+      <button id="driveModeBtn">DRIVE</button>
     </div>
   </div>
 
-  <div id="questPanel">
-    <strong>RPG MILESTONES</strong>
-    <div class="questGrid">
-      <div class="questItem" id="questVisit"><strong>Visit the PBK Schools</strong><span id="questVisitText">0 / 4 visited</span></div>
-      <div class="questItem" id="questForms"><strong>Forms Competitor</strong><span id="questFormsText">Not completed</span></div>
-      <div class="questItem" id="questTournament"><strong>Tournament Fighter</strong><span id="questTournamentText">0 tournament wins</span></div>
-      <div class="questItem" id="questBoss"><strong>Boss Path</strong><span id="questBossText">Dad awaits</span></div>
+  <div id="regionWorld">
+    <div class="regionRoad" id="regionRoadA"></div>
+    <div class="regionRoad" id="regionRoadB"></div>
+    <div class="regionRoad" id="regionRoadC"></div>
+    <div class="regionRoad" id="regionRoadD"></div>
+
+    <div id="regionFastTravel">
+      <button id="teleportNortonBtn">FAST TRAVEL NORTON</button>
+      <button id="teleportEastonBtn">FAST TRAVEL EASTON</button>
+      <button id="teleportFoxboroughBtn">FAST TRAVEL FOXBOROUGH</button>
+      <button id="teleportRaynhamBtn">FAST TRAVEL RAYNHAM</button>
     </div>
+
+    <div class="regionTown" id="regionNorton">
+      <strong>NORTON</strong><span>PBK Norton • homes • stores • challenges</span><div class="tinyDojo"></div>
+    </div>
+    <div class="regionTown" id="regionEaston">
+      <strong>EASTON</strong><span>PBK Easton • homes • stores • challenges</span><div class="tinyDojo"></div>
+    </div>
+    <div class="regionTown" id="regionFoxborough">
+      <strong>FOXBOROUGH</strong><span>PBK Foxborough • homes • stores • challenges</span><div class="tinyDojo"></div>
+    </div>
+    <div class="regionTown" id="regionRaynham">
+      <strong>RAYNHAM</strong><span>PBK Raynham • homes • stores • challenges</span><div class="tinyDojo"></div>
+    </div>
+
+    <div id="regionApartment" class="regionLifeSpot"><div class="regionLifeLabel">APARTMENTS</div></div>
+    <div id="regionCarLot" class="regionLifeSpot"><div class="regionLifeLabel">AUTO LOT</div></div>
+    <div id="regionGas" class="regionLifeSpot"><div class="regionLifeLabel">GAS STATION</div></div>
+    <div id="regionMall" class="regionLifeSpot"><div class="regionLifeLabel">SHOPPING CENTER</div></div>
+    <div class="regionTree" id="regionTree1"></div><div class="regionTree" id="regionTree2"></div>
+    <div class="regionTree" id="regionTree3"></div><div class="regionTree" id="regionTree4"></div>
+
+    <div id="regionPlayer">
+      <div class="humanParts">
+        <div class="rpgHuman" style="left:50%;top:50%">
+          <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+          <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+          <div class="leg l"></div><div class="leg r"></div>
+        </div>
+      </div>
+      <div id="regionPlayerCar"></div>
+    </div>
+
+    <div id="regionPrompt">ENTER TOWN</div>
+  </div>
+
+  <div id="regionControls">
+    <div></div>
+    <div id="regionDpad">
+      <button class="up" data-regionmove="up">▲</button>
+      <button class="left" data-regionmove="left">◀</button>
+      <button class="right" data-regionmove="right">▶</button>
+      <button class="down" data-regionmove="down">▼</button>
+    </div>
+    <div id="regionActions">
+      <button id="regionEnterBtn">ENTER TOWN</button>
+      <button id="regionCenterBtn">CENTER REGION</button>
+    </div>
+  </div>
+  <div id="lifeHud">
+    <div class="lifeStat"><strong>CASH</strong><span id="cashText">$500</span></div>
+    <div class="lifeStat"><strong>HOME</strong><span id="homeText">No apartment rented</span></div>
+    <div class="lifeStat"><strong>VEHICLE</strong><span id="vehicleText">No vehicle owned</span></div>
+    <div class="lifeStat"><strong>REGION REP</strong><span id="regionRepText">0</span></div><div class="lifeStat"><strong>ENERGY</strong><span id="energyText">100</span></div>
   </div>
 </div>
 
+
+<div id="apartment" class="screen centercol">
+  <button class="back" data-back="world">BACK TO REGION</button>
+  <div id="apartmentLobby">
+    <div id="apartmentTitle">REGIONAL APARTMENTS</div>
+    <div id="apartmentDesk">LEASING OFFICE</div>
+    <div id="apartmentBoard">
+      <strong>AVAILABLE UNITS</strong><br><br>
+      Studio — $150<br>
+      One Bedroom — $250<br>
+      Two Bedroom — $400
+    </div>
+    <div id="apartmentRoomPreview">YOUR RENTED APARTMENT</div>
+    <div id="apartmentActions">
+      <button id="rentStudioBtn">RENT STUDIO — $150</button>
+      <button id="rentOneBtn">RENT 1BR — $250</button>
+      <button id="rentTwoBtn">RENT 2BR — $400</button>
+      <button id="sleepBtn">REST / SAVE</button>
+    </div>
+    <button id="apartmentExit">EXIT</button>
+  </div>
+</div>
+
+<div id="carlot" class="screen centercol">
+  <button class="back" data-back="world">BACK TO REGION</button>
+  <div id="carLotScene">
+    <div id="carLotTitle">PBK REGION AUTO LOT</div>
+    <div class="carChoice" id="carChoice1">
+      <div class="carIcon">🚗</div><strong>COMPACT</strong><br>$300
+      <button id="buyCompactBtn">BUY</button>
+    </div>
+    <div class="carChoice" id="carChoice2">
+      <div class="carIcon">🚙</div><strong>SUV</strong><br>$550
+      <button id="buySuvBtn">BUY</button>
+    </div>
+    <div class="carChoice" id="carChoice3">
+      <div class="carIcon">🏎️</div><strong>SPORT</strong><br>$900
+      <button id="buySportBtn">BUY</button>
+    </div>
+    <div id="carLotInfo">Own a vehicle to make driving around the PBK region feel like part of the game world.</div>
+    <button id="carLotExit">EXIT</button>
+  </div>
+</div>
 
 <div id="town" class="screen centercol">
   <button class="back" data-back="world">BACK TO MAP</button>
@@ -2152,6 +2970,14 @@ document.addEventListener('DOMContentLoaded',function(){
 
   <div id="townScene">
     <div id="townBackdropHill"></div>
+    <div class="townRoute major" id="townRouteA"></div>
+    <div class="townRoute cross" id="townRouteB"></div>
+    <div class="townRoute" id="townRouteC"></div>
+    <div class="townRoute" id="townRouteD"></div>
+    <div class="routeLabel" id="routeLabelA">MAIN ROUTE</div>
+    <div class="routeLabel" id="routeLabelB">CROSS ROUTE</div>
+    <div class="routeLabel" id="routeLabelC">LOCAL ROAD</div>
+    <div class="routeLabel" id="routeLabelD">TOWN ROAD</div>
     <div id="townCloud1"></div><div id="townCloud2"></div>
     <div class="townBird" id="bird1"></div><div class="townBird" id="bird2"></div>
     <div id="townDojo">
@@ -2201,6 +3027,65 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="townNpc" id="townNpc2"><div class="nl" id="townNpc2Name">PARENT</div><div class="nh"></div><div class="nb"></div></div>
     <div class="townNpc" id="townNpc3"><div class="nl" id="townNpc3Name">COMPETITOR</div><div class="nh"></div><div class="nb"></div></div>
 
+    
+    <div id="townHouse1">
+      <div class="townFacadeSign">HOUSE</div><div class="townDoor"></div>
+      <div class="townWindow l"></div><div class="townWindow r"></div>
+    </div>
+    <div id="townHouse2">
+      <div class="townFacadeSign">HOUSE</div><div class="townDoor"></div>
+      <div class="townWindow l"></div><div class="townWindow r"></div>
+    </div>
+    <div id="townStore1">
+      <div class="townFacadeSign">MARTIAL ARTS SHOP</div><div class="townDoor"></div>
+      <div class="townWindow l"></div><div class="townWindow r"></div>
+    </div>
+    <div id="townStore2">
+      <div class="townFacadeSign">LOCAL MARKET</div><div class="townDoor"></div>
+      <div class="townWindow l"></div><div class="townWindow r"></div>
+    </div>
+    <div class="townApartment"></div><div class="townCarDealer"></div>
+    <div class="townFood" id="townFood1">
+      <div class="foodSign" id="townFood1Sign">TOWN DINER</div>
+      <div class="foodWindow l"></div><div class="foodWindow r"></div><div class="foodDoor"></div>
+    </div>
+    <div class="townFood" id="townFood2">
+      <div class="foodSign" id="townFood2Sign">PIZZA</div>
+      <div class="foodWindow l"></div><div class="foodWindow r"></div><div class="foodDoor"></div>
+    </div>
+    <div class="townFood" id="townFood3">
+      <div class="foodSign" id="townFood3Sign">CAFE</div>
+      <div class="foodWindow l"></div><div class="foodWindow r"></div><div class="foodDoor"></div>
+    </div>
+
+    <div id="townChallengeSpot">WORLD CHALLENGE<br><span id="townChallengeLabel">Talk to locals</span></div>
+
+    <div class="rpgHuman" id="playerAvatar">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag">BRADLEY</div>
+    </div>
+    <div class="rpgHuman walk" id="lifeNpc1">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag" id="lifeNpc1Name">STUDENT</div>
+    </div>
+    <div class="rpgHuman walk" id="lifeNpc2">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag" id="lifeNpc2Name">PARENT</div>
+    </div>
+    <div class="rpgHuman walk" id="lifeNpc3">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag" id="lifeNpc3Name">COMPETITOR</div>
+    </div>
+    <div class="rpgHuman walk" id="lifeNpc4">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag">LOCAL</div>
+    </div>
+
     <div id="townPlayer">
       <div class="ph"></div><div class="pb"></div><div class="pl l"></div><div class="pl r"></div>
     </div>
@@ -2234,6 +3119,42 @@ document.addEventListener('DOMContentLoaded',function(){
   </div>
 </div>
 
+
+
+
+<div id="restaurant" class="screen centercol">
+  <button class="back" data-back="town">BACK TO TOWN</button>
+  <div id="restaurantInterior">
+    <div id="restaurantTitle">TOWN RESTAURANT</div>
+    <div id="restaurantCounter">ORDER COUNTER</div>
+    <div id="restaurantTables"></div>
+    <div id="restaurantMenu">
+      <strong id="restaurantMenuTitle">MENU</strong><br>
+      <span id="restaurantMenuText">Burger • Pizza • Chicken • Fries • Drinks</span>
+    </div>
+    <div id="restaurantActions">
+      <button id="eatMealBtn">EAT — $15</button>
+      <button id="eatSnackBtn">SNACK — $7</button>
+      <button id="talkRestaurantBtn">TALK</button>
+    </div>
+    <button id="restaurantExit">EXIT</button>
+  </div>
+</div>
+
+<div id="building" class="screen centercol">
+  <button class="back" data-back="town">BACK TO TOWN</button>
+  <div id="buildingInterior">
+    <div id="buildingTitle">BUILDING</div>
+    <div id="buildingDecor1"></div><div id="buildingDecor2"></div><div id="buildingDecor3"></div>
+    <div class="rpgHuman" id="buildingNpcAvatar">
+      <div class="shadow"></div><div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div class="torso"></div><div class="beltline"></div><div class="arm l"></div><div class="arm r"></div>
+      <div class="leg l"></div><div class="leg r"></div><div class="nameTag" id="buildingNpcName">LOCAL</div>
+    </div>
+    <div id="buildingPrompt">INTERACT</div>
+    <button id="buildingExit">EXIT</button>
+  </div>
+</div>
 
 <div id="sideinterior" class="screen centercol">
   <button class="back" data-back="town">BACK TO TOWN</button>
@@ -2789,7 +3710,7 @@ document.addEventListener('DOMContentLoaded',function(){
 </div>
 
 <script>
-const $=id=>document.getElementById(id),screens=['menu','world','town','sideinterior','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
+const $=id=>document.getElementById(id),screens=['menu','world','apartment','carlot','town','restaurant','building','sideinterior','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
 function pbkStorageGet(key){
   try{return window.localStorage?window.localStorage.getItem(key):null}catch(e){return null}
@@ -2799,7 +3720,7 @@ function pbkStorageSet(key,value){
 }
 const saveDefaults={
   tournamentWins:0,totalWins:0,formsDone:false,breakingDone:false,
-  selectedFighter:'BRADLEY',
+  selectedFighter:'BRADLEY',cash:500,apartment:'',vehicle:'',regionRep:0,energy:100,
   dadDefeated:false,ryanDefeated:false,alexDefeated:false,
   stephDefeated:false,camaraDefeated:false,rappoldDefeated:false,
   visitedSchools:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},dojoTalks:{NORTON:0,EASTON:0,FOXBOROUGH:0,RAYNHAM:0},schoolActivities:{NORTON:{train:false,forms:false,spar:false,tournament:false},EASTON:{train:false,forms:false,spar:false,tournament:false},FOXBOROUGH:{train:false,forms:false,spar:false,tournament:false},RAYNHAM:{train:false,forms:false,spar:false,tournament:false}},schoolQuestComplete:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},schoolChallengeComplete:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false}
@@ -2817,7 +3738,7 @@ save.schoolActivities=Object.assign({},saveDefaults.schoolActivities,rawSave.sch
 });
 save.schoolQuestComplete=Object.assign({},saveDefaults.schoolQuestComplete,rawSave.schoolQuestComplete||{});
 save.schoolChallengeComplete=Object.assign({},saveDefaults.schoolChallengeComplete,rawSave.schoolChallengeComplete||{});
-let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formMode='traditional',formRoutine=[],formX=50,formFacing=1,formStance='forward',focus=0,focusDir=1,focusTimer=null,boards=0,worldX=50,worldY=50,currentSchool='',dojoX=50,dojoY=72,parkingX=50,parkingY=78,townX=50,townY=77,currentTown='',dojoRosterOffset=0;
+let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formMode='traditional',formRoutine=[],formX=50,formFacing=1,formStance='forward',focus=0,focusDir=1,focusTimer=null,boards=0,worldX=50,worldY=50,currentSchool='',dojoX=50,dojoY=72,parkingX=50,parkingY=78,townX=50,townY=77,currentTown='',regionX=50,regionY=49,regionTravelMode='walk',dojoRosterOffset=0;
 const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'},{name:'DAD',style:'bossDad',color:'#45403b'},{name:'RYAN',style:'bossRyan',color:'#2d2f55'},{name:'ALEX GEORGE',style:'bossAlex',color:'#315043'},{name:'MASTER STEPH',style:'bossSteph',color:'#453724'},{name:'MASTER CAMARA',style:'bossCamara',color:'#353535'},{name:'MASTER RAPPOLD',style:'bossRappold',color:'#3a243f'}];
 
 
@@ -3273,6 +4194,22 @@ bindTap('performFormBtn',performAndScoreForm);
 
 
 
+
+document.querySelectorAll('[data-regionmove]').forEach(btn=>{
+  let hold=null;
+  const dir=btn.dataset.regionmove;
+  const step=()=>{
+    if(dir==='up')moveRegion(0,-1);
+    if(dir==='down')moveRegion(0,1);
+    if(dir==='left')moveRegion(-1,0);
+    if(dir==='right')moveRegion(1,0);
+  };
+  btn.addEventListener('pointerdown',e=>{
+    safe(e);step();hold=setInterval(step,65);
+  },{passive:false});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>btn.addEventListener(ev,()=>{if(hold)clearInterval(hold);hold=null}));
+});
+
 document.querySelectorAll('[data-townmove]').forEach(btn=>{
   let hold=null;
   const dir=btn.dataset.townmove;
@@ -3334,6 +4271,18 @@ document.querySelectorAll('[data-worldmove]').forEach(btn=>{
 });
 
 document.addEventListener('keydown',e=>{
+  if($('world').classList.contains('active')){
+    if(e.key==='ArrowUp'||e.key==='w')moveRegion(0,-1.25);
+    if(e.key==='ArrowDown'||e.key==='s')moveRegion(0,1.25);
+    if(e.key==='ArrowLeft'||e.key==='a')moveRegion(-1.25,0);
+    if(e.key==='ArrowRight'||e.key==='d')moveRegion(1.25,0);
+    if(e.key==='Enter'||e.key===' ')enterNearestRegionTown();
+    if(e.key==='1')setRegionTravelMode('walk');
+    if(e.key==='2')setRegionTravelMode('run');
+    if(e.key==='3')setRegionTravelMode('drive');
+    return;
+  }
+
   if($('town').classList.contains('active')){
     if(e.key==='ArrowUp'||e.key==='w')moveTown(0,-2.2);
     if(e.key==='ArrowDown'||e.key==='s')moveTown(0,2.2);
@@ -3359,6 +4308,7 @@ document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key==='d')moveDojo(2.2,0);
     if(e.key==='Enter'||e.key===' ')dojoInteract();
   }
+
 });
 
 document.querySelectorAll('[data-form-control]').forEach(btn=>{
@@ -3620,26 +4570,199 @@ function townNpcDialogue(slot){
   return 'Good stance. Good guard. Clean technique.';
 }
 
+
+
+function updateLifeHud(){
+  if($('cashText'))$('cashText').textContent='$'+(save.cash||0);
+  if($('homeText'))$('homeText').textContent=save.apartment||'No apartment rented';
+  if($('vehicleText'))$('vehicleText').textContent=save.vehicle||'No vehicle owned';
+  if($('regionRepText'))$('regionRepText').textContent=save.regionRep||0;if($('energyText'))$('energyText').textContent=Math.round(save.energy??100);
+}
+
+function saveLifeState(){
+  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  updateLifeHud();
+}
+
+function rentApartment(type,cost){
+  if((save.cash||0)<cost){
+    openDialog('LEASING OFFICE','You need more cash before you can rent this apartment.');
+    return;
+  }
+  save.cash-=cost;
+  save.apartment=type;
+  save.regionRep=(save.regionRep||0)+1;
+  saveLifeState();
+  openDialog('LEASING OFFICE',`You rented the ${type}. It is now your home base in the PBK region.`);
+}
+
+function restAtApartment(){
+  if(!save.apartment){
+    openDialog('APARTMENT','Rent a unit first.');
+    return;
+  }
+  openDialog('HOME','You rest, recover, and save your progress before the next day of training.');
+  saveLifeState();
+}
+
+function buyVehicle(type,cost){
+  if((save.cash||0)<cost){
+    openDialog('AUTO LOT','You do not have enough cash for this vehicle yet.');
+    return;
+  }
+  save.cash-=cost;
+  save.vehicle=type;
+  save.regionRep=(save.regionRep||0)+1;
+  saveLifeState();
+  openDialog('AUTO LOT',`${type} purchased. Driving is now part of your PBK life in the region.`);
+}
+
+const regionalLifeTargets=[
+  {type:'apartment',x:39,y:18,label:'ENTER APARTMENTS',el:'regionApartment'},
+  {type:'carlot',x:67,y:76,label:'ENTER AUTO LOT',el:'regionCarLot'},
+  {type:'gas',x:36,y:82,label:'VISIT GAS STATION',el:'regionGas'},
+  {type:'mall',x:67,y:40,label:'ENTER SHOPPING CENTER',el:'regionMall'}
+];
+
+function nearestRegionalLifeSpot(){
+  let best=null,bestD=999;
+  regionalLifeTargets.forEach(t=>{
+    const d=Math.hypot(regionX-t.x,regionY-t.y);
+    if(d<bestD){best=t;bestD=d}
+  });
+  return bestD<=11?best:null;
+}
+
+function openRegionalLifeSpot(t){
+  if(!t)return;
+  if(t.type==='apartment'){show('apartment');return}
+  if(t.type==='carlot'){show('carlot');return}
+  if(t.type==='gas'){
+    openDialog('GAS STATION',save.vehicle?'You refuel and get ready for more driving around the PBK region.':'You will need a vehicle before the gas station matters.');
+    return;
+  }
+  if(t.type==='mall'){
+    openDialog('SHOPPING CENTER','A future hub for clothing, equipment, food, and town side quests.');
+  }
+}
+
+const regionTownZones=[
+  {id:'NORTON',x:14,y:18,el:'regionNorton'},
+  {id:'EASTON',x:86,y:20,el:'regionEaston'},
+  {id:'FOXBOROUGH',x:16,y:82,el:'regionFoxborough'},
+  {id:'RAYNHAM',x:84,y:82,el:'regionRaynham'}
+];
+
+function setRegionTravelMode(mode){
+  if(mode==='drive'&&!save.vehicle){
+    openDialog('DRIVE','Visit the regional auto lot and buy a vehicle before you can drive.');
+    return;
+  }
+  regionTravelMode=mode;
+  ['walk','run','drive'].forEach(m=>{
+    const btn=$(m+'ModeBtn');
+    if(btn)btn.classList.toggle('active',m===mode);
+  });
+  $('regionPlayer')?.classList.toggle('drive',mode==='drive');
+}
+
+function regionSpeed(){
+  return regionTravelMode==='drive'?3.4:regionTravelMode==='run'?2.0:1.15;
+}
+
+function renderRegionPlayer(){
+  const p=$('regionPlayer');
+  if(!p)return;
+  p.style.left=regionX+'%';
+  p.style.top=regionY+'%';
+  updateRegionPrompt();
+}
+
+function moveRegion(dx,dy){
+  const s=regionSpeed();
+  regionX=Math.max(4,Math.min(96,regionX+dx*s));
+  regionY=Math.max(7,Math.min(93,regionY+dy*s));
+  save.energy=Math.max(0,(save.energy??100)-(regionTravelMode==='run'?.10:regionTravelMode==='walk'?.035:.015));
+  updateLifeHud();
+  renderRegionPlayer();updateLifeHud();
+}
+
+function nearestRegionTown(){
+  let best=null,bestD=999;
+  regionTownZones.forEach(t=>{
+    const d=Math.hypot(regionX-t.x,regionY-t.y);
+    if(d<bestD){best=t;bestD=d}
+  });
+  return bestD<=13?best:null;
+}
+
+function updateRegionPrompt(){
+  document.querySelectorAll('.regionTown').forEach(el=>el.classList.remove('near'));
+  document.querySelectorAll('.regionLifeSpot').forEach(el=>el.classList.remove('near'));
+
+  const t=nearestRegionTown();
+  const life=nearestRegionalLifeSpot();
+  const p=$('regionPrompt');
+
+  let best=null;
+  let td=t?Math.hypot(regionX-t.x,regionY-t.y):999;
+  let ld=life?Math.hypot(regionX-life.x,regionY-life.y):999;
+  best=ld<td?life:t;
+
+  if(!best){p?.classList.remove('show');return}
+
+  if(best.el)$(best.el)?.classList.add('near');
+  p?.classList.add('show');
+  if(p)p.textContent=best.type&&['apartment','carlot','gas','mall'].includes(best.type)
+    ? best.label
+    : 'ENTER '+best.id+' TOWN';
+}
+
+function enterNearestRegionTown(){
+  const town=nearestRegionTown();
+  const life=nearestRegionalLifeSpot();
+
+  const td=town?Math.hypot(regionX-town.x,regionY-town.y):999;
+  const ld=life?Math.hypot(regionX-life.x,regionY-life.y):999;
+
+  if(life&&ld<td){openRegionalLifeSpot(life);return}
+  if(town){travelToTown(town.id);return}
+
+  openDialog('PBK REGION','Travel closer to a town or regional location to enter it.');
+}
+
+function centerRegion(){
+  regionX=50;regionY=49;renderRegionPlayer();
+}
+
 const townDescriptions={
   NORTON:{
-    title:'Norton Town',
-    subtitle:'Balanced fundamentals town. Walk the block and enter PBK Norton.',
-    info:'Norton feels steady and grounded — quiet streets, a clean dojo, and a fundamentals-first identity.'
+    title:'Norton, MA',
+    subtitle:'Explore Norton using a Route 123 / Route 140 inspired street framework.',
+    info:'Norton is structured around West/East Main Street (Route 123) with Route 140 as a major cross-town connection.',
+    routes:['ROUTE 123 • WEST / EAST MAIN','ROUTE 140 • TAUNTON AVE','WORCESTER STREET','LOCAL CENTER ROAD'],
+    foods:['Norton Town Diner','Route 123 Pizza','Common Cafe']
   },
   EASTON:{
-    title:'Easton Town',
-    subtitle:'Fast-paced competition town. Walk through Easton and reach PBK Easton.',
-    info:'Easton has more energy and pressure — a busier street feel and a dojo known for combinations and pace.'
+    title:'Easton, MA',
+    subtitle:'Explore Easton using Washington Street / Depot Street and the town-center road pattern.',
+    info:'Easton uses Washington Street (Route 138) and Depot Street (Route 123) as major anchors, with Route 106 reflected as a regional connection.',
+    routes:['ROUTE 138 • WASHINGTON ST','ROUTE 123 • DEPOT ST','ROUTE 106','MAIN / TURNPIKE CONNECTION'],
+    foods:['Easton Grill','Depot Street Pizza','Washington Cafe']
   },
   FOXBOROUGH:{
-    title:'Foxborough Town',
-    subtitle:'Movement-focused town. Explore the area and head into PBK Foxborough.',
-    info:'Foxborough emphasizes space, timing, and range control. The town layout feels a little more open.'
+    title:'Foxborough, MA',
+    subtitle:'Explore Foxborough using Route 1, Route 140, and downtown-style connections.',
+    info:'Foxborough uses Route 1 (Washington Street) as a major north-south corridor and Route 140 / Commercial Street as another important connection.',
+    routes:['ROUTE 1 • WASHINGTON ST','ROUTE 140 • COMMERCIAL ST','DOWNTOWN MAIN ST','I-95 CONNECTION'],
+    foods:['Foxborough Diner','Route 1 Pizza','Town Common Cafe']
   },
   RAYNHAM:{
-    title:'Raynham Town',
-    subtitle:'Power and pressure town. Travel through Raynham before entering PBK Raynham.',
-    info:'Raynham has a tougher edge — more presence, stronger atmosphere, and a dojo tied closely to Master Steph.'
+    title:'Raynham, MA',
+    subtitle:'Explore Raynham using Route 138 / Broadway, Route 44, and Route 24 connections.',
+    info:'Raynham uses Route 138 (Broadway), Route 44, and the Route 24 corridor as major anchors.',
+    routes:['ROUTE 138 • BROADWAY','ROUTE 44','ROUTE 24 CONNECTION','SOUTH / NORTH MAIN ST'],
+    foods:['Raynham Grill','Broadway Pizza','Route 44 Cafe']
   }
 };
 
@@ -3662,7 +4785,10 @@ function updateTownScene(){
   $('townRankText').textContent=rankDisplay();
   $('townDojoSign').textContent='PBK '+currentTown;
   $('townInfoTitle').textContent=data.title;
-  $('townInfoText').textContent=data.info+' You can walk to the dojo, check the parking area, visit the park/cafe, or use the travel depot to go town-to-town.';updateTownNpcs();
+  $('townInfoText').textContent=data.info+' Restaurants, stores, homes, apartments, and PBK locations are part of the town itself.';
+  ['routeLabelA','routeLabelB','routeLabelC','routeLabelD'].forEach((id,i)=>{if($(id))$(id).textContent=data.routes[i]||''});
+  ['townFood1Sign','townFood2Sign','townFood3Sign'].forEach((id,i)=>{if($(id))$(id).textContent=data.foods[i]||'FOOD'});
+  updateTownNpcs();
 }
 
 function renderTownPlayer(){
@@ -3675,6 +4801,8 @@ function renderTownPlayer(){
 function moveTown(dx,dy){
   townX=Math.max(5,Math.min(95,townX+dx));
   townY=Math.max(18,Math.min(91,townY+dy));
+  save.energy=Math.max(0,(save.energy??100)-.035);
+  updateLifeHud();
   renderTownPlayer();
 }
 
@@ -3804,6 +4932,7 @@ function openWorld(){
   updateWorldHud();
   updateWorldProgress();
   show('world');
+  renderRegionPlayer();
 }
 
 function updateWorldHud(){
@@ -4178,7 +5307,7 @@ function updateSchoolChallengeProgress(){
 }
 
 function finishSchoolChallenge(){
-  save.schoolChallengeComplete[currentSchool]=true;
+  save.schoolChallengeComplete[currentSchool]=true;save.cash=(save.cash||0)+100;save.regionRep=(save.regionRep||0)+2;
   pbkStorageSet('pbkSaveV25',JSON.stringify(save));
   $('challengeResult').textContent='CHALLENGE COMPLETE!';
   $('challengeProgress').textContent='School mastered.';
@@ -5283,7 +6412,25 @@ function bindPBKNavigation(){
   bindTap('teleportRaynhamBtn',()=>travelToTown('RAYNHAM'));
 
   // Town movement/actions
-  bindTap('townInteractBtn',townInteract);
+  bindTap('rentStudioBtn',()=>rentApartment('Studio Apartment',150));
+bindTap('rentOneBtn',()=>rentApartment('One Bedroom Apartment',250));
+bindTap('rentTwoBtn',()=>rentApartment('Two Bedroom Apartment',400));
+bindTap('sleepBtn',restAtApartment);
+bindTap('apartmentExit',()=>show('world'));
+bindTap('buyCompactBtn',()=>buyVehicle('Compact Car',300));
+bindTap('buySuvBtn',()=>buyVehicle('SUV',550));
+bindTap('buySportBtn',()=>buyVehicle('Sport Car',900));
+bindTap('carLotExit',()=>show('world'));
+bindTap('eatMealBtn',()=>eatAtRestaurant(15,30));
+bindTap('eatSnackBtn',()=>eatAtRestaurant(7,12));
+bindTap('talkRestaurantBtn',restaurantTalk);
+bindTap('restaurantExit',()=>show('town'));
+bindTap('walkModeBtn',()=>setRegionTravelMode('walk'));
+bindTap('runModeBtn',()=>setRegionTravelMode('run'));
+bindTap('driveModeBtn',()=>setRegionTravelMode('drive'));
+bindTap('regionEnterBtn',enterNearestRegionTown);
+bindTap('regionCenterBtn',centerRegion);
+bindTap('townInteractBtn',townInteract);
   bindTap('townMapBtn',()=>show('world'));
   bindTap('townToNortonBtn',()=>travelToTown('NORTON'));
   bindTap('townToEastonBtn',()=>travelToTown('EASTON'));
