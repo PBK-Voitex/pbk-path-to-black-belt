@@ -1357,18 +1357,544 @@ h1,h2,h3{margin:0}
 .degreeStep{border-style:dashed}
 .trainingStep{background:#1a1712!important}
 
+
+/* v2.6 walkable dojo interiors + quests */
+#dojoHub{padding:10px 0 22px}
+#dojoRoom{
+  width:min(980px,96vw);min-height:560px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(#262d34 0 30%,#8a6b49 30% 100%);
+  background-size:46px 46px,46px 46px,100% 100%;
+}
+#dojoMat{
+  position:absolute;left:18%;right:18%;top:34%;bottom:14%;
+  border-radius:18px;border:3px solid #23262b;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    #31516c;
+  background-size:52px 52px;
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.025);
+}
+#dojoplayer{
+  position:absolute;width:34px;height:54px;left:50%;top:72%;z-index:30;
+  transform:translate(-50%,-50%);
+  transition:left .04s linear,top .04s linear;
+}
+#dojoplayer .dh{position:absolute;width:20px;height:20px;border-radius:50%;left:7px;top:0;background:#c89e72;border:2px solid #111}
+#dojoplayer .db{position:absolute;width:28px;height:29px;left:3px;top:18px;border-radius:7px;background:#0e1013;border:2px solid #050607}
+#dojoplayer .dl{position:absolute;width:8px;height:15px;top:41px;background:#111;border:1px solid #050607}
+#dojoplayer .dl.l{left:7px}#dojoplayer .dl.r{right:7px}
+.dojoNpc{
+  position:absolute;width:34px;height:52px;z-index:20;
+}
+.dojoNpc .nh{width:19px;height:19px;border-radius:50%;margin:auto;background:#c79f78;border:2px solid #111}
+.dojoNpc .nb{width:28px;height:30px;margin:auto;border-radius:7px;background:#1e2329;border:2px solid #0b0d10}
+.dojoNpc .nl{
+  position:absolute;left:50%;top:-18px;transform:translateX(-50%);
+  white-space:nowrap;font-size:10px;font-weight:1000;text-shadow:0 2px 3px #000;
+}
+#dojoNpc1{left:24%;top:43%}
+#dojoNpc2{right:24%;top:43%}
+#dojoNpc3{left:48%;top:28%}
+#dojoInteractPrompt{
+  position:absolute;left:50%;bottom:72px;transform:translateX(-50%);
+  z-index:40;padding:7px 12px;border-radius:999px;background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000;display:none
+}
+#dojoInteractPrompt.show{display:block}
+#dojoControls{
+  width:min(980px,96vw);margin-top:10px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center
+}
+#dojodpad{
+  width:210px;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:4px;justify-content:center
+}
+#dojodpad button{min-width:0;padding:0}
+#dojodpad .up{grid-column:2;grid-row:1}
+#dojodpad .left{grid-column:1;grid-row:2}
+#dojodpad .down{grid-column:2;grid-row:3}
+#dojodpad .right{grid-column:3;grid-row:2}
+#dojoActionPanel{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#dojoActionPanel button{min-width:115px}
+#dojoQuestCard{
+  width:min(980px,96vw);margin-top:10px;padding:12px;border-radius:14px;background:#11161b;border:1px solid #4d5661
+}
+#dojoQuestCard strong{display:block;margin-bottom:6px}
+#dojoQuestProgress{font-size:12px;opacity:.86}
+.questComplete{box-shadow:inset 0 0 0 1px rgba(255,255,255,.15),0 0 20px rgba(255,255,255,.04)}
+@media(max-width:760px){
+  #dojoRoom{min-height:590px}
+  #dojoControls{grid-template-columns:1fr}
+  #dojodpad{justify-self:center}
+  #dojoActionPanel{justify-content:center}
+}
+
+
+/* v2.7 teleport map + parking lot RPG shell */
+#travelMap{
+  width:min(1040px,96vw);
+  min-height:560px;
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid #4f5762;
+  background:
+    radial-gradient(circle at 30% 28%,rgba(255,255,255,.04),transparent 20%),
+    linear-gradient(135deg,#49613f,#2f4635 55%,#263a2d);
+  box-shadow:0 18px 45px rgba(0,0,0,.38);
+}
+.mapRoad{
+  position:absolute;background:#626764;border-radius:999px;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.04);
+}
+.mapRoad.r1{left:12%;right:14%;top:46%;height:36px;transform:rotate(-5deg)}
+.mapRoad.r2{left:48%;top:13%;bottom:13%;width:34px;transform:rotate(8deg)}
+.mapRoad.r3{left:20%;right:20%;bottom:18%;height:28px;transform:rotate(9deg)}
+.travelNode{
+  position:absolute;width:170px;padding:13px;border-radius:14px;
+  background:rgba(12,16,20,.92);border:1px solid #66717d;
+  box-shadow:0 10px 22px rgba(0,0,0,.36);text-align:center;z-index:8;
+}
+.travelNode strong{display:block;font-size:15px;margin-bottom:6px}
+.travelNode button{width:100%;margin-top:8px}
+#nodeNorton{left:5%;top:10%}
+#nodeEaston{right:5%;top:12%}
+#nodeFoxborough{left:7%;bottom:9%}
+#nodeRaynham{right:7%;bottom:9%}
+#travelLegend{
+  position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  padding:8px 13px;border-radius:999px;background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.1);font-weight:900;font-size:12px;z-index:10
+}
+
+#parkingLot{
+  width:min(1040px,96vw);min-height:560px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 72px,rgba(255,255,255,.14) 72px 75px,transparent 75px 145px),
+    linear-gradient(#52565a,#34383b);
+  box-shadow:0 18px 45px rgba(0,0,0,.38);
+}
+#parkingBuilding{
+  position:absolute;left:50%;top:7%;transform:translateX(-50%);
+  width:330px;height:155px;border-radius:12px;
+  background:linear-gradient(#2b3138,#12171c);
+  border:2px solid #77818c;
+  box-shadow:0 14px 25px rgba(0,0,0,.4);
+}
+#parkingBuilding .roof{
+  position:absolute;left:-12px;right:-12px;top:-25px;height:34px;
+  clip-path:polygon(6% 100%,50% 0,94% 100%);
+  background:#454d56;
+}
+#parkingSchoolSign{
+  position:absolute;left:50%;top:22px;transform:translateX(-50%);
+  padding:7px 12px;border-radius:7px;background:#090c0f;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;white-space:nowrap;
+}
+#parkingDoor{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:58px;height:68px;background:#33271c;border:2px solid #8d704f;
+}
+#parkingPrompt{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  z-index:40;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000;display:none
+}
+#parkingPrompt.show{display:block}
+#parkingPlayer{
+  position:absolute;width:34px;height:54px;left:50%;top:78%;z-index:30;
+  transform:translate(-50%,-50%);transition:left .04s linear,top .04s linear;
+}
+#parkingPlayer .ph{position:absolute;width:20px;height:20px;border-radius:50%;left:7px;top:0;background:#c89e72;border:2px solid #111}
+#parkingPlayer .pb{position:absolute;width:28px;height:29px;left:3px;top:18px;border-radius:7px;background:#0e1013;border:2px solid #050607}
+#parkingPlayer .pl{position:absolute;width:8px;height:15px;top:41px;background:#111;border:1px solid #050607}
+#parkingPlayer .pl.l{left:7px}#parkingPlayer .pl.r{right:7px}
+
+#parkingControls{
+  width:min(1040px,96vw);margin-top:10px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center
+}
+#parkingDpad{
+  width:210px;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:4px;justify-content:center
+}
+#parkingDpad button{min-width:0;padding:0}
+#parkingDpad .up{grid-column:2;grid-row:1}
+#parkingDpad .left{grid-column:1;grid-row:2}
+#parkingDpad .down{grid-column:2;grid-row:3}
+#parkingDpad .right{grid-column:3;grid-row:2}
+#parkingActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#parkingActions button{min-width:120px}
+
+
+/* v2.8 integrated dojo stations + persistent school quests */
+.dojoStationPoint{
+  position:absolute;width:112px;min-height:62px;padding:8px;border-radius:10px;
+  background:rgba(14,18,23,.90);border:1px solid #5b6570;
+  text-align:center;font-size:10px;font-weight:900;z-index:12;
+}
+.dojoStationPoint span{display:block;font-size:9px;opacity:.7;margin-top:4px}
+#stationTrain{left:5%;top:34%}
+#stationForms{left:5%;bottom:19%}
+#stationSpar{right:5%;top:34%}
+#stationTournament{right:5%;bottom:19%}
+#stationCharacter{left:36%;top:18%}
+#stationBelts{right:36%;top:18%}
+#stationBoss{left:50%;bottom:9%;transform:translateX(-50%)}
+.dojoStationPoint.near{
+  outline:2px solid rgba(255,255,255,.6);
+  box-shadow:0 0 24px rgba(255,255,255,.07);
+}
+#dojoInteractPrompt{
+  max-width:80vw;
+  text-align:center;
+}
+#dojoQuestSteps{
+  margin-top:8px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;
+}
+.questStep{
+  padding:7px;border-radius:8px;background:#0d1116;border:1px solid #303842;
+  font-size:10px
+}
+.questStep.done{opacity:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.questStep:not(.done){opacity:.55}
+#dojoRosterMini{
+  position:absolute;left:50%;top:73px;transform:translateX(-50%);
+  z-index:13;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:900;
+}
+#parkingArrival{
+  position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);
+  z-index:35;padding:12px 18px;border-radius:12px;background:rgba(0,0,0,.76);
+  border:1px solid rgba(255,255,255,.1);font-weight:1000;letter-spacing:1px;
+  opacity:0;pointer-events:none;
+}
+#parkingArrival.show{animation:arrivalFlash 1.2s ease-out}
+@keyframes arrivalFlash{
+  0%{opacity:0;transform:translate(-50%,-42%) scale(.94)}
+  20%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-56%)}
+}
+
+
+/* v2.9 school-specific quest chains + challenge gates */
+#schoolChallengeCard{
+  width:min(980px,96vw);margin-top:10px;padding:12px;border-radius:14px;
+  background:#11161b;border:1px solid #4d5661
+}
+#schoolChallengeCard.locked{opacity:.5}
+#schoolChallengeCard.unlocked{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 0 24px rgba(255,255,255,.04)
+}
+#schoolChallengeTitle{font-weight:1000;margin-bottom:6px}
+#schoolChallengeText{font-size:12px;opacity:.86}
+#schoolChallengeBtn{margin-top:10px}
+.schoolCompletionBadge{
+  position:absolute;top:96px;left:50%;transform:translateX(-50%);
+  z-index:14;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.62);
+  border:1px solid rgba(255,255,255,.1);font-size:10px;font-weight:1000;display:none
+}
+.schoolCompletionBadge.show{display:block}
+#schoolQuestSummary{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px;margin-top:10px
+}
+.schoolSummaryItem{
+  padding:8px;border-radius:9px;background:#0d1116;border:1px solid #303842;font-size:10px
+}
+.schoolSummaryItem.done{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+
+
+/* v3.0 playable school challenges */
+#schoolchallenge{padding-top:12px}
+#challengeArena{
+  width:min(980px,96vw);min-height:520px;position:relative;overflow:hidden;
+  border-radius:18px;border:1px solid #4f5762;
+  background:linear-gradient(#262d34 0 32%,#765d41 32% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38);
+}
+#challengeTitle{
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  z-index:10;font-size:20px;font-weight:1000;letter-spacing:1px;text-align:center;
+}
+#challengeInstruction{
+  position:absolute;left:50%;top:58px;transform:translateX(-50%);
+  width:min(760px,88%);padding:10px;border-radius:10px;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.08);font-size:12px;text-align:center
+}
+#challengeFighter{
+  position:absolute;left:50%;bottom:90px;width:86px;height:174px;
+  transform:translateX(-50%);z-index:8;transition:transform .22s ease,left .22s ease
+}
+#challengeFighter .h{position:absolute;left:27px;top:0;width:32px;height:32px;border-radius:50%;background:#c89e72;border:2px solid #111}
+#challengeFighter .t{position:absolute;left:19px;top:31px;width:48px;height:84px;border-radius:10px 10px 6px 6px;background:#101214;border:2px solid #050607}
+#challengeFighter .a,#challengeFighter .l{position:absolute;background:#111;border:2px solid #050607;transform-origin:top center}
+#challengeFighter .a{top:36px;width:13px;height:59px;border-radius:8px}
+#challengeFighter .a.l{left:14px;transform:rotate(-22deg)}
+#challengeFighter .a.r{right:14px;transform:rotate(22deg)}
+#challengeFighter .l{top:105px;width:15px;height:66px;border-radius:8px}
+#challengeFighter .l.l{left:23px;transform:rotate(7deg)}
+#challengeFighter .l.r{right:23px;transform:rotate(-7deg)}
+#challengeFighter.punch .a.r{animation:cPunch .32s ease-out}
+#challengeFighter.kick .l.r{animation:cKick .42s ease-out}
+#challengeFighter.block .a.l{animation:cBlock .32s ease-out}
+#challengeFighter.step{animation:cStep .28s ease-out}
+@keyframes cPunch{0%{transform:rotate(22deg)}50%{transform:rotate(-82deg)}100%{transform:rotate(22deg)}}
+@keyframes cKick{0%{transform:rotate(-7deg)}50%{transform:rotate(-95deg)}100%{transform:rotate(-7deg)}}
+@keyframes cBlock{0%{transform:rotate(-22deg)}50%{transform:rotate(-120deg)}100%{transform:rotate(-22deg)}}
+@keyframes cStep{0%{transform:translateX(-50%)}50%{transform:translateX(-50%) translateY(-8px)}100%{transform:translateX(-50%)}}
+#challengeControls{
+  width:min(980px,96vw);margin-top:10px;padding:14px;border-radius:14px;
+  background:#11161b;border:1px solid #4d5661
+}
+#challengeButtons{display:flex;flex-wrap:wrap;gap:8px}
+#challengeButtons button{flex:1 1 150px;min-height:48px}
+#challengeProgress{
+  margin-top:10px;padding:10px;border-radius:10px;background:#0d1116;border:1px solid #303842;
+  font-size:12px;min-height:42px
+}
+#challengeResult{margin-top:10px;font-weight:1000;text-align:center}
+
+
+/* v3.1 expanded town RPG visuals */
+#worldHud,#parkingHud,#townHud{
+  width:min(1040px,96vw);
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+  padding:10px 12px;border:1px solid #4b535e;border-radius:12px;
+  background:#12161b;margin-bottom:10px;
+}
+#worldHud strong,#parkingHud strong,#townHud strong{font-size:14px}
+
+#town{
+  padding:10px 0 22px;
+}
+#townScene{
+  width:min(1040px,96vw);
+  min-height:620px;
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid #4f5762;
+  background:
+    linear-gradient(#748fbb 0 24%, #5e86b7 24% 26%, #8ca06f 26% 100%);
+  box-shadow:0 18px 45px rgba(0,0,0,.38);
+}
+#townBackdropHill{
+  position:absolute;left:-4%;right:-4%;top:20%;height:120px;
+  background:radial-gradient(circle at 25% 50%, #6b8b5f 0 32%, transparent 33%),
+             radial-gradient(circle at 55% 50%, #638455 0 36%, transparent 37%),
+             radial-gradient(circle at 82% 50%, #6b8c60 0 34%, transparent 35%);
+  opacity:.8;
+}
+#townRoadMain{
+  position:absolute;left:0;right:0;top:56%;height:118px;
+  background:linear-gradient(#55585c,#3b3e42);
+  box-shadow:inset 0 4px 0 rgba(255,255,255,.05), inset 0 -4px 0 rgba(0,0,0,.15);
+}
+#townRoadStripe{
+  position:absolute;left:6%;right:6%;top:611px;height:10px;
+  background:repeating-linear-gradient(90deg, #e6d77b 0 42px, transparent 42px 84px);
+  z-index:2;
+}
+#townSidewalkTop,#townSidewalkBottom{
+  position:absolute;left:0;right:0;height:18px;background:#c2b8a2;
+}
+#townSidewalkTop{top:330px}
+#townSidewalkBottom{top:454px}
+.townTree{
+  position:absolute;width:26px;height:58px;z-index:4;
+}
+.townTree .trunk{position:absolute;left:10px;bottom:0;width:8px;height:24px;background:#6d4f34}
+.townTree .crown{position:absolute;left:-4px;top:0;width:34px;height:34px;border-radius:50%;background:#3f6e3d}
+#tree1{left:6%;top:270px} #tree2{left:14%;top:250px} #tree3{right:12%;top:265px} #tree4{right:5%;top:245px}
+.townLamp{
+  position:absolute;width:10px;height:64px;background:#3b3f45;z-index:5
+}
+.townLamp::after{
+  content:'';position:absolute;top:-8px;left:-8px;width:26px;height:18px;border-radius:12px;background:#f4e49b;
+  box-shadow:0 0 18px rgba(248,233,156,.45);
+}
+#lamp1{left:27%;top:348px} #lamp2{right:27%;top:348px}
+.townCar{
+  position:absolute;width:70px;height:30px;border-radius:12px;background:linear-gradient(#c74242,#7f1c1c);
+  z-index:5;box-shadow:0 8px 12px rgba(0,0,0,.24)
+}
+.townCar::before,.townCar::after{
+  content:'';position:absolute;bottom:-6px;width:15px;height:15px;border-radius:50%;background:#111
+}
+.townCar::before{left:8px}.townCar::after{right:8px}
+#car1{left:64%;top:535px;background:linear-gradient(#355aad,#1b2f63)}
+#car2{left:74%;top:545px;background:linear-gradient(#b74141,#6e1a1a)}
+
+#townDojo{
+  position:absolute;left:50%;top:130px;transform:translateX(-50%);
+  width:370px;height:170px;border-radius:12px;background:linear-gradient(#2a3139,#12171c);
+  border:2px solid #77818c;box-shadow:0 18px 30px rgba(0,0,0,.35);z-index:6;
+}
+#townDojo .roof{
+  position:absolute;left:-14px;right:-14px;top:-30px;height:38px;
+  clip-path:polygon(6% 100%,50% 0,94% 100%);background:#48505a;
+}
+#townDojoSign{
+  position:absolute;left:50%;top:20px;transform:translateX(-50%);
+  min-width:190px;padding:8px 14px;border-radius:8px;background:#0b0f13;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;text-align:center
+}
+#townDojoWindow1,#townDojoWindow2{
+  position:absolute;top:72px;width:82px;height:42px;border-radius:8px;background:linear-gradient(#5379a8,#2f4a68);
+  border:2px solid #8998a6;
+}
+#townDojoWindow1{left:38px} #townDojoWindow2{right:38px}
+#townDojoDoor{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+  width:66px;height:82px;background:#34281d;border:2px solid #8e7150;
+}
+#townDojoMatIcon{
+  position:absolute;left:50%;top:126px;transform:translateX(-50%);
+  width:76px;height:14px;border-radius:999px;background:#2c5377;opacity:.9
+}
+
+.townBuilding{
+  position:absolute;width:170px;height:120px;border-radius:12px;border:2px solid #787f87;
+  background:linear-gradient(#3b4651,#1a2026);box-shadow:0 14px 22px rgba(0,0,0,.3);z-index:5;
+}
+.townBuilding .sign{
+  position:absolute;left:50%;top:16px;transform:translateX(-50%);
+  min-width:110px;padding:6px 10px;border-radius:8px;background:#12161b;border:1px solid #69727c;
+  font-size:11px;font-weight:900;text-align:center
+}
+.townBuilding .door{
+  position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:42px;height:55px;background:#35291e;border:2px solid #8b6f4e
+}
+#townCafe{left:8%;top:190px}
+#townCafe .sign{background:#3e251d;border-color:#a06f55}
+#townPark{right:8%;top:210px;background:linear-gradient(#50684b,#263626)}
+#townPark .sign{background:#203522;border-color:#6ea06d}
+#townTravelDepot{left:6%;bottom:68px;width:210px;height:90px;background:linear-gradient(#444f5a,#1b232b)}
+#townTravelDepot .sign{top:12px}
+#townParkingZone{
+  position:absolute;right:4%;bottom:44px;width:240px;height:120px;border-radius:14px;border:2px solid #818991;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 58px, rgba(255,255,255,.16) 58px 61px, transparent 61px 119px),
+    linear-gradient(#666b70,#45494d);
+  z-index:4;
+}
+#townParkingZoneLabel{
+  position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.08);font-size:10px;font-weight:1000
+}
+#townTravelBoard{
+  position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:7;
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+  width:min(880px,90%);
+}
+#townTravelBoard button{min-width:120px}
+
+#townPlayer{
+  position:absolute;width:36px;height:58px;left:50%;top:77%;z-index:20;
+  transform:translate(-50%,-50%);transition:left .04s linear,top .04s linear;
+}
+#townPlayer .ph{position:absolute;width:22px;height:22px;border-radius:50%;left:7px;top:0;background:#c89e72;border:2px solid #111}
+#townPlayer .pb{position:absolute;width:30px;height:31px;left:3px;top:20px;border-radius:8px;background:#0e1013;border:2px solid #050607}
+#townPlayer .pl{position:absolute;width:9px;height:16px;top:44px;background:#111;border:1px solid #050607}
+#townPlayer .pl.l{left:7px} #townPlayer .pl.r{right:7px}
+
+#townPrompt{
+  position:absolute;left:50%;bottom:92px;transform:translateX(-50%);
+  z-index:30;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.74);
+  border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:1000;display:none;
+  max-width:84vw;text-align:center
+}
+#townPrompt.show{display:block}
+
+#townControls{
+  width:min(1040px,96vw);margin-top:10px;display:grid;
+  grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;
+}
+#townDpad{
+  width:210px;display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:4px;justify-content:center
+}
+#townDpad button{min-width:0;padding:0}
+#townDpad .up{grid-column:2;grid-row:1}
+#townDpad .left{grid-column:1;grid-row:2}
+#townDpad .right{grid-column:3;grid-row:2}
+#townDpad .down{grid-column:2;grid-row:3}
+#townActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#townActions button{min-width:125px}
+#townInfoCard{
+  width:min(1040px,96vw);margin-top:10px;padding:12px;border-radius:14px;background:#11161b;border:1px solid #4d5661
+}
+#townInfoTitle{font-weight:1000;margin-bottom:6px}
+#townInfoText{font-size:12px;opacity:.88}
+
+/* richer dojo atmosphere */
+#dojoRoom{
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(#2a3138 0 28%,#8b6d4a 28% 100%);
+  background-size:46px 46px,46px 46px,100% 100%;
+}
+#dojoCeilingBanner{
+  position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  padding:8px 16px;border-radius:999px;background:#10151a;border:1px solid #626b75;
+  font-weight:1000;letter-spacing:1px;z-index:12
+}
+#dojoMirror{
+  position:absolute;left:9%;top:18%;width:150px;height:80px;border-radius:10px;background:linear-gradient(#6085a7,#354d67);
+  border:4px solid #88939d;box-shadow:inset 0 0 14px rgba(255,255,255,.16)
+}
+#dojoTrophyCase{
+  position:absolute;right:7%;top:18%;width:170px;height:120px;border-radius:12px;background:linear-gradient(#593f22,#2e2216);
+  border:2px solid #99744a;box-shadow:inset 0 0 0 2px rgba(255,255,255,.05)
+}
+#dojoTrophyCase::before{
+  content:'TROPHY CASE';position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  font-size:11px;font-weight:1000;letter-spacing:1px
+}
+#dojoTrophyCase::after{
+  content:'🏆   🏆   🏆';position:absolute;left:50%;top:48px;transform:translateX(-50%);font-size:28px
+}
+#dojoHeavyBag{
+  position:absolute;right:20%;top:29%;width:38px;height:105px;border-radius:18px;background:linear-gradient(#bf3c3c,#6b1717);
+  border:2px solid #2b0a0a;box-shadow:0 10px 18px rgba(0,0,0,.3)
+}
+#dojoHeavyBag::before{
+  content:'';position:absolute;top:-22px;left:17px;width:4px;height:22px;background:#888
+}
+#dojoFlagBoard{
+  position:absolute;left:50%;top:19%;transform:translateX(-50%);width:170px;height:52px;border-radius:10px;
+  background:#101418;border:1px solid #59636e
+}
+#dojoFlagBoard::before{
+  content:'PBK • DISCIPLINE • RESPECT';position:absolute;left:50%;top:16px;transform:translateX(-50%);
+  font-size:11px;font-weight:1000;letter-spacing:1px
+}
+
+@media(max-width:760px){
+  #townScene{min-height:670px}
+  #townControls{grid-template-columns:1fr}
+  #townDpad{justify-self:center}
+  #townActions{justify-content:center}
+  #townDojo{width:280px;height:160px}
+  #townCafe,#townPark{width:130px;height:104px}
+  #townTravelDepot{width:170px}
+}
+
 </style>
 </head>
 <body>
 
 <div id="menu" class="screen active">
   <h1>PBK: PATH TO BLACK BELT</h1>
-  <div>RPG Progression Expansion v2.5.1</div>
+  <div>Expanded Town RPG v3.1.1</div>
   <div class="menuBtns">
-    <button id="worldBtn">RPG WORLD</button><button id="playBtn">PLAY</button>
-    <button id="careerBtn">BELT LADDER</button>
-    <button id="selectBtn">FIGHTER SELECT</button>
-    <button id="bracketBtn">TOURNAMENT</button><button id="bossBtn">BOSS ROADMAP</button><button id="bossFightBtn">BOSS BATTLES</button>
+    <button id="worldBtn">ENTER PBK WORLD</button><button id="playBtn" style="display:none">PLAY</button>
+    <button id="careerBtn" style="display:none">BELT LADDER</button>
+    <button id="selectBtn" style="display:none">FIGHTER SELECT</button>
+    <button id="bracketBtn" style="display:none">TOURNAMENT</button><button id="bossBtn" style="display:none">BOSS ROADMAP</button><button id="bossFightBtn" style="display:none">BOSS BATTLES</button>
   </div>
   
 <div id="profileBar">
@@ -1383,31 +1909,42 @@ h1,h2,h3{margin:0}
 
 
 
+
 <div id="world" class="screen centercol">
   <button class="back" data-back="menu">BACK</button>
   <div id="worldHud">
     <strong id="worldFighterName">BRADLEY</strong>
-    <span id="worldBeltText">White Belt • Stripe 0 / 4</span>
-    <span>Explore the PBK schools</span>
+    <span id="worldBeltText">White Belt</span>
+    <span>PBK Regional Travel Map</span>
   </div>
 
-  <div id="worldMap">
-    <div class="worldBuilding" id="bNorton"><div class="visitBadge" id="visitNorton">NOT VISITED</div><div class="roof"></div><div class="sign">PBK NORTON</div><div class="door"></div></div>
-    <div class="worldBuilding" id="bEaston"><div class="visitBadge" id="visitEaston">NOT VISITED</div><div class="roof"></div><div class="sign">PBK EASTON</div><div class="door"></div></div>
-    <div class="worldBuilding" id="bFoxborough"><div class="visitBadge" id="visitFoxborough">NOT VISITED</div><div class="roof"></div><div class="sign">PBK FOXBOROUGH</div><div class="door"></div></div>
-    <div class="worldBuilding" id="bRaynham"><div class="visitBadge" id="visitRaynham">NOT VISITED</div><div class="roof"></div><div class="sign">PBK RAYNHAM</div><div class="door"></div></div>
+  <div id="travelMap">
+    <div id="travelLegend">SELECT A PBK TOWN TO START YOUR TRAVEL</div>
+    <div class="mapRoad r1"></div><div class="mapRoad r2"></div><div class="mapRoad r3"></div>
 
-    <div class="npc" id="npcGuide">
-      <div class="npcLabel">PBK GUIDE</div><div class="npcHead"></div><div class="npcBody"></div>
-    </div>
-    <div class="npc" id="npcRaynham">
-      <div class="npcLabel">DECLAN</div><div class="npcHead"></div><div class="npcBody"></div>
+    <div class="travelNode" id="nodeNorton">
+      <strong>PBK NORTON</strong>
+      <span>Travel to Norton Town</span>
+      <button id="teleportNortonBtn">TELEPORT</button>
     </div>
 
-    <div id="worldPlayer">
-      <div class="wpHead"></div><div class="wpBody"></div><div class="wpLeg l"></div><div class="wpLeg r"></div>
+    <div class="travelNode" id="nodeEaston">
+      <strong>PBK EASTON</strong>
+      <span>Travel to Easton Town</span>
+      <button id="teleportEastonBtn">TELEPORT</button>
     </div>
-    <div id="worldPrompt">PRESS INTERACT</div>
+
+    <div class="travelNode" id="nodeFoxborough">
+      <strong>PBK FOXBOROUGH</strong>
+      <span>Travel to Foxborough Town</span>
+      <button id="teleportFoxboroughBtn">TELEPORT</button>
+    </div>
+
+    <div class="travelNode" id="nodeRaynham">
+      <strong>PBK RAYNHAM</strong>
+      <span>Travel to Raynham Town</span>
+      <button id="teleportRaynhamBtn">TELEPORT</button>
+    </div>
   </div>
 
   <div id="questPanel">
@@ -1419,19 +1956,128 @@ h1,h2,h3{margin:0}
       <div class="questItem" id="questBoss"><strong>Boss Path</strong><span id="questBossText">Dad awaits</span></div>
     </div>
   </div>
+</div>
 
-  <div id="worldControls">
-    <div></div>
-    <div id="worldDpad">
-      <button class="up" data-worldmove="up">▲</button>
-      <button class="left" data-worldmove="left">◀</button>
-      <button class="right" data-worldmove="right">▶</button>
-      <button class="down" data-worldmove="down">▼</button>
+
+<div id="town" class="screen centercol">
+  <button class="back" data-back="world">BACK TO MAP</button>
+  <div id="townHud">
+    <strong id="townTitle">PBK TOWN</strong>
+    <span id="townSubtitle">Explore the town and walk to the dojo.</span>
+    <span id="townRankText">White Belt</span>
+  </div>
+
+  <div id="townScene">
+    <div id="townBackdropHill"></div>
+    <div id="townDojo">
+      <div class="roof"></div>
+      <div id="townDojoSign">PBK SCHOOL</div>
+      <div id="townDojoWindow1"></div>
+      <div id="townDojoWindow2"></div>
+      <div id="townDojoDoor"></div>
+      <div id="townDojoMatIcon"></div>
     </div>
-    <div id="worldActionPanel">
-      <button id="worldInteractBtn">INTERACT</button>
-      <button id="worldRosterBtn">ROSTER</button>
-      <button id="worldCareerBtn">BELTS</button>
+
+    <div class="townBuilding" id="townCafe">
+      <div class="sign">SHAKE / CAFE</div>
+      <div class="door"></div>
+    </div>
+
+    <div class="townBuilding" id="townPark">
+      <div class="sign">TOWN PARK</div>
+      <div class="door"></div>
+    </div>
+
+    <div class="townBuilding" id="townTravelDepot">
+      <div class="sign">TRAVEL DEPOT</div>
+      <div class="door"></div>
+    </div>
+
+    <div id="townParkingZone">
+      <div id="townParkingZoneLabel">DOJO PARKING</div>
+      <div class="townCar" id="car1"></div>
+      <div class="townCar" id="car2"></div>
+    </div>
+
+    <div id="townRoadMain"></div>
+    <div id="townRoadStripe"></div>
+    <div id="townSidewalkTop"></div>
+    <div id="townSidewalkBottom"></div>
+
+    <div class="townTree" id="tree1"><div class="crown"></div><div class="trunk"></div></div>
+    <div class="townTree" id="tree2"><div class="crown"></div><div class="trunk"></div></div>
+    <div class="townTree" id="tree3"><div class="crown"></div><div class="trunk"></div></div>
+    <div class="townTree" id="tree4"><div class="crown"></div><div class="trunk"></div></div>
+
+    <div class="townLamp" id="lamp1"></div>
+    <div class="townLamp" id="lamp2"></div>
+
+    <div id="townPlayer">
+      <div class="ph"></div><div class="pb"></div><div class="pl l"></div><div class="pl r"></div>
+    </div>
+
+    <div id="townPrompt">INTERACT</div>
+    <div id="townTravelBoard">
+      <button id="townToNortonBtn">TO NORTON</button>
+      <button id="townToEastonBtn">TO EASTON</button>
+      <button id="townToFoxboroughBtn">TO FOXBOROUGH</button>
+      <button id="townToRaynhamBtn">TO RAYNHAM</button>
+    </div>
+  </div>
+
+  <div id="townControls">
+    <div></div>
+    <div id="townDpad">
+      <button class="up" data-townmove="up">▲</button>
+      <button class="left" data-townmove="left">◀</button>
+      <button class="right" data-townmove="right">▶</button>
+      <button class="down" data-townmove="down">▼</button>
+    </div>
+    <div id="townActions">
+      <button id="townInteractBtn">INTERACT</button>
+      <button id="townMapBtn">WORLD MAP</button>
+    </div>
+  </div>
+
+  <div id="townInfoCard">
+    <div id="townInfoTitle">Town View</div>
+    <div id="townInfoText">Move around the town, check the parking area, visit the local spots, and walk into the dojo for training and competition.</div>
+  </div>
+</div>
+
+<div id="parking" class="screen centercol">
+  <button class="back" data-back="world">BACK TO MAP</button>
+  <div id="parkingHud">
+    <strong id="parkingSchoolTitle">PBK SCHOOL</strong>
+    <span>Parking Lot</span>
+    <span>Walk to the entrance</span>
+  </div>
+
+  <div id="parkingLot">
+    <div id="parkingBuilding">
+      <div class="roof"></div>
+      <div id="parkingSchoolSign">PBK SCHOOL</div>
+      <div id="parkingDoor"></div>
+    </div>
+
+    <div id="parkingPlayer">
+      <div class="ph"></div><div class="pb"></div><div class="pl l"></div><div class="pl r"></div>
+    </div>
+
+    <div id="parkingArrival">ARRIVED</div><div id="parkingPrompt">INTERACT: ENTER SCHOOL</div>
+  </div>
+
+  <div id="parkingControls">
+    <div></div>
+    <div id="parkingDpad">
+      <button class="up" data-parkingmove="up">▲</button>
+      <button class="left" data-parkingmove="left">◀</button>
+      <button class="right" data-parkingmove="right">▶</button>
+      <button class="down" data-parkingmove="down">▼</button>
+    </div>
+    <div id="parkingActions">
+      <button id="parkingEnterBtn">ENTER</button>
+      <button id="parkingMapBtn">MAP</button>
     </div>
   </div>
 </div>
@@ -1439,12 +2085,74 @@ h1,h2,h3{margin:0}
 <div id="dojoHub" class="screen centercol">
   <button class="back" data-back="world">BACK TO WORLD</button>
   <div id="dojoRoom">
+    <div id="dojoCeilingBanner">PBK DOJO</div>
+    <div id="dojoMirror"></div>
+    <div id="dojoTrophyCase"></div>
+    <div id="dojoHeavyBag"></div>
+    <div id="dojoFlagBoard"></div>
     <div id="dojoName">PBK SCHOOL</div>
-    <div class="dojoStation" id="dojoTrain"><h3>TRAIN</h3><p>Practice techniques and movement.</p><button id="dojoTrainBtn">TRAIN</button></div>
-    <div class="dojoStation" id="dojoSpar"><h3>SPAR</h3><p>Enter point-fighting practice.</p><button id="dojoSparBtn">SPAR</button></div>
-    <div class="dojoStation" id="dojoForms"><h3>FORMS</h3><p>Build and perform a routine.</p><button id="dojoFormsBtn">FORMS</button></div>
-    <div class="dojoStation" id="dojoTournament"><h3>TOURNAMENT</h3><p>Enter the next career tournament.</p><button id="dojoTournamentBtn">ENTER</button></div>
-    <button id="dojoExit">EXIT SCHOOL</button>
+    <div id="schoolMilestone">SCHOOL VISITED</div><div id="schoolCompleteBadge" class="schoolCompletionBadge">SCHOOL QUEST COMPLETE</div>
+    <div id="dojoMat"></div>
+
+    <div class="dojoNpc" id="dojoNpc1">
+      <div class="nl" id="dojoNpc1Name">STUDENT</div><div class="nh"></div><div class="nb"></div>
+    </div>
+    <div class="dojoNpc" id="dojoNpc2">
+      <div class="nl" id="dojoNpc2Name">STUDENT</div><div class="nh"></div><div class="nb"></div>
+    </div>
+    <div class="dojoNpc" id="dojoNpc3">
+      <div class="nl" id="dojoNpc3Name">INSTRUCTOR</div><div class="nh"></div><div class="nb"></div>
+    </div>
+
+    
+    <div id="dojoRosterMini">PBK SCHOOL</div>
+    <div class="dojoStationPoint" id="stationTrain">TRAINING MAT<span>Technique practice</span></div>
+    <div class="dojoStationPoint" id="stationForms">FORMS AREA<span>Traditional / creative</span></div>
+    <div class="dojoStationPoint" id="stationSpar">SPARRING AREA<span>Point fighting</span></div>
+    <div class="dojoStationPoint" id="stationTournament">TOURNAMENT DESK<span>Career events</span></div>
+    <div class="dojoStationPoint" id="stationCharacter">ROSTER BOARD<span>Playable fighters</span></div>
+    <div class="dojoStationPoint" id="stationBelts">BELT BOARD<span>Rank progression</span></div>
+    <div class="dojoStationPoint" id="stationBoss">CHALLENGE BOARD<span>Boss path</span></div>
+
+<div id="dojoplayer">
+      <div class="dh"></div><div class="db"></div><div class="dl l"></div><div class="dl r"></div>
+    </div>
+
+    <div id="dojoInteractPrompt">INTERACT</div>
+    <button id="dojoExit" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%)">EXIT SCHOOL</button>
+  </div>
+
+  <div id="dojoControls">
+    <div></div>
+    <div id="dojodpad">
+      <button class="up" data-dojomove="up">▲</button>
+      <button class="left" data-dojomove="left">◀</button>
+      <button class="right" data-dojomove="right">▶</button>
+      <button class="down" data-dojomove="down">▼</button>
+    </div>
+    <div id="dojoActionPanel">
+      <button id="dojoInteractBtn">INTERACT</button>
+      <button id="dojoMapBtn">TRAVEL MAP</button>
+    </div>
+  </div>
+
+  <div id="dojoQuestCard">
+    <strong id="dojoQuestTitle">School Quest</strong>
+    <div id="dojoQuestProgress">Talk to the students in this school.</div>
+    <div id="dojoQuestSteps">
+      <div class="questStep" id="qTalk">Meet dojo members</div>
+      <div class="questStep" id="qTrain">Train</div>
+      <div class="questStep" id="qForms">Forms</div>
+      <div class="questStep" id="qSpar">Spar</div>
+      <div class="questStep" id="qTournament">Tournament</div>
+    </div>
+  </div>
+
+  <div id="schoolChallengeCard" class="locked">
+    <div id="schoolChallengeTitle">School Challenge</div>
+    <div id="schoolChallengeText">Complete this dojo's quest to unlock a playable school challenge.</div>
+    <button id="schoolChallengeBtn" disabled>LOCKED</button>
+    <div id="schoolQuestSummary"></div>
   </div>
 </div>
 
@@ -1613,6 +2321,25 @@ h1,h2,h3{margin:0}
 
 
 
+
+<div id="schoolchallenge" class="screen centercol">
+  <button class="back" data-back="dojoHub">BACK TO DOJO</button>
+  <div id="challengeArena">
+    <div id="challengeTitle">SCHOOL CHALLENGE</div>
+    <div id="challengeInstruction">Complete the required sequence.</div>
+    <div id="challengeFighter">
+      <div class="h"></div><div class="t"></div>
+      <div class="a l"></div><div class="a r"></div>
+      <div class="l l"></div><div class="l r"></div>
+    </div>
+  </div>
+  <div id="challengeControls">
+    <div id="challengeButtons"></div>
+    <div id="challengeProgress">Progress: --</div>
+    <div id="challengeResult"></div>
+  </div>
+</div>
+
 <div id="bossfightselect" class="screen centercol">
   <button class="back" data-back="menu">BACK</button>
   <h2>BOSS BATTLES</h2>
@@ -1646,6 +2373,13 @@ h1,h2,h3{margin:0}
       <p>Third boss. Versatile movement and mixed attacks.</p>
       <div class="bossTag" id="alexBossTag">LOCKED</div>
       <button id="fightAlexBtn" disabled>LOCKED</button>
+    </div>
+    <div class="bossFightCard locked" id="stephBossCard">
+      <div class="bossPortrait">MS</div>
+      <strong>Master Steph</strong>
+      <p>Raynham master boss. Strong kicks, disciplined counters, and escalating pressure.</p>
+      <div class="bossTag" id="stephBossTag">LOCKED</div>
+      <button id="fightStephBtn" disabled>LOCKED</button>
     </div>
     <div class="bossFightCard locked" id="camaraBossCard">
       <div class="bossPortrait">MC</div>
@@ -1852,14 +2586,14 @@ h1,h2,h3{margin:0}
 </div>
 
 <script>
-const $=id=>document.getElementById(id),screens=['menu','world','dojoHub','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
+const $=id=>document.getElementById(id),screens=['menu','world','town','parking','dojoHub','schoolchallenge','select','career','modes','bossfightselect','bosses','bracket','forms','breaking','fight','ceremony'];
 function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
 const saveDefaults={
   tournamentWins:0,totalWins:0,formsDone:false,breakingDone:false,
   selectedFighter:'BRADLEY',
   dadDefeated:false,ryanDefeated:false,alexDefeated:false,
   stephDefeated:false,camaraDefeated:false,rappoldDefeated:false,
-  visitedSchools:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false}
+  visitedSchools:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},dojoTalks:{NORTON:0,EASTON:0,FOXBOROUGH:0,RAYNHAM:0},schoolActivities:{NORTON:{train:false,forms:false,spar:false,tournament:false},EASTON:{train:false,forms:false,spar:false,tournament:false},FOXBOROUGH:{train:false,forms:false,spar:false,tournament:false},RAYNHAM:{train:false,forms:false,spar:false,tournament:false}},schoolQuestComplete:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false},schoolChallengeComplete:{NORTON:false,EASTON:false,FOXBOROUGH:false,RAYNHAM:false}
 };
 let rawSave={};
 try{
@@ -1867,7 +2601,14 @@ try{
 }catch(e){rawSave={}}
 let save=Object.assign({},saveDefaults,rawSave);
 save.visitedSchools=Object.assign({},saveDefaults.visitedSchools,rawSave.visitedSchools||{});
-let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formMode='traditional',formRoutine=[],formX=50,formFacing=1,formStance='forward',focus=0,focusDir=1,focusTimer=null,boards=0,worldX=50,worldY=50,currentSchool='';
+save.dojoTalks=Object.assign({},saveDefaults.dojoTalks,rawSave.dojoTalks||{});
+save.schoolActivities=Object.assign({},saveDefaults.schoolActivities,rawSave.schoolActivities||{});
+['NORTON','EASTON','FOXBOROUGH','RAYNHAM'].forEach(id=>{
+  save.schoolActivities[id]=Object.assign({},saveDefaults.schoolActivities[id],(rawSave.schoolActivities||{})[id]||{});
+});
+save.schoolQuestComplete=Object.assign({},saveDefaults.schoolQuestComplete,rawSave.schoolQuestComplete||{});
+save.schoolChallengeComplete=Object.assign({},saveDefaults.schoolChallengeComplete,rawSave.schoolChallengeComplete||{});
+let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formMode='traditional',formRoutine=[],formX=50,formFacing=1,formStance='forward',focus=0,focusDir=1,focusTimer=null,boards=0,worldX=50,worldY=50,currentSchool='',dojoX=50,dojoY=72,parkingX=50,parkingY=78,townX=50,townY=77,currentTown='',dojoRosterOffset=0;
 const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'},{name:'DAD',style:'bossDad',color:'#45403b'},{name:'RYAN',style:'bossRyan',color:'#2d2f55'},{name:'ALEX GEORGE',style:'bossAlex',color:'#315043'},{name:'MASTER STEPH',style:'bossSteph',color:'#453724'},{name:'MASTER CAMARA',style:'bossCamara',color:'#353535'},{name:'MASTER RAPPOLD',style:'bossRappold',color:'#3a243f'}];
 
 
@@ -1972,7 +2713,7 @@ function updateCareer(){
 function updateBossProgress(){
   const ryanUnlocked=!!save.dadDefeated;
   const alexUnlocked=!!save.ryanDefeated;
-  const stephUnlocked=!!save.alexDefeated;
+  const stephUnlocked=!!save.alexDefeated&&!!save.schoolChallengeComplete.RAYNHAM;
   const camaraUnlocked=!!save.stephDefeated;
   const rappoldUnlocked=!!save.camaraDefeated;
 
@@ -2118,51 +2859,10 @@ function applySelectedFighter(){
 
 
 function safe(e){if(e&&e.cancelable)e.preventDefault()}
-function bindTap(id,fn){const el=$(id);el.addEventListener('pointerup',e=>{safe(e);fn()},{passive:false})}
-function bindHold(id,down,up){const el=$(id);el.addEventListener('pointerdown',e=>{safe(e);down()},{passive:false});['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,e=>{safe(e);up()},{passive:false}))}
-
-document.querySelectorAll('[data-back]').forEach(el=>el.addEventListener('pointerup',e=>{safe(e);show(el.dataset.back)},{passive:false}));
-bindTap('worldBtn',openWorld);
-bindTap('worldInteractBtn',worldInteract);
-bindTap('worldRosterBtn',()=>{updateRoster();show('select')});
-bindTap('worldCareerBtn',()=>{updateCareer();show('career')});
-bindTap('dialogCloseBtn',closeDialog);
-bindTap('dojoExit',()=>{closeDialog();show('world')});
-bindTap('dojoTalkBtn',talkToDojoStudent);
-bindTap('dojoTrainBtn',trainingDialog);
-bindTap('dojoSparBtn',startTournament);
-bindTap('dojoFormsBtn',()=>{resetFormsMode();show('forms')});
-bindTap('dojoTournamentBtn',startTournament);
-bindTap('playBtn',()=>show('modes'));bindTap('careerBtn',()=>show('career'));bindTap('selectBtn',()=>{updateRoster();show('select')});bindTap('bracketBtn',()=>show('bracket'));bindTap('bossBtn',()=>show('bosses'));bindTap('bossFightBtn',()=>{updateBossProgress();show('bossfightselect')});
-bindTap('chooseBradley',()=>selectPlayable('BRADLEY'));
-bindTap('chooseNorton',()=>selectPlayable('NORTON'));
-bindTap('chooseIanJo',()=>selectPlayable('IAN_JO'));
-bindTap('chooseAlarmaJoe',()=>selectPlayable('ALARMA_JOE'));
-bindTap('chooseAJ',()=>selectPlayable('AJ'));
-bindTap('chooseJesseSanchez',()=>selectPlayable('JESSE_SANCHEZ'));
-bindTap('chooseSamShanoi',()=>selectPlayable('SAM_SHANOI'));
-bindTap('chooseMaxShanoi',()=>selectPlayable('MAX_SHANOI'));
-bindTap('chooseDrewKazi',()=>selectPlayable('DREW_KAZI'));
-bindTap('chooseFoxborough',()=>selectPlayable('FOXBOROUGH'));
-bindTap('chooseRaynham',()=>selectPlayable('RAYNHAM'));
-bindTap('sparBtn',startTournament);bindTap('fightDadBtn',startDadBoss);bindTap('fightRyanBtn',startRyanBoss);bindTap('fightAlexBtn',startAlexBoss);bindTap('fightStephBtn',startStephBoss);bindTap('fightCamaraBtn',startCamaraBoss);bindTap('fightRappoldBtn',startRappoldBoss);bindTap('bossIntroFightBtn',launchRyanBossFight);bindTap('formsBtn',()=>{resetFormsMode();show('forms')});
-bindTap('breakingBtn',()=>{boards=0;focus=0;$('boards').textContent='0 / 3';$('breakMsg').textContent='Time the strike near full focus.';show('breaking');startFocus()});
-
-document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV25',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
-
-
-const formMoveLabels={
-  STEP_FORWARD:'Step Forward',
-  STEP_BACK:'Step Back',
-  TURN_LEFT:'Turn Left',
-  TURN_RIGHT:'Turn Right',
-  FORWARD_STANCE:'Forward Stance',
-  BACK_STANCE:'Back Stance',
-  PUNCH:'Punch',
-  BLOCK:'Block',
-  SIDE_KICK:'Side Kick',
-  ROUND_KICK:'Round Kick',
-  TORNADO_KICK:'Tornado Kick'
+function bindTap(id,fn){
+  const el=$(id);
+  if(!el)return;
+  el.addEventListener('pointerup',e=>{safe(e);fn(e)},{passive:false});
 };
 
 function resetFormsMode(){
@@ -2322,6 +3022,10 @@ function performAndScoreForm(){
 
   if(total>=23.0){
     $('formsMsg').textContent='Excellent form! Judges approve the performance.';
+    if(currentSchool&&save.schoolActivities[currentSchool]){
+      save.schoolActivities[currentSchool].forms=true;
+      localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+    }
     if(!save.formsDone){
       save.formsDone=true;
       localStorage.setItem('pbkSaveV25',JSON.stringify(save));
@@ -2340,6 +3044,54 @@ bindTap('clearFormBtn',resetFormsMode);
 bindTap('performFormBtn',performAndScoreForm);
 
 
+
+
+
+document.querySelectorAll('[data-townmove]').forEach(btn=>{
+  let hold=null;
+  const dir=btn.dataset.townmove;
+  const step=()=>{
+    if(dir==='up')moveTown(0,-1.8);
+    if(dir==='down')moveTown(0,1.8);
+    if(dir==='left')moveTown(-1.8,0);
+    if(dir==='right')moveTown(1.8,0);
+  };
+  btn.addEventListener('pointerdown',e=>{
+    safe(e);step();hold=setInterval(step,70);
+  },{passive:false});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>btn.addEventListener(ev,()=>{if(hold)clearInterval(hold);hold=null}));
+});
+
+document.querySelectorAll('[data-parkingmove]').forEach(btn=>{
+  let hold=null;
+  const dir=btn.dataset.parkingmove;
+  const step=()=>{
+    if(dir==='up')moveParking(0,-1.8);
+    if(dir==='down')moveParking(0,1.8);
+    if(dir==='left')moveParking(-1.8,0);
+    if(dir==='right')moveParking(1.8,0);
+  };
+  btn.addEventListener('pointerdown',e=>{
+    safe(e);step();hold=setInterval(step,70);
+  },{passive:false});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>btn.addEventListener(ev,()=>{if(hold)clearInterval(hold);hold=null}));
+});
+
+document.querySelectorAll('[data-dojomove]').forEach(btn=>{
+  let hold=null;
+  const dir=btn.dataset.dojomove;
+  const step=()=>{
+    if(dir==='up')moveDojo(0,-1.8);
+    if(dir==='down')moveDojo(0,1.8);
+    if(dir==='left')moveDojo(-1.8,0);
+    if(dir==='right')moveDojo(1.8,0);
+  };
+  btn.addEventListener('pointerdown',e=>{
+    safe(e);step();hold=setInterval(step,70);
+  },{passive:false});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>btn.addEventListener(ev,()=>{if(hold)clearInterval(hold);hold=null}));
+});
+
 document.querySelectorAll('[data-worldmove]').forEach(btn=>{
   let hold=null;
   const dir=btn.dataset.worldmove;
@@ -2356,12 +3108,31 @@ document.querySelectorAll('[data-worldmove]').forEach(btn=>{
 });
 
 document.addEventListener('keydown',e=>{
-  if(!$('world').classList.contains('active'))return;
-  if(e.key==='ArrowUp'||e.key==='w')moveWorld(0,-2.2);
-  if(e.key==='ArrowDown'||e.key==='s')moveWorld(0,2.2);
-  if(e.key==='ArrowLeft'||e.key==='a')moveWorld(-2.2,0);
-  if(e.key==='ArrowRight'||e.key==='d')moveWorld(2.2,0);
-  if(e.key==='Enter'||e.key===' ')worldInteract();
+  if($('town').classList.contains('active')){
+    if(e.key==='ArrowUp'||e.key==='w')moveTown(0,-2.2);
+    if(e.key==='ArrowDown'||e.key==='s')moveTown(0,2.2);
+    if(e.key==='ArrowLeft'||e.key==='a')moveTown(-2.2,0);
+    if(e.key==='ArrowRight'||e.key==='d')moveTown(2.2,0);
+    if(e.key==='Enter'||e.key===' ')townInteract();
+    return;
+  }
+
+  if($('parking').classList.contains('active')){
+    if(e.key==='ArrowUp'||e.key==='w')moveParking(0,-2.2);
+    if(e.key==='ArrowDown'||e.key==='s')moveParking(0,2.2);
+    if(e.key==='ArrowLeft'||e.key==='a')moveParking(-2.2,0);
+    if(e.key==='ArrowRight'||e.key==='d')moveParking(2.2,0);
+    if(e.key==='Enter'||e.key===' ')parkingEnter();
+    return;
+  }
+
+  if($('dojoHub').classList.contains('active')){
+    if(e.key==='ArrowUp'||e.key==='w')moveDojo(0,-2.2);
+    if(e.key==='ArrowDown'||e.key==='s')moveDojo(0,2.2);
+    if(e.key==='ArrowLeft'||e.key==='a')moveDojo(-2.2,0);
+    if(e.key==='ArrowRight'||e.key==='d')moveDojo(2.2,0);
+    if(e.key==='Enter'||e.key===' ')dojoInteract();
+  }
 });
 
 document.querySelectorAll('[data-form-control]').forEach(btn=>{
@@ -2530,9 +3301,12 @@ const schoolNpcDialog={
 
 function updateWorldProgress(){
   if(!$('questVisitText'))return;
+
   const visited=Object.values(save.visitedSchools||{}).filter(Boolean).length;
-  $('questVisitText').textContent=`${visited} / 4 visited`;
-  $('questVisit').classList.toggle('done',visited===4);
+  const mastered=Object.values(save.schoolChallengeComplete||{}).filter(Boolean).length;
+
+  $('questVisitText').textContent=`${visited} / 4 visited • ${mastered} / 4 mastered`;
+  $('questVisit').classList.toggle('done',visited===4&&mastered===4);
 
   $('questFormsText').textContent=save.formsDone?'Completed':'Not completed';
   $('questForms').classList.toggle('done',!!save.formsDone);
@@ -2548,47 +3322,199 @@ function updateWorldProgress(){
   if(save.camaraDefeated)bossText='Master Rappold awaits';
   if(save.rappoldDefeated)bossText='Grandmaster Chung awaits';
   $('questBossText').textContent=bossText;
-
-  ['NORTON','EASTON','FOXBOROUGH','RAYNHAM'].forEach(id=>{
-    const badge=$('visit'+id.charAt(0)+id.slice(1).toLowerCase());
-    if(badge){
-      const done=!!save.visitedSchools[id];
-      badge.textContent=done?'VISITED':'NOT VISITED';
-      badge.classList.toggle('done',done);
-    }
-  });
 }
 
 const dojoRosters={
-  NORTON:['Norton Student'],
+  NORTON:['Norton Student','Norton Student 2','Norton Instructor','Norton Competitor'],
   EASTON:['Ian Jo','Alarma Joe','AJ','Jesse Sanchez','Sam Shanoi','Max Shanoi','Drew Kazi'],
-  FOXBOROUGH:['Foxborough Student'],
+  FOXBOROUGH:['Foxborough Student','Foxborough Student 2','Foxborough Instructor','Foxborough Competitor'],
   RAYNHAM:['Declan Greenwood','Brian Mitchell','Mr. Dylan','Master Steph']
 };
 
 function updateDojoRoster(id){
-  const list=dojoRosters[id]||['PBK Student'];
-  $('dojoRosterTitle').textContent='PBK '+id+' ROSTER';
-  $('dojoRosterList').innerHTML=list.map(n=>'• '+n).join('<br>');
+  const list=dojoRosters[id]||['PBK Student','PBK Student','Instructor'];
+  dojoRosterOffset=(dojoRosterOffset+1)%Math.max(1,list.length);
+
+  const selected=[
+    list[dojoRosterOffset%list.length],
+    list[(dojoRosterOffset+1)%list.length],
+    list[(dojoRosterOffset+2)%list.length]
+  ];
+
+  $('dojoNpc1Name').textContent=selected[0]||'STUDENT';
+  $('dojoNpc2Name').textContent=selected[1]||'STUDENT';
+  $('dojoNpc3Name').textContent=selected[2]||'INSTRUCTOR';
+  $('dojoNpc1').dataset.npcName=selected[0]||'PBK Student';
+  $('dojoNpc2').dataset.npcName=selected[1]||'PBK Student';
+  $('dojoNpc3').dataset.npcName=selected[2]||'PBK Instructor';
+  $('dojoRosterMini').textContent='PBK '+id+' • '+list.length+' MEMBERS';
+
+  dojoX=50;dojoY=72;
+  renderDojoPlayer();
+  updateDojoQuest();
 }
 
-function talkToDojoStudent(){
-  const list=dojoRosters[currentSchool]||[];
-  if(!list.length){
-    openDialog('PBK STUDENT','Keep training and more students will appear here.');
+
+
+
+
+const townDescriptions={
+  NORTON:{
+    title:'Norton Town',
+    subtitle:'Balanced fundamentals town. Walk the block and enter PBK Norton.',
+    info:'Norton feels steady and grounded — quiet streets, a clean dojo, and a fundamentals-first identity.'
+  },
+  EASTON:{
+    title:'Easton Town',
+    subtitle:'Fast-paced competition town. Walk through Easton and reach PBK Easton.',
+    info:'Easton has more energy and pressure — a busier street feel and a dojo known for combinations and pace.'
+  },
+  FOXBOROUGH:{
+    title:'Foxborough Town',
+    subtitle:'Movement-focused town. Explore the area and head into PBK Foxborough.',
+    info:'Foxborough emphasizes space, timing, and range control. The town layout feels a little more open.'
+  },
+  RAYNHAM:{
+    title:'Raynham Town',
+    subtitle:'Power and pressure town. Travel through Raynham before entering PBK Raynham.',
+    info:'Raynham has a tougher edge — more presence, stronger atmosphere, and a dojo tied closely to Master Steph.'
+  }
+};
+
+function travelToTown(id){
+  currentTown=id;
+  currentSchool=id;
+  townX=50;
+  townY=78;
+  updateTownScene();
+  renderTownPlayer();
+  show('town');
+}
+
+function updateTownScene(){
+  const data=townDescriptions[currentTown]||townDescriptions.NORTON;
+  processBeltProgress();
+
+  $('townTitle').textContent=data.title.toUpperCase();
+  $('townSubtitle').textContent=data.subtitle;
+  $('townRankText').textContent=rankDisplay();
+  $('townDojoSign').textContent='PBK '+currentTown;
+  $('townInfoTitle').textContent=data.title;
+  $('townInfoText').textContent=data.info+' You can walk to the dojo, check the parking area, visit the park/cafe, or use the travel depot to go town-to-town.';
+}
+
+function renderTownPlayer(){
+  if(!$('townPlayer'))return;
+  $('townPlayer').style.left=townX+'%';
+  $('townPlayer').style.top=townY+'%';
+  updateTownPrompt();
+}
+
+function moveTown(dx,dy){
+  townX=Math.max(5,Math.min(95,townX+dx));
+  townY=Math.max(18,Math.min(91,townY+dy));
+  renderTownPlayer();
+}
+
+function nearestTownTarget(){
+  const targets=[
+    {type:'dojo',x:50,y:33,label:'ENTER PBK '+currentTown},
+    {type:'cafe',x:16,y:36,label:'VISIT CAFE'},
+    {type:'park',x:84,y:38,label:'VISIT PARK'},
+    {type:'depot',x:14,y:78,label:'TRAVEL DEPOT'},
+    {type:'parking',x:84,y:79,label:'DOJO PARKING'}
+  ];
+  let best=null,bestD=999;
+  targets.forEach(t=>{
+    const d=Math.hypot(townX-t.x,townY-t.y);
+    if(d<bestD){best=t;bestD=d}
+  });
+  return bestD<=14?best:null;
+}
+
+function updateTownPrompt(){
+  const t=nearestTownTarget();
+  const p=$('townPrompt');
+  if(!t){
+    p.classList.remove('show');
     return;
   }
-  const name=list[Math.floor(Math.random()*list.length)];
-  let text='Keep training. Every school has a different fighting style.';
-  if(name==='Master Steph')text='Raynham training gets serious here. Defeat Alex George to earn the right to challenge Master Steph.';
-  openDialog(name,text);
+  p.classList.add('show');
+  p.textContent='INTERACT: '+t.label;
+}
+
+function townInteract(){
+  const t=nearestTownTarget();
+  if(!t){
+    openDialog('TOWN','Walk closer to a location to interact.');
+    return;
+  }
+
+  if(t.type==='dojo'){
+    openDojo(currentTown);
+    return;
+  }
+  if(t.type==='cafe'){
+    openDialog('LOCAL CAFE','A little place to grab a shake after class. The town feels more alive when locations like this are part of the world.');
+    return;
+  }
+  if(t.type==='park'){
+    openDialog('TOWN PARK','Open space for movement, stretching, and relaxing between dojo visits.');
+    return;
+  }
+  if(t.type==='parking'){
+    openDialog('DOJO PARKING','This is the parking area outside the dojo. You can imagine arriving here before walking up to class.');
+    return;
+  }
+  if(t.type==='depot'){
+    openDialog('TRAVEL DEPOT','Use the travel buttons at the bottom of town to move directly between PBK towns.');
+    return;
+  }
+}
+
+function teleportToSchool(id){
+  currentSchool=id;
+  parkingX=50;
+  parkingY=78;
+  $('parkingSchoolTitle').textContent='PBK '+id;
+  $('parkingSchoolSign').textContent='PBK '+id;
+  renderParkingPlayer();
+  show('parking');
+  const a=$('parkingArrival');
+  if(a){
+    a.textContent='ARRIVED • PBK '+id;
+    a.classList.remove('show');void a.offsetWidth;a.classList.add('show');
+  }
+}
+
+function renderParkingPlayer(){
+  if(!$('parkingPlayer'))return;
+  $('parkingPlayer').style.left=parkingX+'%';
+  $('parkingPlayer').style.top=parkingY+'%';
+
+  const nearDoor=Math.hypot(parkingX-50,parkingY-30)<=15;
+  $('parkingPrompt').classList.toggle('show',nearDoor);
+}
+
+function moveParking(dx,dy){
+  parkingX=Math.max(7,Math.min(93,parkingX+dx));
+  parkingY=Math.max(25,Math.min(91,parkingY+dy));
+  renderParkingPlayer();
+}
+
+function parkingEnter(){
+  const nearDoor=Math.hypot(parkingX-50,parkingY-30)<=15;
+  if(!nearDoor){
+    openDialog('PARKING LOT','Walk up to the school entrance first.');
+    return;
+  }
+  openDojo(currentSchool);
 }
 
 function openWorld(){
   applySelectedFighter();
   updateWorldHud();
   updateWorldProgress();
-  renderWorldPlayer();
   show('world');
 }
 
@@ -2690,7 +3616,377 @@ function openDojo(id){
   }
 
   show('dojoHub');
+  renderDojoPlayer();
   setTimeout(()=>openDialog('PBK '+id,schoolNpcDialog[id]),120);
+}
+
+
+
+
+const schoolChallenges={
+  NORTON:{
+    title:'Norton Fundamentals Test',
+    text:'Complete a clean fundamentals challenge to prove stance, guard, and basic technique control.',
+    action:'fundamentals'
+  },
+  EASTON:{
+    title:'Easton Combination Challenge',
+    text:'Show pressure, clean combinations, and obvious scoring technique.',
+    action:'combo'
+  },
+  FOXBOROUGH:{
+    title:'Foxborough Distance Challenge',
+    text:'Demonstrate range control, movement, and side-kick timing.',
+    action:'distance'
+  },
+  RAYNHAM:{
+    title:'Raynham Power Challenge',
+    text:'Show explosive kicks and strong counter-fighting under pressure.',
+    action:'power'
+  }
+};
+
+const dojoStations=[
+  {id:'stationTrain',type:'train',x:11,y:38,label:'TRAINING MAT'},
+  {id:'stationForms',type:'forms',x:11,y:70,label:'FORMS AREA'},
+  {id:'stationSpar',type:'spar',x:89,y:38,label:'SPARRING AREA'},
+  {id:'stationTournament',type:'tournament',x:89,y:70,label:'TOURNAMENT DESK'},
+  {id:'stationCharacter',type:'character',x:42,y:22,label:'ROSTER BOARD'},
+  {id:'stationBelts',type:'belts',x:58,y:22,label:'BELT BOARD'},
+  {id:'stationBoss',type:'boss',x:50,y:84,label:'CHALLENGE BOARD'}
+];
+
+const dojoNpcPositions=[
+  {slot:0,x:25,y:47},
+  {slot:1,x:75,y:47},
+  {slot:2,x:50,y:31}
+];
+
+function renderDojoPlayer(){
+  if(!$('dojoplayer'))return;
+  $('dojoplayer').style.left=dojoX+'%';
+  $('dojoplayer').style.top=dojoY+'%';
+  updateDojoPrompt();
+}
+
+function moveDojo(dx,dy){
+  dojoX=Math.max(8,Math.min(92,dojoX+dx));
+  dojoY=Math.max(26,Math.min(88,dojoY+dy));
+  renderDojoPlayer();
+}
+
+function nearestDojoNpc(){
+  let best=null,bestD=999;
+  dojoNpcPositions.forEach(n=>{
+    const d=Math.hypot(dojoX-n.x,dojoY-n.y);
+    if(d<bestD){best={kind:'npc',...n};bestD=d}
+  });
+  return bestD<=13?best:null;
+}
+
+function nearestDojoStation(){
+  let best=null,bestD=999;
+  dojoStations.forEach(st=>{
+    const d=Math.hypot(dojoX-st.x,dojoY-st.y);
+    if(d<bestD){best={kind:'station',...st};bestD=d}
+  });
+  return bestD<=13?best:null;
+}
+
+function nearestDojoTarget(){
+  const npc=nearestDojoNpc();
+  const station=nearestDojoStation();
+
+  const npcD=npc?Math.hypot(dojoX-dojoNpcPositions[npc.slot].x,dojoY-dojoNpcPositions[npc.slot].y):999;
+  const stD=station?Math.hypot(dojoX-station.x,dojoY-station.y):999;
+  return npcD<=stD?npc:station;
+}
+
+function updateDojoPrompt(){
+  const target=nearestDojoTarget();
+  const p=$('dojoInteractPrompt');
+
+  document.querySelectorAll('.dojoStationPoint').forEach(x=>x.classList.remove('near'));
+
+  if(!target){
+    p.classList.remove('show');
+    return;
+  }
+
+  p.classList.add('show');
+
+  if(target.kind==='npc'){
+    const el=$('dojoNpc'+(target.slot+1));
+    const name=el?.dataset.npcName||dojoRosters[currentSchool]?.[target.slot]||'PBK STUDENT';
+    p.textContent='INTERACT: TALK TO '+name.toUpperCase();
+  }else{
+    const el=$(target.id);
+    if(el)el.classList.add('near');
+    p.textContent='INTERACT: '+target.label;
+  }
+}
+
+function dojoInteract(){
+  const target=nearestDojoTarget();
+  if(!target){
+    openDialog('PBK DOJO','Move closer to a person or activity station.');
+    return;
+  }
+
+  if(target.kind==='npc'){
+    const el=$('dojoNpc'+(target.slot+1));
+    const name=el?.dataset.npcName||'PBK Student';
+    openDialog(name,dojoDialogue(currentSchool,name));
+    save.dojoTalks[currentSchool]=Math.min(3,(save.dojoTalks[currentSchool]||0)+1);
+    localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+    updateDojoQuest();
+    return;
+  }
+
+  launchDojoStation(target.type);
+}
+
+function markSchoolActivity(type){
+  if(!save.schoolActivities[currentSchool])return;
+  if(type in save.schoolActivities[currentSchool]){
+    save.schoolActivities[currentSchool][type]=true;
+    localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  }
+  updateDojoQuest();
+}
+
+function launchDojoStation(type){
+  if(type==='train'){
+    markSchoolActivity('train');
+    trainingDialog();
+    return;
+  }
+  if(type==='forms'){
+    markSchoolActivity('forms');
+    resetFormsMode();
+    show('forms');
+    return;
+  }
+  if(type==='spar'){
+    markSchoolActivity('spar');
+    startTournament();
+    return;
+  }
+  if(type==='tournament'){
+    markSchoolActivity('tournament');
+    startTournament();
+    return;
+  }
+  if(type==='character'){
+    updateRoster();show('select');return;
+  }
+  if(type==='belts'){
+    updateCareer();show('career');return;
+  }
+  if(type==='boss'){
+    updateBossProgress();show('bossfightselect');return;
+  }
+}
+
+
+let activeSchoolChallenge=null;
+let schoolChallengeStep=0;
+
+const playableSchoolChallenges={
+  NORTON:{
+    title:'Norton Fundamentals Test',
+    instruction:'Perform the fundamentals in order: Forward Stance → Block → Punch → Side Kick.',
+    sequence:['FORWARD STANCE','BLOCK','PUNCH','SIDE KICK']
+  },
+  EASTON:{
+    title:'Easton Combination Challenge',
+    instruction:'Build the pressure combination: Punch → Round Kick → Punch → Side Kick.',
+    sequence:['PUNCH','ROUND KICK','PUNCH','SIDE KICK']
+  },
+  FOXBOROUGH:{
+    title:'Foxborough Distance Challenge',
+    instruction:'Control range in order: Step Back → Side Kick → Step Forward → Punch.',
+    sequence:['STEP BACK','SIDE KICK','STEP FORWARD','PUNCH']
+  },
+  RAYNHAM:{
+    title:'Raynham Power Challenge',
+    instruction:'Show power and counter control: Block → Side Kick → Round Kick → Punch.',
+    sequence:['BLOCK','SIDE KICK','ROUND KICK','PUNCH']
+  }
+};
+
+function startSchoolChallenge(){
+  if(!currentSchool||!save.schoolQuestComplete[currentSchool])return;
+
+  if(currentSchool==='RAYNHAM'&&!save.alexDefeated){
+    openDialog('RAYNHAM CHALLENGE','You completed the school quest, but the final Raynham challenge stays locked until Alex George is defeated.');
+    return;
+  }
+
+  activeSchoolChallenge=playableSchoolChallenges[currentSchool];
+  schoolChallengeStep=0;
+
+  $('challengeTitle').textContent=activeSchoolChallenge.title;
+  $('challengeInstruction').textContent=activeSchoolChallenge.instruction;
+  $('challengeResult').textContent='';
+  buildSchoolChallengeButtons();
+  updateSchoolChallengeProgress();
+  show('schoolchallenge');
+}
+
+function buildSchoolChallengeButtons(){
+  const moves=['FORWARD STANCE','BACK STANCE','STEP FORWARD','STEP BACK','BLOCK','PUNCH','SIDE KICK','ROUND KICK'];
+  $('challengeButtons').innerHTML=moves.map(m=>`<button data-schoolchallenge="${m}">${m}</button>`).join('');
+
+  document.querySelectorAll('[data-schoolchallenge]').forEach(btn=>{
+    btn.addEventListener('pointerup',e=>{
+      safe(e);
+      schoolChallengeInput(btn.dataset.schoolchallenge);
+    },{passive:false});
+  });
+}
+
+function challengeAnimate(move){
+  const f=$('challengeFighter');
+  ['punch','kick','block','step'].forEach(c=>f.classList.remove(c));
+  let cls='';
+  if(move==='PUNCH')cls='punch';
+  if(move==='SIDE KICK'||move==='ROUND KICK')cls='kick';
+  if(move==='BLOCK')cls='block';
+  if(move.includes('STEP'))cls='step';
+  if(cls){
+    void f.offsetWidth;
+    f.classList.add(cls);
+    setTimeout(()=>f.classList.remove(cls),450);
+  }
+}
+
+function schoolChallengeInput(move){
+  if(!activeSchoolChallenge)return;
+
+  challengeAnimate(move);
+  const expected=activeSchoolChallenge.sequence[schoolChallengeStep];
+
+  if(move===expected){
+    schoolChallengeStep++;
+    $('challengeResult').textContent='GOOD!';
+    if(schoolChallengeStep>=activeSchoolChallenge.sequence.length){
+      finishSchoolChallenge();
+      return;
+    }
+  }else{
+    schoolChallengeStep=0;
+    $('challengeResult').textContent='RESET — TRY THE SEQUENCE AGAIN';
+  }
+
+  updateSchoolChallengeProgress();
+}
+
+function updateSchoolChallengeProgress(){
+  if(!activeSchoolChallenge)return;
+  const seq=activeSchoolChallenge.sequence;
+  const chips=seq.map((m,i)=>`${i<schoolChallengeStep?'✓':'○'} ${m}`);
+  $('challengeProgress').textContent='Progress: '+chips.join('  •  ');
+}
+
+function finishSchoolChallenge(){
+  save.schoolChallengeComplete[currentSchool]=true;
+  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
+  $('challengeResult').textContent='CHALLENGE COMPLETE!';
+  $('challengeProgress').textContent='School mastered.';
+  updateDojoQuest();
+  updateWorldProgress();
+  updateBossProgress();
+  setTimeout(()=>show('dojoHub'),900);
+}
+
+function dojoDialogue(school,name){
+  if(school==='EASTON'){
+    if(name==='Ian Jo')return 'Easton is about pressure and clean scoring. Keep your hands ready and finish every technique.';
+    if(name==='Jesse Sanchez')return 'Mix your punches and kicks. If they only expect one attack, make them deal with two.';
+    if(name==='AJ')return 'Speed matters, but timing matters more. Make the point obvious to the judges.';
+  }
+  if(school==='RAYNHAM'){
+    if(name==='Declan Greenwood')return 'Raynham training gets physical. Stay balanced and do not give away your distance.';
+    if(name==='Brian Mitchell')return 'Use your movement to create the opening before you attack.';
+    if(name==='Master Steph'){
+      if(!save.alexDefeated)return 'Train more and defeat Alex George first. Then we can test your skill.';
+      if(!save.schoolChallengeComplete.RAYNHAM)return 'Finish the Raynham school challenge first. Then you can challenge me.';
+      return 'You have earned the right to challenge me. Find the Challenge Board when you are ready.';
+    }
+  }
+  if(school==='NORTON'){
+    return 'Norton focuses on fundamentals: stance, guard, distance, and clean technique.';
+  }
+  if(school==='FOXBOROUGH'){
+    return 'Foxborough fighters like range and movement. Control the space before you commit.';
+  }
+  return 'Keep training.';
+}
+
+function updateDojoQuest(){
+  if(!$('dojoQuestTitle')||!currentSchool)return;
+
+  const talks=save.dojoTalks[currentSchool]||0;
+  const a=save.schoolActivities[currentSchool]||{train:false,forms:false,spar:false,tournament:false};
+
+  $('dojoQuestTitle').textContent=`PBK ${currentSchool} School Quest`;
+
+  const steps=[
+    ['qTalk',talks>=3],
+    ['qTrain',!!a.train],
+    ['qForms',!!a.forms],
+    ['qSpar',!!a.spar],
+    ['qTournament',!!a.tournament]
+  ];
+  steps.forEach(([id,done])=>{
+    const el=$(id);
+    if(el)el.classList.toggle('done',done);
+  });
+
+  const complete=(talks>=3)&&a.train&&a.forms&&a.spar&&a.tournament;
+  save.schoolQuestComplete[currentSchool]=complete;
+
+  const doneCount=(talks>=3?1:0)+[a.train,a.forms,a.spar,a.tournament].filter(Boolean).length;
+
+  $('dojoQuestProgress').textContent=complete
+    ?'School quest complete! Special challenge unlocked.'
+    :`Complete the dojo activities: ${doneCount} / 5`;
+
+  $('dojoQuestCard').classList.toggle('questComplete',complete);
+
+  const c=schoolChallenges[currentSchool];
+  const challengeDone=!!save.schoolChallengeComplete[currentSchool];
+  const card=$('schoolChallengeCard');
+  const btn=$('schoolChallengeBtn');
+
+  if(c){
+    $('schoolChallengeTitle').textContent=c.title;
+    $('schoolChallengeText').textContent=challengeDone
+      ?'Challenge complete. This school recognizes your progress.'
+      :complete ? c.text+' This challenge is now playable.' : 'Complete this dojo quest to unlock its special challenge.';
+
+    card.classList.toggle('locked',!complete);
+    card.classList.toggle('unlocked',complete);
+    btn.disabled=!complete||challengeDone;
+    btn.textContent=challengeDone?'COMPLETED':complete?'START CHALLENGE':'LOCKED';
+  }
+
+  const summary=[
+    ['Quest',complete],
+    ['Challenge',challengeDone],
+    ['Visited',!!save.visitedSchools[currentSchool]],
+    ['Boss Link',currentSchool==='RAYNHAM'?!!save.alexDefeated:true]
+  ];
+  $('schoolQuestSummary').innerHTML=summary.map(([label,done])=>`<div class="schoolSummaryItem ${done?'done':''}">${label}: ${done?'YES':'NO'}</div>`).join('');
+
+  const badge=$('schoolCompleteBadge');
+  if(badge){
+    badge.classList.toggle('show',complete);
+    badge.textContent=challengeDone?'SCHOOL MASTERED':'SCHOOL QUEST COMPLETE';
+  }
+
+  localStorage.setItem('pbkSaveV25',JSON.stringify(save));
 }
 
 function trainingDialog(){
@@ -3652,6 +4948,17 @@ bindTap('jump',doJump);bindTap('punch',()=>attack('punch'));bindTap('kick',()=>a
 bindHold('left',()=>moveDir=-1,()=>moveDir=0);bindHold('right',()=>moveDir=1,()=>moveDir=0);bindHold('block',()=>{if(!s.playerStun&&!s.roundLocked&&!s.paused){s.blocking=true;render()}},()=>{s.blocking=false;render()});
 document.addEventListener('touchmove',e=>{if($('fight').classList.contains('active'))safe(e)},{passive:false});
 buildCrowd();processBeltProgress();updateCareer();updateBossProgress();updateRoster();applySelectedFighter();updateWorldProgress();movementLoop();
+
+function runtimeHealthCheck(){
+  const required=['worldBtn','teleportNortonBtn','teleportEastonBtn','teleportFoxboroughBtn','teleportRaynhamBtn','parkingEnterBtn','dojoInteractBtn'];
+  const missing=required.filter(id=>!$(id));
+  if(missing.length){
+    console.warn('PBK missing UI ids:',missing);
+  }
+  return missing.length===0;
+}
+runtimeHealthCheck();
+
 </script>
 </body>
 </html>
