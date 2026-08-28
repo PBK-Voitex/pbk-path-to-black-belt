@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PBK: Path to Black Belt v0.4</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#0a0c10;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow:hidden;touch-action:none}
+.screen{position:absolute;inset:0;display:none;background:linear-gradient(#171b23,#0a0c10);padding:18px;overflow:auto}
+.screen.active{display:flex}
+button{border:0;border-radius:14px;background:#303846;color:#fff;font-weight:800;font-size:17px;padding:14px;box-shadow:inset 0 0 0 1px #6a7380}
+button:active{transform:scale(.98);background:#485365}
+h1,h2,h3{margin:0}
+#menu{align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center}
+#menu h1{font-size:40px}
+.menuBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(620px,94vw)}
+.menuBtns button{min-height:58px}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;width:min(900px,95vw)}
+.card{border:1px solid #58616d;border-radius:14px;background:#171b20;padding:14px}
+.card h3{font-size:21px;margin-bottom:8px}
+.stat{display:flex;justify-content:space-between;font-size:13px;margin:5px 0}
+.meter{height:9px;background:#30343a;border-radius:5px;overflow:hidden}.meter div{height:100%;background:#bbb}
+.centercol{align-items:center;justify-content:flex-start;flex-direction:column;gap:18px}
+#career,#select,#modes,#forms,#breaking,#bracket,#ceremony{padding-top:30px}
+.back{align-self:flex-start;min-width:100px}
+.ladder{width:min(760px,95vw);display:flex;flex-direction:column;gap:10px}
+.ladderStep{padding:12px 16px;border:1px solid #555;border-radius:12px;background:#15191f;display:flex;justify-content:space-between;align-items:center}
+.current{outline:2px solid #aaa}
+.locked{opacity:.45}
+.modeCard button{width:100%;margin-top:12px}
+#fight{flex-direction:column;padding:0;overflow:hidden}
+#hud{height:19vh;min-height:115px;padding:8px;display:grid;grid-template-columns:1fr 180px 1fr;gap:8px}
+.panel{background:rgba(0,0,0,.4);border:1px solid #444;border-radius:12px;padding:8px}
+.name{font-size:18px;font-weight:900}.bar{height:19px;background:#2d3138;border:1px solid #666;border-radius:10px;overflow:hidden;margin-top:5px}.fill{height:100%;background:#eee;width:100%}.power .fill{background:#9ba2ad;width:0}
+#center{text-align:center}#timer{font-size:36px;font-weight:900}
+#arena{position:relative;flex:1;overflow:hidden;background:linear-gradient(#252b34 0%,#1c2026 60%,#715137 60%,#4b3525 100%);border-top:2px solid #333;border-bottom:2px solid #333}
+#arenaTitle,#message{position:absolute;width:100%;text-align:center;font-weight:900;text-shadow:0 2px 3px #000}
+#arenaTitle{top:8px;font-size:19px}#message{top:40px;font-size:20px;z-index:5}
+.fighter{position:absolute;bottom:16%;width:80px;height:156px;transform-origin:center bottom;transition:left .07s linear}
+.head{position:absolute;left:25px;top:0;width:30px;height:30px;border-radius:50%;background:#c99469}
+.body{position:absolute;left:18px;top:30px;width:44px;height:87px;border-radius:10px 10px 4px 4px}
+.arm,.leg{position:absolute;border-radius:5px}.arm{width:14px;height:58px;top:43px;transform-origin:top center}.arm.l{left:8px;transform:rotate(12deg)}.arm.r{right:8px;transform:rotate(-12deg)}.leg{width:15px;height:54px;bottom:0}.leg.l{left:17px}.leg.r{right:17px}.belt{position:absolute;left:13px;top:92px;width:54px;height:9px;background:#050505;border:1px solid #777}.stripe{position:absolute;right:4px;top:1px;width:8px;height:5px;background:#ddd}.tag{position:absolute;top:-28px;width:100%;text-align:center;font-size:13px;font-weight:800}
+#bradley .body,#bradley .arm,#bradley .leg{background:#090a0b;border:1px solid #555}#enemy .body,#enemy .arm,#enemy .leg{background:#4c1919;border:1px solid #935454}
+.hit{filter:brightness(2.3)}.blocking .arm.l{transform:rotate(-65deg);left:19px}.blocking .arm.r{transform:rotate(65deg);right:19px}.attack{transform:scaleX(1.08)}.specialFx{animation:twist .38s linear}.sideFx{animation:sidekick .25s ease-out}
+@keyframes twist{0%{transform:rotate(0)}50%{transform:rotate(180deg) scale(1.1)}100%{transform:rotate(360deg)}}@keyframes sidekick{0%{transform:translateX(0)}50%{transform:translateX(14px) scaleX(1.05)}100%{transform:translateX(0)}}
+#controls{height:29vh;min-height:185px;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.pad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.wide{grid-column:span 2}
+.overlaybtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:16px 28px;display:none;z-index:20}
+#combo{position:absolute;left:10px;bottom:8px;background:rgba(0,0,0,.45);padding:6px 9px;border-radius:8px;font-size:12px}
+.challenge{width:min(760px,95vw);text-align:center}.challengeBox{margin-top:18px;padding:22px;border:1px solid #555;border-radius:14px;background:#15191f}.bigscore{font-size:54px;font-weight:900}.sequence{font-size:22px;line-height:1.6;margin:16px 0}.challengeBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+#profileBar{width:min(720px,95vw);display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.profileBox{background:#15191f;border:1px solid #505864;border-radius:12px;padding:10px;text-align:center}
+.unlock{border:1px solid #59616e;border-radius:12px;padding:12px;background:#15191f}
+.unlock strong{display:block;margin-bottom:5px}
+.badge{display:inline-block;padding:4px 8px;border:1px solid #777;border-radius:999px;font-size:12px;margin-top:6px}
+.reward{font-size:13px;opacity:.82;margin-top:7px}
+
+</style>
+</head>
+<body>
+
+<div id="menu" class="screen active">
+  <h1>PBK: PATH TO BLACK BELT</h1>
+  <div>Career Prototype v0.7</div>
+  <div class="menuBtns">
+    <button id="playBtn">PLAY</button>
+    <button id="careerBtn">BELT LADDER</button>
+    <button id="selectBtn">FIGHTER SELECT</button>
+    <button id="bracketBtn">TOURNAMENT</button>
+  </div>
+  
+<div id="profileBar">
+  <div class="profileBox"><strong>TOURNAMENT WINS</strong><div id="totalWins">0</div></div>
+  <div class="profileBox"><strong>FORMS</strong><div id="formsStatus">Not Completed</div></div>
+  <div class="profileBox"><strong>BREAKING</strong><div id="breakingStatus">Not Completed</div></div>
+</div>
+<div id="careerLine"></div>
+
+</div>
+
+<div id="select" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>FIGHTER SELECT</h2>
+  <div class="cardgrid">
+    <div class="card">
+      <h3>Bradley</h3>
+      <p>Fast, tricky, counter-oriented.</p>
+      <div class="stat"><span>Speed</span><span>9/10</span></div><div class="meter"><div style="width:90%"></div></div>
+      <div class="stat"><span>Power</span><span>7/10</span></div><div class="meter"><div style="width:70%"></div></div>
+      <div class="stat"><span>Defense</span><span>8/10</span></div><div class="meter"><div style="width:80%"></div></div>
+      <div class="stat"><span>Special</span><span>Beat Twist Kick</span></div>
+      <button id="chooseBradley">SELECT BRADLEY</button>
+    </div>
+    
+    <div class="card" id="rexCard">
+      <h3>Rex</h3><p>Relentless pressure fighter.</p>
+      <div class="stat"><span>Speed</span><span>7/10</span></div>
+      <div class="stat"><span>Power</span><span>8/10</span></div>
+      <div class="stat"><span>Defense</span><span>6/10</span></div>
+      <div class="badge" id="rexUnlock">Win 2 tournaments to unlock</div>
+    </div>
+    <div class="card" id="kaiCard">
+      <h3>Kai</h3><p>Patient counter fighter.</p>
+      <div class="stat"><span>Speed</span><span>8/10</span></div>
+      <div class="stat"><span>Power</span><span>7/10</span></div>
+      <div class="stat"><span>Defense</span><span>9/10</span></div>
+      <div class="badge" id="kaiUnlock">Win 4 tournaments to unlock</div>
+    </div>
+    <div class="card locked">
+      <h3>???</h3><p>New challenger coming later in the career.</p>
+      <div class="badge">Win 6 tournaments to unlock</div>
+    </div>
+
+  </div>
+</div>
+
+<div id="career" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>PBK BELT LADDER</h2>
+  <div class="ladder">
+    <div class="ladderStep current" id="stripe0Step"><span>Black Belt</span><span>Starting rank</span></div>
+    <div class="ladderStep" id="stripe1Step"><span>Black Belt • Stripe 1</span><span id="stripe1Status">Win Tournament 1</span></div>
+    <div class="ladderStep" id="stripe2Step"><span>Black Belt • Stripe 2</span><span id="stripe2Status">Win Tournament 2</span></div>
+    <div class="ladderStep" id="stripe3Step"><span>Black Belt • Stripe 3</span><span id="stripe3Status">Win Tournament 3</span></div>
+    <div class="ladderStep" id="stripe4Step"><span>Black Belt • Stripe 4</span><span id="stripe4Status">Win Tournament 4</span></div>
+    <div class="ladderStep locked" id="nextBeltStep"><span>Next Belt / Degree</span><span>Unlocks after Stripe 4</span></div>
+  </div>
+</div>
+
+<div id="modes" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>CHOOSE EVENT</h2>
+  <div class="cardgrid">
+    <div class="card modeCard"><h3>Sparring</h3><p>Best-of-3 arcade fights through the tournament bracket.</p><div class="reward">Reward: Tournament win toward belt advancement</div><button id="sparBtn">ENTER SPARRING</button></div>
+    <div class="card modeCard"><h3>Forms</h3><p>Timing and sequence challenge inspired by forms competition.</p><div class="reward">Reward: Event completion</div><button id="formsBtn">ENTER FORMS</button></div>
+    <div class="card modeCard"><h3>Breaking</h3><p>Build focus and timing to smash through boards.</p><div class="reward">Reward: Event completion</div><button id="breakingBtn">ENTER BREAKING</button></div>
+  </div>
+</div>
+
+<div id="bracket" class="screen centercol">
+  <button class="back" data-back="menu">BACK</button>
+  <h2>TOURNAMENT BRACKET</h2>
+  <div class="cardgrid">
+    <div class="card"><h3>Semifinal</h3><p>Bradley vs Rex</p><p>Style: Pressure fighter</p></div>
+    <div class="card"><h3>Championship</h3><p>Winner vs Kai</p><p>Style: Counter fighter</p></div>
+    <div class="card"><h3>Reward</h3><p>3-foot championship trophy</p><p>1 tournament win = 1 new stripe</p></div>
+  </div>
+</div>
+
+<div id="forms" class="screen centercol">
+  <button class="back" data-back="modes">BACK</button>
+  <div class="challenge">
+    <h2>FORMS COMPETITION</h2>
+    <div class="challengeBox">
+      <p>Memorize the sequence, then tap the moves in order.</p>
+      <div class="sequence" id="formsSequence">BLOCK • KICK • PUNCH • KICK</div>
+      <div class="challengeBtns">
+        <button data-form="BLOCK">BLOCK</button><button data-form="KICK">KICK</button>
+        <button data-form="PUNCH">PUNCH</button><button data-form="STANCE">STANCE</button>
+      </div>
+      <div class="bigscore" id="formsScore">0</div>
+      <div id="formsMsg">Score 4 to complete the form.</div>
+    </div>
+  </div>
+</div>
+
+<div id="breaking" class="screen centercol">
+  <button class="back" data-back="modes">BACK</button>
+  <div class="challenge">
+    <h2>BREAKING CHALLENGE</h2>
+    <div class="challengeBox">
+      <p>Build focus, then strike when the meter is in the target zone.</p>
+      <div class="bar" style="height:32px"><div id="focusFill" class="fill" style="width:0%"></div></div>
+      <div class="bigscore" id="boards">0 / 3</div>
+      <button id="strikeBtn">STRIKE BOARD</button>
+      <div id="breakMsg">Time the strike near full focus.</div>
+    </div>
+  </div>
+</div>
+
+<div id="fight" class="screen">
+  <div id="hud">
+    <div class="panel"><div class="name">BRADLEY</div><div class="bar"><div id="bhp" class="fill"></div></div><div class="bar power"><div id="bpw" class="fill"></div></div><div id="bRounds">Rounds: 0</div></div>
+    <div id="center" class="panel"><div id="timer">60</div><div id="roundLabel">ROUND 1</div><div id="stageLabel">SEMIFINAL</div></div>
+    <div class="panel"><div id="enemyName" class="name" style="text-align:right">REX</div><div class="bar"><div id="ehp" class="fill"></div></div><div class="bar power"><div id="epw" class="fill"></div></div><div id="eRounds" style="text-align:right">Rounds: 0</div></div>
+  </div>
+  <div id="arena">
+    <div id="arenaTitle">PBK TRAINING HALL</div><div id="message">FIGHT!</div>
+    <div id="bradley" class="fighter" style="left:20%"><div class="tag">BRADLEY</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"><div class="stripe"></div></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="enemy" class="fighter" style="left:73%"><div class="tag" id="enemyTag">REX</div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="belt"></div><div class="leg l"></div><div class="leg r"></div></div>
+    <div id="combo">Combo: 0</div>
+    <button id="nextRound" class="overlaybtn">NEXT ROUND</button><button id="nextFight" class="overlaybtn">NEXT FIGHT</button><button id="returnMenu" class="overlaybtn">RETURN TO MENU</button>
+  </div>
+  <div id="controls">
+    <div class="pad"><button id="left">◀</button><button id="jump">JUMP</button><button id="right">▶</button><button id="block" class="wide">BLOCK</button></div>
+    <div class="actions"><button id="punch">PUNCH</button><button id="kick">KICK</button><button id="sidekick">DEF. SIDE KICK</button><button id="special">BEAT TWIST KICK</button><button id="comboBtn" class="wide">PUNCH → KICK → SIDE KICK</button></div>
+  </div>
+</div>
+
+<div id="ceremony" class="screen centercol">
+  <div style="font-size:100px">🏆</div><h2>PBK CHAMPION!</h2><p id="ceremonyText"></p><button id="continueCareer">CONTINUE CAREER</button>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),screens=['menu','select','career','modes','bracket','forms','breaking','fight','ceremony'];
+function show(id){screens.forEach(s=>$(s).classList.remove('active'));$(id).classList.add('active')}
+let save=JSON.parse(localStorage.getItem('pbkSaveV07')||'{"tournamentWins":0,"belt":"Black Belt","stripe":0,"totalWins":0,"formsDone":false,"breakingDone":false}');
+let s={},moveDir=0,timerInt=null,aiInt=null,comboCount=0,comboTimer=null,formStep=0,focus=0,focusDir=1,focusTimer=null,boards=0;
+const opponents=[{name:'REX',style:'pressure',color:'#4c1919'},{name:'KAI',style:'counter',color:'#193e4c'}];
+const formSeq=['BLOCK','KICK','PUNCH','KICK'];
+
+function updateCareer(){
+  save.stripe = Math.min(4, save.tournamentWins);
+  $('careerLine').textContent = save.stripe >= 4
+    ? `${save.belt} • Stripe 4 • Belt advancement ready`
+    : `${save.belt} • Stripe ${save.stripe} • Next stripe: tournament ${save.stripe+1}`;
+
+  $('totalWins').textContent = save.totalWins;
+  $('formsStatus').textContent = save.formsDone ? 'Completed' : 'Not Completed';
+  $('breakingStatus').textContent = save.breakingDone ? 'Completed' : 'Not Completed';
+
+  $('rexUnlock').textContent = save.tournamentWins >= 2 ? 'UNLOCKED' : 'Win 2 tournaments to unlock';
+  $('kaiUnlock').textContent = save.tournamentWins >= 4 ? 'UNLOCKED' : 'Win 4 tournaments to unlock';
+  $('rexCard').classList.toggle('locked', save.tournamentWins < 2);
+  $('kaiCard').classList.toggle('locked', save.tournamentWins < 4);
+
+  for(let i=0;i<=4;i++){
+    const el = $('stripe'+i+'Step');
+    if(el) el.classList.remove('current');
+  }
+  const current = $('stripe'+save.stripe+'Step');
+  if(current) current.classList.add('current');
+
+  for(let i=1;i<=4;i++){
+    const status = $('stripe'+i+'Status');
+    if(status) status.textContent = save.tournamentWins >= i ? 'EARNED' : `Win Tournament ${i}`;
+  }
+
+  $('nextBeltStep').classList.toggle('locked', save.stripe < 4);
+  if(save.stripe >= 4) $('nextBeltStep').querySelector('span:last-child').textContent = 'READY';
+} • Stripe ${save.stripe} • Tournament wins ${save.tournamentWins}/4`;
+  
+  
+  
+  $('totalWins').textContent=save.totalWins;
+  $('rexUnlock').textContent=save.tournamentWins>=1?'UNLOCKED':'Win 2 tournaments to unlock';
+  $('kaiUnlock').textContent=save.tournamentWins>=2?'UNLOCKED':'Win 2 tournaments to unlock';
+  $('rexCard').classList.toggle('locked',save.tournamentWins<1);
+  $('kaiCard').classList.toggle('locked',save.tournamentWins<2);
+}
+function safe(e){if(e&&e.cancelable)e.preventDefault()}
+function bindTap(id,fn){const el=$(id);el.addEventListener('pointerup',e=>{safe(e);fn()},{passive:false})}
+function bindHold(id,down,up){const el=$(id);el.addEventListener('pointerdown',e=>{safe(e);down()},{passive:false});['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,e=>{safe(e);up()},{passive:false}))}
+
+document.querySelectorAll('[data-back]').forEach(el=>el.addEventListener('pointerup',e=>{safe(e);show(el.dataset.back)},{passive:false}));
+bindTap('playBtn',()=>show('modes'));bindTap('careerBtn',()=>show('career'));bindTap('selectBtn',()=>show('select'));bindTap('bracketBtn',()=>show('bracket'));bindTap('chooseBradley',()=>show('menu'));
+bindTap('sparBtn',startTournament);bindTap('formsBtn',()=>{formStep=0;$('formsScore').textContent='0';$('formsMsg').textContent='Score 4 to complete the form.';show('forms')});
+bindTap('breakingBtn',()=>{boards=0;focus=0;$('boards').textContent='0 / 3';$('breakMsg').textContent='Time the strike near full focus.';show('breaking');startFocus()});
+
+document.querySelectorAll('[data-form]').forEach(btn=>btn.addEventListener('pointerup',e=>{safe(e);const move=btn.dataset.form;if(move===formSeq[formStep]){formStep++;$('formsScore').textContent=formStep;if(formStep===formSeq.length){$('formsMsg').textContent='Excellent form! Competition complete.';if(!save.formsDone){save.formsDone=true;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer()}}}else{$('formsMsg').textContent='Sequence broken — restart.';formStep=0;$('formsScore').textContent='0'}},{passive:false}));
+
+function startFocus(){clearInterval(focusTimer);focusTimer=setInterval(()=>{focus+=focusDir*2;if(focus>=100){focus=100;focusDir=-1}if(focus<=0){focus=0;focusDir=1}$('focusFill').style.width=focus+'%'},35)}
+bindTap('strikeBtn',()=>{if(focus>=82){boards++;$('boards').textContent=boards+' / 3';$('breakMsg').textContent=boards>=3?'All boards broken! Challenge complete.':'Clean break!';if(boards>=3&&!save.breakingDone){save.breakingDone=true;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer()}}else $('breakMsg').textContent='Missed timing — build focus again.'});
+
+function resetFightState(){s={bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,bWins:0,eWins:0,round:1,time:60,over:false,roundOver:false,blocking:false,eBlocking:false,jumping:false,opponentIndex:0}}
+function startTournament(){resetFightState();show('fight');loadOpponent(0);setupRound()}
+function loadOpponent(i){s.opponentIndex=i;const o=opponents[i];$('enemyName').textContent=o.name;$('enemyTag').textContent=o.name;$('enemy').querySelector('.body').style.background=o.color;$('stageLabel').textContent=i===0?'SEMIFINAL':'CHAMPIONSHIP'}
+function setupRound(){Object.assign(s,{bx:20,ex:73,bh:100,eh:100,bp:0,ep:0,time:60,roundOver:false,blocking:false,eBlocking:false});$('nextRound').style.display='none';$('nextFight').style.display='none';$('returnMenu').style.display='none';$('message').textContent=`ROUND ${s.round} — FIGHT!`;startTimers();render()}
+function startTimers(){stopTimers();timerInt=setInterval(()=>{if(!s.roundOver&&!s.over){s.time--;if(s.time<=0){s.time=0;judgeRound()}render()}},1000);aiInt=setInterval(enemyAI,500)}
+function stopTimers(){if(timerInt)clearInterval(timerInt);if(aiInt)clearInterval(aiInt);timerInt=aiInt=null}
+function render(){$('bradley').style.left=s.bx+'%';$('enemy').style.left=s.ex+'%';$('bhp').style.width=s.bh+'%';$('ehp').style.width=s.eh+'%';$('bpw').style.width=s.bp+'%';$('epw').style.width=s.ep+'%';$('timer').textContent=s.time;$('roundLabel').textContent='ROUND '+s.round;$('bRounds').textContent='Rounds: '+s.bWins;$('eRounds').textContent='Rounds: '+s.eWins;$('bradley').classList.toggle('blocking',!!s.blocking);$('enemy').classList.toggle('blocking',!!s.eBlocking);$('combo').textContent='Combo: '+comboCount}
+function dist(){return Math.abs(s.ex-s.bx)}function flash(el){el.classList.add('hit');setTimeout(()=>el.classList.remove('hit'),100)}function anim(el,k){el.classList.add(k);setTimeout(()=>el.classList.remove(k),k==='specialFx'?380:260)}
+function knock(t,a,d){if(t==='p')s.bx=Math.max(2,Math.min(88,s.bx+a*d));else s.ex=Math.max(8,Math.min(92,s.ex+a*d))}
+function addCombo(){comboCount++;clearTimeout(comboTimer);comboTimer=setTimeout(()=>{comboCount=0;render()},1200)}
+function damage(t,base,kn=2){if(t==='e'){const d=s.eBlocking?Math.max(1,Math.floor(base*.25)):base;s.eh=Math.max(0,s.eh-d);s.bp=Math.min(100,s.bp+10);if(!s.eBlocking){flash($('enemy'));knock('e',kn,1);addCombo()}if(s.eh===0)endRound('p')}else{const d=s.blocking?Math.max(1,Math.floor(base*.25)):base;s.bh=Math.max(0,s.bh-d);s.ep=Math.min(100,s.ep+10);if(!s.blocking){flash($('bradley'));knock('p',kn,-1);comboCount=0}if(s.bh===0)endRound('e')}render()}
+function attack(type){if(s.roundOver||s.over)return;let dmg=0,range=0,kind='attack',cost=0,kn=2;if(type==='punch'){dmg=8;range=9}if(type==='kick'){dmg=12;range=12}if(type==='sidekick'){dmg=15;range=15;kind='sideFx';kn=4}if(type==='special'){dmg=26;range=17;kind='specialFx';cost=40;kn=5}if(cost&&s.bp<cost){$('message').textContent='Need 40 power!';setTimeout(()=>{if(!s.roundOver)$('message').textContent='FIGHT!'},650);return}if(cost)s.bp-=cost;anim($('bradley'),kind);if(dist()<=range)damage('e',dmg,kn);render()}
+function comboAttack(){if(s.roundOver||s.over)return;attack('punch');setTimeout(()=>attack('kick'),180);setTimeout(()=>attack('sidekick'),390)}
+function enemyAttack(type='kick'){let dmg=type==='punch'?7:type==='sidekick'?14:11,range=type==='punch'?9:type==='sidekick'?15:12;if(type==='special'&&s.ep>=40){dmg=22;range=16;s.ep-=40;anim($('enemy'),'specialFx')}else anim($('enemy'),type==='sidekick'?'sideFx':'attack');if(dist()<=range)damage('p',dmg,type==='sidekick'?4:2)}
+function enemyAI(){if(s.roundOver||s.over||!$('fight').classList.contains('active'))return;const o=opponents[s.opponentIndex],delta=s.bx-s.ex;s.eBlocking=false;if(o.style==='pressure'){if(Math.abs(delta)>11)s.ex+=Math.sign(delta)*1.5;else{const r=Math.random();if(r<.15){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},500)}else if(r<.28&&s.ep>=40)enemyAttack('special');else if(r<.58)enemyAttack('kick');else if(r<.82)enemyAttack('punch');else enemyAttack('sidekick')}}else{if(Math.abs(delta)<9)s.ex-=Math.sign(delta);else if(Math.abs(delta)>15)s.ex+=Math.sign(delta)*.7;const r=Math.random();if(r<.32){s.eBlocking=true;setTimeout(()=>{s.eBlocking=false;render()},650)}else if(r<.6&&dist()<=15)enemyAttack('sidekick');else if(r<.76&&s.ep>=40)enemyAttack('special')}s.ex=Math.max(8,Math.min(92,s.ex));render()}
+function judgeRound(){endRound(s.bh===s.eh?'draw':s.bh>s.eh?'p':'e')}
+function endRound(w){if(s.roundOver)return;s.roundOver=true;stopTimers();if(w==='p'){s.bWins++;$('message').textContent='K.O.! BRADLEY WINS THE ROUND!'}else if(w==='e'){s.eWins++;$('message').textContent=opponents[s.opponentIndex].name+' WINS THE ROUND'}else $('message').textContent='ROUND DRAW';render();setTimeout(()=>{if(s.bWins>=2||s.eWins>=2)endFight(s.bWins>s.eWins);else $('nextRound').style.display='block'},500)}
+function endFight(win){s.over=true;stopTimers();if(!win){$('message').textContent='TOURNAMENT DEFEAT';$('returnMenu').style.display='block';return}if(s.opponentIndex===0){$('message').textContent='SEMIFINAL VICTORY!';$('nextFight').style.display='block'}else{save.tournamentWins=Math.min(4,save.tournamentWins+1);save.stripe=Math.min(4,save.tournamentWins);save.totalWins+=1;localStorage.setItem('pbkSaveV07',JSON.stringify(save));updateCareer();let extra='';
+if(save.tournamentWins===2)extra=' Rex is now unlocked in Fighter Select.';
+if(save.tournamentWins===4)extra=' Kai is now unlocked in Fighter Select.';
+$('ceremonyText').textContent=save.tournamentWins>=4
+  ?'Bradley has won Tournament 4, earned Stripe 4, and is ready for the next belt/degree!'+extra
+  :'Bradley wins the tournament, earns Stripe '+save.stripe+', and receives the 3-foot championship trophy.'+extra;updateCareer();setTimeout(()=>show('ceremony'),500)}}
+function nextOpponent(){s.bWins=0;s.eWins=0;s.round=1;s.over=false;loadOpponent(1);setupRound()}
+function movementLoop(){if($('fight').classList.contains('active')&&!s.roundOver&&!s.over&&moveDir&&!s.blocking){s.bx=Math.max(2,Math.min(88,s.bx+moveDir*.5));if(s.bx>s.ex-4)s.bx=s.ex-4;render()}requestAnimationFrame(movementLoop)}
+function doJump(){if(s.jumping||s.roundOver||s.over)return;s.jumping=true;$('bradley').style.transition='bottom .2s ease-out';$('bradley').style.bottom='35%';setTimeout(()=>{$('bradley').style.transition='bottom .27s ease-in';$('bradley').style.bottom='16%'},210);setTimeout(()=>{s.jumping=false;$('bradley').style.transition=''},520)}
+
+bindTap('jump',doJump);bindTap('punch',()=>attack('punch'));bindTap('kick',()=>attack('kick'));bindTap('sidekick',()=>attack('sidekick'));bindTap('special',()=>attack('special'));bindTap('comboBtn',comboAttack);bindTap('nextRound',()=>{s.round++;setupRound()});bindTap('nextFight',nextOpponent);bindTap('returnMenu',()=>{updateCareer();show('menu')});bindTap('continueCareer',()=>{updateCareer();show('menu')});
+bindHold('left',()=>moveDir=-1,()=>moveDir=0);bindHold('right',()=>moveDir=1,()=>moveDir=0);bindHold('block',()=>{s.blocking=true;render()},()=>{s.blocking=false;render()});
+document.addEventListener('touchmove',e=>{if($('fight').classList.contains('active'))safe(e)},{passive:false});
+updateCareer();movementLoop();
+</script>
+</body>
+</html>
