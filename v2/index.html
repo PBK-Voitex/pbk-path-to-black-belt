@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PBK: Path to Black Belt — Sparring Slice</title>
+  <style>
+    html,body{margin:0;height:100%;overflow:hidden;background:#111;font-family:system-ui,Segoe UI,Arial,sans-serif}
+    #ui{position:fixed;inset:0;pointer-events:none;color:white}
+    #score{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:30px;font-weight:800;text-shadow:0 2px 8px #000}
+    #status{position:absolute;top:62px;left:50%;transform:translateX(-50%);font-size:18px;font-weight:700;text-shadow:0 2px 8px #000}
+    #controls{position:absolute;left:18px;bottom:16px;background:#0009;padding:10px 12px;border-radius:10px;font-size:13px}
+    canvas{display:block}
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div id="score">BRADLEY 0 — 0 RYAN</div>
+    <div id="status">FIRST TO 5</div>
+    <div id="controls">WASD move · J punch · K kick · L block · R restart</div>
+  </div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x20242b);
+
+const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, .1, 100);
+camera.position.set(0, 5.5, 8.8);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x3b3226,2.1));
+const keyLight = new THREE.DirectionalLight(0xffffff,2.8);
+keyLight.position.set(4,8,5); keyLight.castShadow = true; scene.add(keyLight);
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(14,10),
+  new THREE.MeshStandardMaterial({color:0xc7b48a,roughness:.8})
+);
+floor.rotation.x = -Math.PI/2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+function fighter(name, x, color){
+  const g = new THREE.Group();
+  const bodyMat = new THREE.MeshStandardMaterial({color,roughness:.55});
+  const skin = new THREE.MeshStandardMaterial({color:0xd7a477,roughness:.65});
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(.38,.9,6,12), bodyMat);
+  torso.position.y = 1.2; torso.castShadow = true; g.add(torso);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.26,18,14), skin);
+  head.position.y = 2.05; head.castShadow = true; g.add(head);
+  const belt = new THREE.Mesh(new THREE.BoxGeometry(.82,.12,.32), new THREE.MeshStandardMaterial({color:0x111111}));
+  belt.position.y=.92; g.add(belt);
+  g.position.set(x,0,0);
+  scene.add(g);
+  return {name,g,score:0,blocking:false,attack:null,cooldown:0};
+}
+
+const player = fighter("BRADLEY",-2.3,0x151515);
+const ai = fighter("RYAN",2.3,0x222831);
+
+const keys = {};
+addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if(e.key.toLowerCase()==='r') restart(); });
+addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+let state = 'play', freeze=0, flash=0;
+const scoreEl = document.getElementById('score'), statusEl = document.getElementById('status');
+
+function restart(){
+  player.score=ai.score=0; state='play'; freeze=0;
+  player.g.position.set(-2.3,0,0); ai.g.position.set(2.3,0,0);
+  player.cooldown=ai.cooldown=0; updateUI('FIRST TO 5');
+}
+function updateUI(msg){
+  scoreEl.textContent = `BRADLEY ${player.score} — ${ai.score} RYAN`;
+  statusEl.textContent = msg || (state==='play' ? 'FIRST TO 5' : '');
+}
+function faceEachOther(){
+  const p=player.g.position, a=ai.g.position;
+  player.g.rotation.y = Math.atan2(a.x-p.x,a.z-p.z);
+  ai.g.rotation.y = Math.atan2(p.x-a.x,p.z-a.z);
+}
+function dist(){ return player.g.position.distanceTo(ai.g.position); }
+
+function tryAttack(f, target, kind){
+  if(state!=='play' || f.cooldown>0) return;
+  const spec = kind==='kick' ? {range:1.55,pts:2,cd:.85} : {range:1.15,pts:1,cd:.55};
+  f.cooldown=spec.cd; f.attack={kind,t:.16,scored:false};
+  if(dist() <= spec.range && !target.blocking && !f.attack.scored){
+    f.attack.scored=true; score(f,spec.pts,kind);
+  }
+}
+function score(f, pts, kind){
+  if(state!=='play') return;
+  f.score += pts; state='reset'; freeze=1.15; flash=.18;
+  updateUI(`${f.name} — ${kind.toUpperCase()} +${pts}`);
+  if(f.score>=5){ state='over'; freeze=999; updateUI(`${f.name} WINS — PRESS R`); }
+}
+function updatePlayer(dt){
+  player.blocking = !!keys['l'];
+  if(state!=='play') return;
+  const speed=3.2, v=new THREE.Vector3();
+  if(keys['w']) v.z-=1; if(keys['s']) v.z+=1; if(keys['a']) v.x-=1; if(keys['d']) v.x+=1;
+  if(v.lengthSq()) { v.normalize().multiplyScalar(speed*dt); player.g.position.add(v); }
+  player.g.position.x=THREE.MathUtils.clamp(player.g.position.x,-5.2,5.2);
+  player.g.position.z=THREE.MathUtils.clamp(player.g.position.z,-3.7,3.7);
+  if(keys['j']) { keys['j']=false; tryAttack(player,ai,'punch'); }
+  if(keys['k']) { keys['k']=false; tryAttack(player,ai,'kick'); }
+}
+let aiThink=0;
+function updateAI(dt){
+  aiThink-=dt;
+  if(state!=='play') return;
+  const d=dist();
+  if(d>1.5){
+    const dir=player.g.position.clone().sub(ai.g.position).setY(0).normalize();
+    ai.g.position.addScaledVector(dir,2.15*dt);
+  } else if(aiThink<=0){
+    aiThink=.55+Math.random()*.65;
+    if(Math.random()<.22){ ai.blocking=true; setTimeout(()=>ai.blocking=false,240); }
+    else tryAttack(ai,player,Math.random()<.48?'kick':'punch');
+  }
+}
+function animateAttacks(dt,f){
+  if(f.cooldown>0) f.cooldown-=dt;
+  if(!f.attack) return;
+  f.attack.t-=dt;
+  const torso=f.g.children[0];
+  torso.rotation.z = f.attack.kind==='kick' ? Math.sin((.16-f.attack.t)*20)*.16 : Math.sin((.16-f.attack.t)*24)*.08;
+  if(f.attack.t<=0){ torso.rotation.z=0; f.attack=null; }
+}
+const clock=new THREE.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),.033);
+  if(state==='reset'){
+    freeze-=dt;
+    if(freeze<=0){
+      player.g.position.set(-2.3,0,0); ai.g.position.set(2.3,0,0);
+      state='play'; updateUI('FIGHT');
+    }
+  }
+  updatePlayer(dt); updateAI(dt); animateAttacks(dt,player); animateAttacks(dt,ai); faceEachOther();
+
+  const mid=player.g.position.clone().add(ai.g.position).multiplyScalar(.5);
+  camera.position.x += (mid.x-camera.position.x)*.05;
+  camera.position.z += ((mid.z+8.5)-camera.position.z)*.05;
+  camera.lookAt(mid.x,1,mid.z);
+
+  if(flash>0){ flash-=dt; scene.background.setHex(0x3b414c); } else scene.background.setHex(0x20242b);
+  renderer.render(scene,camera);
+}
+loop();
+
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+updateUI('FIRST TO 5');
+</script>
+</body>
+</html>
