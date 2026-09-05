@@ -1,0 +1,24 @@
+name: PBK V2 Smoke
+
+on:
+  push:
+    paths:
+      - 'v2/**'
+      - '.github/workflows/pbk-v2-smoke.yml'
+  pull_request:
+    paths:
+      - 'v2/**'
+      - '.github/workflows/pbk-v2-smoke.yml'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run PBK V2 smoke checks
+        run: node v2/tests/smoke.mjs
